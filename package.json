@@ -24,6 +24,7 @@
 	"private": true,
 	"dependencies": {
 		"commands-ts": "^0.1.2",
+		"discord-commands-ts": "^0.0.2",
 		"discord.js": "^12.2.0",
 		"dotenv-flow": "^3.1.0",
 		"googleapis": "39",
