@@ -1,6 +1,6 @@
 node_modules
 .env
-lib
+client
 yarn-error.log
 yarn.lock
 .vscode
