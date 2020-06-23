@@ -1,16 +1,16 @@
-import { TextChannel, DMChannel, NewsChannel } from "discord.js"
+import { TextChannel, DMChannel, NewsChannel, Message } from "discord.js"
 import * as path from "path"
 
-export const relative = (s: string) => path.resolve(__dirname, s)
-export const delay = async (ms: number) =>
+export const relative = (s: string): string => path.resolve(__dirname, s)
+export const delay = async (ms: number): Promise<void> =>
 	new Promise((resolve) => setTimeout(resolve, ms))
 
 export const sendError = async (
 	channel: TextChannel | DMChannel | NewsChannel,
 	errorString: string,
-	msDelay: number = 5000
-) => {
-	const errorMsg = await channel
+	msDelay = 5000
+): Promise<void | Message> => {
+	const errorMsg: void | Message = await channel
 		.send(errorString)
 		.catch(() => Promise.resolve())
 	if (errorMsg) errorMsg.delete({ timeout: msDelay })
