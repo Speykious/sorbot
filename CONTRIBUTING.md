@@ -16,7 +16,7 @@
 ## Working on tasks
 1. Use `Yarn`, not `NPM`.
 2. Your source-code should be in a subfolder of `src`.
-3. Achieve your tasks in a subfolder who's name describes the general purpose of the code inside its files.
+3. Achieve your tasks in a subfolder whose name describes the general purpose of the code inside its files.
 4. Achieve your tasks on a separate branch. When you're done, make a pull request.
 5. Always accompany your code with Jest tests.
 
