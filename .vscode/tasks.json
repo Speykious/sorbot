@@ -1,0 +1,52 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Install Everything",
+			"detail": "Install every dependency from the package.json file with yarn.",
+			"type": "shell",
+			"command": "yarn",
+			"problemMatcher": [
+				"$eslint-stylish"
+			]
+		},
+		{
+			"label": "Compile",
+			"detail": "Deletes all the files in the `build` folder to compile everything again using `tsc`.",
+			"type": "shell",
+			"command": "yarn tsc",
+			"problemMatcher": [
+				"$eslint-stylish"
+			]
+		},
+		{
+			"label": "Run",
+			"detail": "Runs the `start` script. Doesn't do a lot of things for this particular project to be honest.",
+			"type": "shell",
+			"command": "yarn start",
+			"problemMatcher": [
+				"$eslint-stylish"
+			]
+		},
+		{
+			"label": "Jest: test",
+			"detail": "Runs every test present in the `tests` folder with Jest.",
+			"type": "shell",
+			"command": "yarn test",
+			"problemMatcher": [
+				"$eslint-stylish"
+			]
+		},
+		{
+			"label": "Prettier: format code",
+			"detail": "Formats all the code using Prettier.",
+			"type": "shell",
+			"command": "yarn format",
+			"problemMatcher": [
+				"$eslint-stylish"
+			]
+		},
+	]
+}
