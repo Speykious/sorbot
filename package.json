@@ -1,0 +1,23 @@
+{
+  "name": "project_name",
+  "version": "0.0.0",
+  "description": "project_description",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "start": "node .",
+    "test": "jest --config jestconfig.json",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.test.ts\"",
+    "lint": "tslint -p tsconfig.json"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Speykious/project_name"
+  },
+  "author": "Speykious",
+  "license": "GPL-3.0",
+  "private": true
+}
