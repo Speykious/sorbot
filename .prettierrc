@@ -2,7 +2,7 @@
   "proseWrap": "never",
   "trailingComma": "none",
   "singleQuote": false,
-  "useTabs": true,
+  "useTabs": false,
   "arrowParens": "avoid",
   "bracketSpacing": false,
   "endOfLine": "lf",
