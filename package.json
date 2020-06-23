@@ -1,9 +1,9 @@
 {
-	"name": "project_name",
+	"name": "sorbot-3",
 	"version": "0.0.0",
-	"description": "project_description",
-	"main": "lib/index.js",
-	"types": "lib/index.d.ts",
+	"description": "SorBOT 3, La toute nouvelle version de SorBOT, le bot discord du serveur Sorbonne Jussieu !",
+	"main": "client/index.js",
+	"types": "client/index.d.ts",
 	"jest": {
 		"preset": "jest-preset-coffeescript"
 	},
@@ -13,21 +13,28 @@
 		"format": "prettier --write \"src/**/*.ts\" \"tests/**/*.test.ts\""
 	},
 	"files": [
-		"lib/**/*"
+		"client/**/*"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Speykious/project_name"
+		"url": "git@gitlab.com:Speykious/sorbot-3.git"
 	},
 	"author": "Speykious",
 	"license": "GPL-3.0",
 	"private": true,
 	"dependencies": {
-		"discord.js": "^12.2.0"
+		"commands-ts": "^0.1.2",
+		"discord.js": "^12.2.0",
+    "dotenv-flow": "^3.1.0",
+    "googleapis": "39",
+		"parsers-ts": "^4.5.1",
+		"sequelize": "^5.21.13"
 	},
 	"devDependencies": {
+		"@types/dotenv-flow": "^3.0.0",
 		"@types/jest": "^26.0.0",
 		"@types/node": "^14.0.13",
+		"@types/sequelize": "^4.28.9",
 		"coffeescript": "^2.5.1",
 		"eslint": "^7.3.1",
 		"jest": "^26.1.0",
