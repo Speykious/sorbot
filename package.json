@@ -23,6 +23,7 @@
   "license": "GPL-3.0",
   "private": true,
   "dependencies": {
+    "@hulu/splitshot": "^1.2.0",
     "commands-ts": "^0.1.2",
     "discord-commands-ts": "^0.0.2",
     "discord.js": "^12.2.0",
