@@ -23,7 +23,7 @@
     },
     {
       "label": "Run",
-      "detail": "Runs the `start` script. Doesn't do a lot of things for this particular project to be honest.",
+      "detail": "Runs the `start` script, then the bot comes alive from the local SorBOT account.",
       "type": "shell",
       "command": "yarn start",
       "problemMatcher": [
