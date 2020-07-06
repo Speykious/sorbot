@@ -1,24 +1,8 @@
-import * as path from 'path'
-import { Client, TextChannel, DMChannel, NewsChannel } from "discord.js"
+import { Client, TextChannel } from "discord.js"
+import {} from "./utils"
 
 import * as dotenvFlow from 'dotenv-flow'
 dotenvFlow.config()
-
-export const relative = (s: string) => path.resolve(__dirname, s)
-export const delay = async (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms))
-
-export const sendError = async (
-  channel: TextChannel | DMChannel | NewsChannel,
-  errorString: string,
-  msDelay: number = 5000
-) => {
-  const errorMsg = await channel
-    .send(errorString)
-    .catch(() => Promise.resolve())
-  if (errorMsg) errorMsg.delete({ timeout: msDelay })
-  return Promise.resolve(errorMsg)
-}
 
 const bot = new Client({
   disableMentions: "everyone"
