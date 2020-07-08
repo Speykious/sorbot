@@ -1,7 +1,0 @@
-{
-  "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
-  },
-  "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(js|ts|coffee)$",
-  "moduleFileExtensions": ["ts", "js", "coffee", "json", "node"]
-}
