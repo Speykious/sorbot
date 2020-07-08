@@ -1,0 +1,43 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install & Update Everything",
+      "detail": "Install & Update every dependency from the package.json file with yarn.",
+      "type": "shell",
+      "command": "yarn; and yarn upgrade-interactive",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "Compile",
+      "detail": "Compiles everything.",
+      "type": "shell",
+      "command": "yarn build",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "Run",
+      "detail": "Runs the `start` script, then the bot comes alive from the local SorBOT account.",
+      "type": "shell",
+      "command": "yarn start",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "Mocha: test",
+      "detail": "Runs every test present in the `tests` folder with Mocha.",
+      "type": "shell",
+      "command": "yarn test",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    }
+  ]
+}
