@@ -36,10 +36,6 @@
   "eol_last": {
     "level": "ignore"
   },
-  "indentation": {
-    "value": 2,
-    "level": "error"
-  },
   "line_endings": {
     "level": "ignore",
     "value": "unix"
@@ -56,9 +52,6 @@
   "newlines_after_classes": {
     "value": 3,
     "level": "ignore"
-  },
-  "no_backticks": {
-    "level": "error"
   },
   "no_debugger": {
     "level": "warn",
@@ -131,5 +124,11 @@
   },
   "transform_messes_up_line_numbers": {
     "level": "warn"
+  },
+  "no_backticks": {
+    "level": "ignore"
+  },
+  "indentation": {
+    "level": "ignore"
   }
 }
