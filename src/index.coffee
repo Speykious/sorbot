@@ -10,10 +10,10 @@ bot = new Client {
 
 bot.on "ready", () ->
   console.log "Ready to... sip."
-  ###
+  
   bot.channels.cache.get "672498488646434841"
-  .send "I am trying to *sip* some *new* code right there. :coffee: <:thonkintensifies:689825780448100436>"
-  ###
+  .send "GO BACK TO WORK, I NEED TO GET DONE <@&672480366266810398>"
+  
 
 if process.env.LOCAL
 then bot.login process.env.SLOCAL_TOKEN
