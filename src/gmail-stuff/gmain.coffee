@@ -4,7 +4,7 @@ gapis = require 'googleapis'
 forEach = require '../forEach'
 
 ###
-Lists the messages in the user"s account.
+Lists the messages in the user's account.
 @param {gapis.gmail_v1.Gmail} gmail Gmail.
 @param {gapis.google.auth.OAuth2} oAuth2Client An authorized OAuth2 client.
 ###
@@ -42,7 +42,7 @@ listMessages = (gmail, query) ->
   fs.writeFileSync "./messages.md", mdstring, { encoding: "utf8" }
   console.log (green (bold "Messages succesfully saved"))
 
-
+# Main function to do gmail stuff.
 gmain = (oAuth2Client) ->
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
   listMessages gmail, "label:Existential-Crisis"
