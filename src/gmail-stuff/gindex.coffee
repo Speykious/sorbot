@@ -32,7 +32,7 @@ execute the given callback with the authorized OAuth2 client.
 @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
 @param {getEventsCallback} callback The callback for the authorized client.
 ###
-getNewToken oAuth2Client, callback ->
+getNewToken oAuth2Client, (callback) ->
   authUrl = oAuth2Client.generateAuthUrl {
     access_type: "offline"
     scope: SCOPES
