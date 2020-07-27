@@ -5,6 +5,12 @@ forEach = require '../forEach'
 
 ###
 Lists the messages in the user's account.
+For now, the function reads messages them and
+store them in a single markdown file called
+`messages.md`, but later it will be intended
+to return the messages to let them be used in
+a useful way, like telling discord users that
+their entered email address doesn't exist.
 @param {gapis.gmail_v1.Gmail} gmail Gmail.
 @param {gapis.google.auth.OAuth2} oAuth2Client An authorized OAuth2 client.
 ###
@@ -45,7 +51,7 @@ listMessages = (gmail, query) ->
 # Main function to do gmail stuff.
 gmain = (oAuth2Client) ->
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
-  listMessages gmail, "label:Existential-Crisis"
+  listMessages gmail, "is:unread label:existential-crisis"
 
 
 module.exports = gmain
