@@ -12,7 +12,7 @@ bot.on "ready", () ->
   console.log "Ready to... sip."
   
   bot.channels.cache.get "672498488646434841"
-  .send "GO BACK TO WORK, I NEED TO GET DONE <@&672480366266810398>"
+  .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
   
 
 if process.env.LOCAL
