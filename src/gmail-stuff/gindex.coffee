@@ -1,6 +1,7 @@
-fs = require "fs"
-readline = require "readline"
-{ google } = require "googleapis"
+fs                   = require "fs"
+{ relative, delay }  = require "../utils"
+readline             = require "readline"
+{ google }           = require "googleapis"
 { bold, red, green } = require "ansi-colors-ts"
 
 # If modifying these scopes, delete token.json.
@@ -8,7 +9,7 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 # The file token.json stores the user"s access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
-TOKEN_PATH = "token.json"
+TOKEN_PATH = relative "../token.json"
 
 ###
 Create an OAuth2 client with the given credentials, and then execute the
@@ -32,7 +33,7 @@ execute the given callback with the authorized OAuth2 client.
 @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
 @param {getEventsCallback} callback The callback for the authorized client.
 ###
-getNewToken oAuth2Client, (callback) ->
+getNewToken = (oAuth2Client, callback) ->
   authUrl = oAuth2Client.generateAuthUrl {
     access_type: "offline"
     scope: SCOPES
