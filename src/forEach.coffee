@@ -1,6 +1,6 @@
 forEach = (array, f) ->
   promises = []
-  for element of array
+  for element in array
     promises.push (f element)
   return Promise.all promises
 
