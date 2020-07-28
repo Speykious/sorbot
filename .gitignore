@@ -3,3 +3,5 @@ node_modules
 client
 yarn-error.log
 yarn.lock
+credentials.json
+token.json
