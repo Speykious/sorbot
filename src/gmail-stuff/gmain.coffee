@@ -1,6 +1,6 @@
 fs = require 'fs'
 gapis = require 'googleapis'
-{ green, bold } = require 'ansi-colors-ts'
+{ green, blue, bold } = require 'ansi-colors-ts'
 forEach = require '../forEach'
 
 ###
@@ -15,43 +15,53 @@ their entered email address doesn't exist.
 @param {gapis.google.auth.OAuth2} oAuth2Client An authorized OAuth2 client.
 ###
 listMessages = (gmail, query) ->
-  mdstring = "# Lots of Messages about Unexisting Mails\n\n"
-  listm = await gmail.users.messages.list { userId: "me", q: query, maxResults: 500 }
-  if not listm.data.messages then return
+  # mdstring = "# Lots of Messages about Unexisting Mails\n\n"
+  listm = await gmail.users.messages.list { userId: "me", q: query, maxResults: 1 }
+  if not listm.data.messages then return console.log "No messages to query :/"
 
   counter = 0
-  await forEach listm.data.messages, async messageData ->
+  await forEach listm.data.messages, (messageData) ->
     message = await gmail.users.messages.get { userId: "me", id: messageData.id }
-    
-    mailSys = message.data.payload.headers.find (
-      (header) -> /^From$/.test header.name && /^Mail/.test header.value
-    )
+
+    # Verifier that it is a message sending failure notification
+    mailSys = message.data.payload.headers.find ((header) ->
+      (/^From$/.test header.name) && (/^Mail/.test header.value))
     
     if mailSys
-      snippet = message.data.snippet
-                .replace /&#39;/g, "\""
-      mdstring += `#{snippet}\n\n**#{mailSys.value}**\n`
+      # message.data.snippet is the readable content of the email
+      snippet = message.data.snippet.replace /&#39;/g, "'"
 
-      message.data.payload.headers.forEach header ->
+      ###
+      # All mdstrng stuff
+      mdstring += "#{snippet}\n\n**#{mailSys.value}**\n"
+      message.data.payload.headers.forEach ((header) ->
         valu = header.value.replace /\s\s+/g, "\n"
         if /^(From|To|Subject|Date)$/.test header.name
-          mdstring += `- **#{header.name}**: #{valu}\n`
+          mdstring += "- **#{header.name}**: #{valu}\n")
+      mdstring += "\n"
+      ###
 
-      mdstring += `\n`
+      # To make the relevant message appear to be read in the mailbox
+      gmail.users.messages.modify {
+        userId: "me"
+        id: messageData.id
+        addLabelIds: []
+        removeLabelIds: ["UNREAD"]
+      }
     
-    mdstring += `***\n\n`
+    # mdstring += "***\n\n"
     counter++
-    process.stdout.write `\x1b[1000DMessages: #{bold(`#{counter}`)}`
+    process.stdout.write "\x1b[2K\rMessages: #{bold (String counter)}"
   
 
-  console.log mdstring
-  fs.writeFileSync "./messages.md", mdstring, { encoding: "utf8" }
+  # console.log ("\n" + mdstring)
   console.log (green (bold "Messages succesfully saved"))
 
 # Main function to do gmail stuff.
 gmain = (oAuth2Client) ->
+  console.log "Doing the gmain thing..."
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
-  listMessages gmail, "is:unread label:existential-crisis"
-
+  await listMessages gmail, "is:unread label:existential-crisis"
+  console.log "The gmain thing is finished"
 
 module.exports = gmain
