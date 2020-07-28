@@ -5,10 +5,7 @@ forEach = require '../forEach'
 
 ###
 Lists the messages in the user's account.
-For now, the function reads messages them and
-store them in a single markdown file called
-`messages.md`, but later it will be intended
-to return the messages to let them be used in
+Return the messages to let them be used in
 a useful way, like telling discord users that
 their entered email address doesn't exist.
 @param {gapis.gmail_v1.Gmail} gmail Gmail.
@@ -20,13 +17,14 @@ listMessages = (gmail, query) ->
   if not listm.data.messages then return console.log "No messages to query :/"
 
   counter = 0
-  await forEach listm.data.messages, (messageData) ->
+  something = await forEach listm.data.messages, (messageData) ->
     message = await gmail.users.messages.get { userId: "me", id: messageData.id }
 
     # Verifier that it is a message sending failure notification
     mailSys = message.data.payload.headers.find ((header) ->
       (/^From$/.test header.name) && (/^Mail/.test header.value))
     
+    snippet = ""
     if mailSys
       # message.data.snippet is the readable content of the email
       snippet = message.data.snippet.replace /&#39;/g, "'"
@@ -52,10 +50,25 @@ listMessages = (gmail, query) ->
     # mdstring += "***\n\n"
     counter++
     process.stdout.write "\x1b[2K\rMessages: #{bold (String counter)}"
-  
+
+    # To get the email address that failed
+    failed_recipient = message.data.payload.headers.find((header) ->
+      header.name == "X-Failed-Recipients").value
+    # To get the date of when it failed
+    failing_date = message.data.payload.headers.find((header) ->
+      header.name == "Date").value
+    
+
+    return {
+      content: snippet
+      email: failed_recipient
+      date: failing_date
+    }
+
+  console.log something
 
   # console.log ("\n" + mdstring)
-  console.log (green (bold "Messages succesfully saved"))
+  console.log ("\n" + green (bold "Messages succesfully read"))
 
 # Main function to do gmail stuff.
 gmain = (oAuth2Client) ->
