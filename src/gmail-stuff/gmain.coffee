@@ -63,7 +63,7 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
 gmain = (oAuth2Client) ->
   console.log "Doing the gmain thing..."
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
-  await getUnreadMessages gmail, "is:unread label:existential-crisis"
+  await (getUnreadMessages 1) gmail, "is:unread label:existential-crisis"
   console.log "The gmain thing is finished"
 
 module.exports = gmain
