@@ -19,7 +19,6 @@
   "license": "GPL-3.0",
   "private": true,
   "dependencies": {
-    "@hulu/splitshot": "^1.2.0",
     "ansi-colors-ts": "^0.0.1",
     "commands-ts": "^0.1.2",
     "discord-commands-ts": "^0.0.2",
