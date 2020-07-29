@@ -7,7 +7,7 @@ readline             = require "readline"
 # If modifying these scopes, delete token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly",
           "https://www.googleapis.com/auth/gmail.modify"]
-# The file token.json stores the user"s access and refresh tokens, and is
+# The file token.json stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
 TOKEN_PATH = relative "../token.json"
