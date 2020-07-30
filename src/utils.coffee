@@ -1,4 +1,5 @@
 path = require "path"
+fs   = require "fs"
 
 relative = (s) -> path.resolve __dirname, s
 delay = (ms) -> new Promise ((resolve) -> setTimeout resolve, ms)
@@ -16,9 +17,14 @@ forEach = (array, f) ->
     promises.push (f element)
   return Promise.all promises
 
+readf  = (path)       -> fs.readFileSync  (relative path), "utf8"
+writef = (path, data) -> fs.writeFileSync (relative path), data, "utf8"
+
 module.exports = {
   relative
   delay
   sendError
   forEach
+  readf
+  writef
 }
