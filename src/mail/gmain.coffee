@@ -63,6 +63,6 @@ gmain = (oAuth2Client) ->
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
   # The curried arg of getUnreadMessages is the number of unread
   # messages to fetch. It will likely be changed in the future.
-  await (getUnreadMessages 20) gmail, "label:existential-crisis"
+  await (getUnreadMessages 20) gmail, "is:unread label:existential-crisis"
 
 module.exports = gmain
