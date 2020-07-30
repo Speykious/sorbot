@@ -1,7 +1,7 @@
-fs = require 'fs'
-gapis = require 'googleapis'
-{ green, blue, bold, dim } = require 'ansi-colors-ts'
+{ green, blue, bold, dim, red }   = require 'ansi-colors-ts'
+gapis                             = require 'googleapis'
 { forEach, CHECKMARK, CROSSMARK } = require '../utils'
+fs                                = require 'fs'
 
 ###
 Lists the messages in the user's account.
@@ -15,7 +15,7 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
   # mdstring = "# Lots of Messages about Unexisting Mails\n\n"
   listm = await gmail.users.messages.list { userId: "me", q: query, maxResults: maxFetch }
   if not listm.data.messages
-  then return console.log "getUnreadMessages:", (dim CROSSMARK + " No messages to query :/")
+  then return console.log dim red CROSSMARK + " No messages to query :/"
 
   counter = 0
   # overall: the variable that stores all the relevant data of all relevant messages
@@ -56,17 +56,16 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
     }
 
   # console.log "\n" + mdstring
-  console.log "\n" + green bold CHECKMARK + "Messages succesfully read"
+  console.log "\n" + green CHECKMARK + " Messages succesfully read"
 
   return overall
 
 # Main function to do gmail stuff.
 gmain = (oAuth2Client) ->
-  console.log "Doing the gmain thing..."
+  console.log "Reading Existential Crisis messages..."
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
   # The curried arg of getUnreadMessages is the number of unread
   # messages to fetch. It will likely be changed in the future.
-  await (getUnreadMessages 1) gmail, "is:unread label:existential-crisis"
-  console.log "The gmain thing is finished"
+  await (getUnreadMessages 1) gmail, "label:existential-crisis"
 
 module.exports = gmain
