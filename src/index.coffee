@@ -1,6 +1,6 @@
-{ authorize }                  = require "./gmail-stuff/gindex"
-gmain                          = require "./gmail-stuff/gmain"
 { green, bold, red }           = require "ansi-colors-ts"
+{ authorize }                  = require "./mail/gindex"
+gmain                          = require "./mail/gmain"
 { Client }                     = require "discord.js"
 { relative, delay, sendError } = require "./utils"
 fs                             = require "fs"
