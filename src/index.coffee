@@ -26,16 +26,19 @@ bot.on "ready", () ->
   catch err
     console.log (bold red "Error loading #{underline "credentials.yaml"}:"), err
   
-  ### # was testing embeds
+  # was testing embeds
   bot.channels.cache.get "672514494903222311"
   .send {
     embed:
       title: "Testing in progress..."
       description: "Hello I'm a description"
       #timestamp: new Date()
-      footer: "Hello I'm a footer"
+      footer:
+        text: "Hello I'm a footer"
+        icon_url: ("https://gitlab.com/Speykious/sorbot-3/-/"
+        + "raw/master/resources/blackorbit-sorbonne-logo.png")
   }
-  ###
+  
 
 if process.env.LOCAL
 then bot.login process.env.SLOCAL_TOKEN
