@@ -1,22 +1,24 @@
 { Sequelize, DataTypes } = require "sequelize"
 connection = require "../initdb.coffee"
 
-User = connection.define ("User", {
+{ BIGINT, STRING, ARRAY } = DataTypes
+
+User = connection.define "User", {
   id: {
-    type: DataTypes.BIGINT,
+    type: BIGINT,
     primaryKey: true
   },
   email: {
-    type: DataTypes.STRING,
+    type: STRING,
     allowNull: false,
     unique: true
   },
   code: {
-    type: DataTypes.STRING
+    type: STRING
   },
   federatedServers: {
-    type: DataTypes.ARRAY(DataTypes.BIGINT)
+    type: ARRAY BIGINT
   }
-})
+}
 
 module.exports = User
