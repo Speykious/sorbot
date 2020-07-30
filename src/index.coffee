@@ -32,11 +32,9 @@ bot.on "ready", () ->
     embed:
       title: "Testing in progress..."
       description: "Hello I'm a description"
-      #timestamp: new Date()
       footer:
         text: "Hello I'm a footer"
-        icon_url: ("https://gitlab.com/Speykious/sorbot-3/-/"
-        + "raw/master/resources/blackorbit-sorbonne-logo.png")
+        icon_url: "https://gitlab.com/Speykious/sorbot-3/-/raw/master/resources/blackorbit-sorbonne-logo.png"
   }
   
 
