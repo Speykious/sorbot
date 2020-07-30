@@ -3,7 +3,8 @@ node_modules
 client
 yarn-error.log
 yarn.lock
-credentials.json
-token.json
-message.json
+credentials.yaml
+token.yaml
+message.yaml
+test.coffee
 *~
