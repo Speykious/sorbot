@@ -6,3 +6,4 @@ yarn.lock
 credentials.json
 token.json
 message.json
+*~
