@@ -8,7 +8,8 @@ User = connection.define ("User", {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   code: {
     type: DataTypes.STRING
