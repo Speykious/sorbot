@@ -1,7 +1,7 @@
 fs = require 'fs'
 gapis = require 'googleapis'
 { green, blue, bold } = require 'ansi-colors-ts'
-forEach = require '../forEach'
+forEach = require '../utils'
 
 ###
 Lists the messages in the user's account.

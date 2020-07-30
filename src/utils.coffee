@@ -10,8 +10,15 @@ sendError = (channel, errorString, msDelay = 5000) ->
   if errorMsg then errorMsg.delete { timeout: msDelay }
   return Promise.resolve errorMsg
 
+forEach = (array, f) ->
+  promises = []
+  for element in array
+    promises.push (f element)
+  return Promise.all promises
+
 module.exports = {
-  relative,
-  delay,
+  relative
+  delay
   sendError
+  forEach
 }
