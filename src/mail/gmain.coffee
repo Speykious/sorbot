@@ -1,7 +1,7 @@
 fs = require 'fs'
 gapis = require 'googleapis'
-{ green, blue, bold } = require 'ansi-colors-ts'
-{ forEach } = require '../utils'
+{ green, blue, bold, dim } = require 'ansi-colors-ts'
+{ forEach, CHECKMARK, CROSSMARK } = require '../utils'
 
 ###
 Lists the messages in the user's account.
@@ -14,7 +14,8 @@ their entered email address doesn't exist.
 getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
   # mdstring = "# Lots of Messages about Unexisting Mails\n\n"
   listm = await gmail.users.messages.list { userId: "me", q: query, maxResults: maxFetch }
-  if not listm.data.messages then return console.log "No messages to query :/"
+  if not listm.data.messages
+  then return console.log "getUnreadMessages:", (dim CROSSMARK + " No messages to query :/")
 
   counter = 0
   # overall: the variable that stores all the relevant data of all relevant messages
@@ -55,7 +56,7 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
     }
 
   # console.log "\n" + mdstring
-  console.log "\n" + green bold "Messages succesfully read"
+  console.log "\n" + green bold CHECKMARK + "Messages succesfully read"
 
   return overall
 

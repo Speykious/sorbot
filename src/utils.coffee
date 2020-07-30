@@ -20,6 +20,9 @@ forEach = (array, f) ->
 readf  = (path)       -> fs.readFileSync  (relative path), "utf8"
 writef = (path, data) -> fs.writeFileSync (relative path), data, "utf8"
 
+CHECKMARK = "✔"
+CROSSMARK = "✗"
+
 module.exports = {
   relative
   delay
@@ -27,4 +30,6 @@ module.exports = {
   forEach
   readf
   writef
+  CHECKMARK
+  CROSSMARK
 }

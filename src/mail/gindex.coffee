@@ -1,9 +1,9 @@
-{ bold, red, green, blue, underline } = require "ansi-colors-ts"
-{ google }                            = require "googleapis"
-{ delay, readf, writef }              = require "../utils"
-readline                              = require "readline"
-YAML                                  = require "yaml"
-fs                                    = require "fs"
+{ bold, red, green, blue, underline }          = require "ansi-colors-ts"
+{ google }                                     = require "googleapis"
+{ delay, readf, writef, CHECKMARK, CROSSMARK } = require "../utils"
+readline                                       = require "readline"
+YAML                                           = require "yaml"
+fs                                             = require "fs"
 
 # If modifying these scopes, delete token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"
@@ -28,7 +28,7 @@ authorize = (credentials, callback) ->
   try
     token = readf TOKEN_PATH
     oAuth2Client.setCredentials YAML.parse token
-    console.log green "✓ Success"
+    console.log green CHECKMARK + " Success"
     callback oAuth2Client
   catch err
     getNewToken oAuth2Client, callback
@@ -52,7 +52,8 @@ getNewToken = (oAuth2Client, callback) ->
   rl.question (blue "Enter the code from that page here: "), (code) ->
     rl.close()
     oAuth2Client.getToken code, (err, token) ->
-      if err then return console.error (bold red "Error retrieving access token:"), err
+      if err then return console.error (
+        bold red CROSSMARK + " Error retrieving access token:"), err
       oAuth2Client.setCredentials token
 
       # Store the token to disk for later program executions
