@@ -25,7 +25,7 @@ authorize = (credentials, callback) ->
   # Check if we have previously stored a token.
   fs.readFile TOKEN_PATH, (err, token) ->
     if err then return getNewToken oAuth2Client, callback
-    oAuth2Client.setCredentials (JSON.parse token)
+    oAuth2Client.setCredentials JSON.parse token
     callback oAuth2Client
 
 ###
@@ -47,12 +47,12 @@ getNewToken = (oAuth2Client, callback) ->
   rl.question (green "Enter the code from that page here: "), (code) ->
     rl.close()
     oAuth2Client.getToken code, (err, token) ->
-      if err then return console.error (bold (red "Error retrieving access token")), err
+      if err then return console.error (bold red "Error retrieving access token"), err
       oAuth2Client.setCredentials token
       # Store the token to disk for later program executions
       fs.writeFile TOKEN_PATH, (JSON.stringify token), (err) ->
         if err then return console.error err
-        console.log (bold (green "Token stored to")), TOKEN_PATH
+        console.log (bold green "Token stored to"), TOKEN_PATH
       
       callback oAuth2Client
 

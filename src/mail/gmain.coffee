@@ -54,8 +54,8 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
       date: failing_date
     }
 
-  # console.log ("\n" + mdstring)
-  console.log ("\n" + green (bold "Messages succesfully read"))
+  # console.log "\n" + mdstring
+  console.log "\n" + green bold "Messages succesfully read"
 
   return overall
 
@@ -63,6 +63,8 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
 gmain = (oAuth2Client) ->
   console.log "Doing the gmain thing..."
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
+  # The curried arg of getUnreadMessages is the number of unread
+  # messages to fetch. It will likely be changed in the future.
   await (getUnreadMessages 1) gmail, "is:unread label:existential-crisis"
   console.log "The gmain thing is finished"
 
