@@ -1,9 +1,9 @@
-{ bold, red, green, blue, underline }          = require "ansi-colors-ts"
-{ google }                                     = require "googleapis"
-{ delay, readf, writef, CHECKMARK, CROSSMARK } = require "../utils"
-readline                                       = require "readline"
-YAML                                           = require "yaml"
-fs                                             = require "fs"
+{ bold, red, green, blue, underline }                   = require "ansi-colors-ts"
+{ google }                                              = require "googleapis"
+{ delay, readf, writef, CHECKMARK, CROSSMARK, templog } = require "../utils"
+readline                                                = require "readline"
+YAML                                                    = require "yaml"
+fs                                                      = require "fs"
 
 # If modifying these scopes, delete token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"
@@ -20,7 +20,7 @@ given callback function.
 @param {function} callback The callback to call with the authorized client.
 ###
 authorize = (credentials, callback) ->
-  console.log "Authorizing gmail access..."
+  templog "Authorizing gmail access..."
   { client_secret, client_id, redirect_uris } = credentials.installed
   oAuth2Client = new google.auth.OAuth2 client_id, client_secret, redirect_uris[0]
 
@@ -28,7 +28,7 @@ authorize = (credentials, callback) ->
   try
     token = readf TOKEN_PATH
     oAuth2Client.setCredentials YAML.parse token
-    console.log green CHECKMARK + " Success"
+    templog green CHECKMARK + " Authorized gmail access\n"
     callback oAuth2Client
   catch err
     getNewToken oAuth2Client, callback

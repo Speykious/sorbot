@@ -1,9 +1,9 @@
-{ green, bold, red, underline }       = require "ansi-colors-ts"
-{ authorize }                         = require "./mail/gindex"
-gmain                                 = require "./mail/gmain"
-{ Client }                            = require "discord.js"
-{ relative, delay, sendError, readf } = require "./utils"
-YAML                                  = require "yaml"
+{ green, bold, red, underline }                  = require "ansi-colors-ts"
+{ authorize }                                    = require "./mail/gindex"
+gmain                                            = require "./mail/gmain"
+{ Client }                                       = require "discord.js"
+{ relative, delay, sendError, readf, CROSSMARK } = require "./utils"
+YAML                                             = require "yaml"
 
 require "dotenv-flow"
 .config()
@@ -24,7 +24,7 @@ bot.on "ready", () ->
     # Authorize a client with credentials, then call the Gmail API.
     authorize (YAML.parse content), gmain
   catch err
-    console.log (bold red "Error loading #{underline "credentials.yaml"}:"), err
+    console.log (red CROSSMARK + " Error loading #{underline "credentials.yaml"}:"), err
   
   ### # was testing embeds
   bot.channels.cache.get "672514494903222311"

@@ -1,7 +1,7 @@
-{ green, blue, bold, dim, red }   = require 'ansi-colors-ts'
-gapis                             = require 'googleapis'
-{ forEach, CHECKMARK, CROSSMARK } = require '../utils'
-fs                                = require 'fs'
+{ green, blue, bold, dim, yellow }         = require 'ansi-colors-ts'
+gapis                                      = require 'googleapis'
+{ forEach, CHECKMARK, CROSSMARK, templog } = require '../utils'
+fs                                         = require 'fs'
 
 ###
 Lists the messages in the user's account.
@@ -12,10 +12,9 @@ their entered email address doesn't exist.
 @param {gapis.google.auth.OAuth2} oAuth2Client An authorized OAuth2 client.
 ###
 getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
-  # mdstring = "# Lots of Messages about Unexisting Mails\n\n"
   listm = await gmail.users.messages.list { userId: "me", q: query, maxResults: maxFetch }
   if not listm.data.messages
-  then return console.log dim red CROSSMARK + " No messages to query :/"
+  then return console.log dim yellow CROSSMARK + " No messages to query :/"
 
   counter = 0
   # overall: the variable that stores all the relevant data of all relevant messages
@@ -38,9 +37,8 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
         removeLabelIds: ["UNREAD"]
       }
     
-    # mdstring += "***\n\n"
     counter++
-    process.stdout.write "\x1b[2K\rMessages: #{bold (String counter)}"
+    templog "Messages: #{bold (String counter)}"
 
     # To get the email address that failed
     failed_recipient = message.data.payload.headers.find((header) ->
@@ -54,18 +52,17 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
       email: failed_recipient
       date: failing_date
     }
-
-  # console.log "\n" + mdstring
-  console.log "\n" + green CHECKMARK + " Messages succesfully read"
+  
+  templog green CHECKMARK + " Messages succesfully read\n"
 
   return overall
 
 # Main function to do gmail stuff.
 gmain = (oAuth2Client) ->
-  console.log "Reading Existential Crisis messages..."
+  templog "Reading Existential Crisis messages..."
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
   # The curried arg of getUnreadMessages is the number of unread
   # messages to fetch. It will likely be changed in the future.
-  await (getUnreadMessages 1) gmail, "label:existential-crisis"
+  await (getUnreadMessages 20) gmail, "label:existential-crisis"
 
 module.exports = gmain
