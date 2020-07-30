@@ -1,0 +1,196 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Address",
+  "type": "object",
+  "properties": {
+    "author": {
+      "type": "object",
+      "description": "The author of the embed (if any)",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of this author"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL of this author"
+        },
+        "iconURL": {
+          "type": "string",
+          "description": "URL of the icon for this author"
+        },
+        "proxyIconURL": {
+          "type": "string",
+          "description": "Proxied URL of the icon for this author"
+        }
+      }
+    },
+    "color": {
+      "type": "number",
+      "description": "The color of this embed (use hex plz 👀)"
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of this embed"
+    },
+    "fields": {
+      "type": "array",
+      "description": "The fields of this embed",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of this field"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of this field"
+          },
+          "inline": {
+            "type": "boolean",
+            "description": "Whether this field will be displayed inline"
+          }
+        }
+      }
+    },
+    
+    "files": {
+      "type": "array",
+      "description": "The files of this embed",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "title": "File Options",
+            "properties": {
+              "attachment": {
+                "type": "string",
+                "description": "File to attach"
+              },
+              "name": {
+                "type": "string",
+                "description": "Filename of the attachment"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "title": "Message Attachment",
+            "properties": {
+              "attachment": {
+                "type": "string",
+                "description": "The file"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the file, if any"
+              },
+              "data": {
+                "type": "object",
+                "description": "Extra data"
+              }
+            }
+          }
+        ]
+      }
+    },
+
+    "footer": {
+      "type": "object",
+      "description": "The footer of this embed",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "URL of this footer"
+        },
+        "iconURL": {
+          "type": "string",
+          "description": "URL of the icon for this footer"
+        },
+        "proxyIconURL": {
+          "type": "string",
+          "description": "Proxied URL of the icon for this footer"
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "description": "The image of this embed",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "URL for this image"
+        },
+        "proxyIconURL": {
+          "type": "string",
+          "description": "ProxyURL for this image"
+        },
+        "height": {
+          "type": "number",
+          "description": "Height of this image"
+        },
+        "width": {
+          "type": "number",
+          "description": "Width of this image"
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "description": "The provider of this embed",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of this provider"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL of this provider"
+        }
+      }
+    },
+    "thumbnail": {
+      "type": "object",
+      "description": "The thumbnail of this embed",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "URL for this thumbnail"
+        },
+        "proxyIconURL": {
+          "type": "string",
+          "description": "ProxyURL for this thumbnail"
+        },
+        "height": {
+          "type": "number",
+          "description": "Height of this thumbnail"
+        },
+        "width": {
+          "type": "number",
+          "description": "Width of this thumbnail"
+        }
+      }
+    },
+    "timestamp": {
+      "type": "number",
+      "description": "The timestamp of this embed"
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of this embed"
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of this embed",
+      "enum": ["rich", "image", "video", "gifv", "article", "link"]
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL of this embed"
+    }
+  }
+}
