@@ -13,7 +13,7 @@ bot = new Client {
 }
 
 bot.on "ready", () ->
-  console.log green "Ready to... sip."
+  console.log green "Ready to... sip. ☕"
   ###
   bot.channels.cache.get "672498488646434841"
   .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
@@ -26,7 +26,7 @@ bot.on "ready", () ->
   catch err
     console.log (bold red "Error loading #{underline "credentials.yaml"}:"), err
   
-  # was testing embeds
+  ### # was testing embeds
   bot.channels.cache.get "672514494903222311"
   .send {
     embed:
@@ -36,6 +36,7 @@ bot.on "ready", () ->
         text: "Hello I'm a footer"
         icon_url: "https://gitlab.com/Speykious/sorbot-3/-/raw/master/resources/blackorbit-sorbonne-logo.png"
   }
+  ###
   
 
 if process.env.LOCAL
