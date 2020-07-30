@@ -1,4 +1,5 @@
 fs                   = require "fs"
+YAML                 = require "yaml"
 { relative, delay }  = require "../utils"
 readline             = require "readline"
 { google }           = require "googleapis"
@@ -7,10 +8,10 @@ readline             = require "readline"
 # If modifying these scopes, delete token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"
           "https://www.googleapis.com/auth/gmail.modify"]
-# The file token.json stores the user's access and refresh tokens, and is
+# The file token.yaml stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
-TOKEN_PATH = relative "../token.json"
+TOKEN_PATH = relative "../token.yaml"
 
 ###
 Create an OAuth2 client with the given credentials, and then execute the
@@ -25,7 +26,7 @@ authorize = (credentials, callback) ->
   # Check if we have previously stored a token.
   fs.readFile TOKEN_PATH, (err, token) ->
     if err then return getNewToken oAuth2Client, callback
-    oAuth2Client.setCredentials JSON.parse token
+    oAuth2Client.setCredentials YAML.parse token
     callback oAuth2Client
 
 ###
@@ -50,7 +51,7 @@ getNewToken = (oAuth2Client, callback) ->
       if err then return console.error (bold red "Error retrieving access token"), err
       oAuth2Client.setCredentials token
       # Store the token to disk for later program executions
-      fs.writeFile TOKEN_PATH, (JSON.stringify token), (err) ->
+      fs.writeFile TOKEN_PATH, (YAML.stringify token), (err) ->
         if err then return console.error err
         console.log (bold green "Token stored to"), TOKEN_PATH
       
