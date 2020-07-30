@@ -1,4 +1,4 @@
-{ green, bold, red, underline }                  = require "ansi-colors-ts"
+{ rgb24, red, underline }                        = require "ansi-colors-ts"
 { authorize }                                    = require "./mail/gindex"
 gmain                                            = require "./mail/gmain"
 { Client }                                       = require "discord.js"
@@ -13,7 +13,7 @@ bot = new Client {
 }
 
 bot.on "ready", () ->
-  console.log green "Ready to... sip. ☕"
+  console.log (rgb24 0x3E2723) bold "Ready to... sip. ☕"
   ###
   bot.channels.cache.get "672498488646434841"
   .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
