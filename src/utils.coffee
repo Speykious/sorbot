@@ -20,6 +20,8 @@ forEach = (array, f) ->
 readf  = (path)       -> fs.readFileSync  (relative path), "utf8"
 writef = (path, data) -> fs.writeFileSync (relative path), data, "utf8"
 
+templog = (s) -> process.stdout.write "\x1b[2K\r" + s
+
 CHECKMARK = "✔"
 CROSSMARK = "✗"
 
@@ -32,4 +34,5 @@ module.exports = {
   writef
   CHECKMARK
   CROSSMARK
+  templog
 }
