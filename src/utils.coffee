@@ -22,7 +22,7 @@ writef = (path, data) -> fs.writeFileSync (relative path), data, "utf8"
 
 # Erases the line it's currently on to then
 # print s with(out) an automatic newline.
-templog = (s) -> process.stdout.write "\x1b[2K\r" + s
+templog   = (s) -> process.stdout.write "\x1b[2K\r" + s
 templogln = (s) -> templog s + "\n"
 
 CHECKMARK = "✔"
