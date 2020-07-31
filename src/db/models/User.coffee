@@ -12,6 +12,8 @@ User = connection.define "User", {
     type: STRING
     allowNull: false
     unique: true
+    validate:
+      isEmail: true
   
   code:
     type: STRING
