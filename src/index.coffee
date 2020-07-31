@@ -1,9 +1,10 @@
-{ rgb24, bold, red, underline }                  = require "ansi-colors-ts"
-{ authorize }                                    = require "./mail/gindex"
-gmain                                            = require "./mail/gmain"
-{ Client }                                       = require "discord.js"
-{ relative, delay, sendError, readf, CROSSMARK } = require "./utils"
-YAML                                             = require "yaml"
+{ rgb24, bold, red, underline } = require "ansi-colors-ts"
+{ authorize }                   = require "./mail/gindex"
+gmain                           = require "./mail/gmain"
+{ Client }                      = require "discord.js"
+{ relative, delay, sendError,
+  readf, CROSSMARK }            = require "./utils"
+YAML                            = require "yaml"
 
 require "dotenv-flow"
 .config()

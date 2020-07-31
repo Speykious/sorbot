@@ -1,9 +1,10 @@
-{ bold, red, green, blue, underline }                   = require "ansi-colors-ts"
-{ google }                                              = require "googleapis"
-{ delay, readf, writef, CHECKMARK, CROSSMARK, templog } = require "../utils"
-readline                                                = require "readline"
-YAML                                                    = require "yaml"
-fs                                                      = require "fs"
+{ bold, red, green, blue, underline } = require "ansi-colors-ts"
+{ google }                            = require "googleapis"
+{ delay, readf, writef, CHECKMARK,
+  CROSSMARK, templog, templogln }     = require "../utils"
+readline                              = require "readline"
+YAML                                  = require "yaml"
+fs                                    = require "fs"
 
 # If modifying these scopes, delete token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"
@@ -28,7 +29,7 @@ authorize = (credentials, callback) ->
   try
     token = readf TOKEN_PATH
     oAuth2Client.setCredentials YAML.parse token
-    templog green CHECKMARK + " Authorized gmail access\n"
+    templogln green CHECKMARK + " Authorized gmail access"
     callback oAuth2Client
   catch err
     getNewToken oAuth2Client, callback
