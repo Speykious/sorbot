@@ -1,9 +1,11 @@
-{ rgb24, bold, red, underline } = require "ansi-colors-ts"
+{ rgb24, bold, red, underline,
+  green }                       = require "ansi-colors-ts"
 { authorize }                   = require "./mail/gindex"
 gmain                           = require "./mail/gmain"
 { Client }                      = require "discord.js"
 { relative, delay, sendError,
-  readf, CROSSMARK }            = require "./utils"
+  readf, CROSSMARK, CHECKMARK,
+  templog, templogln }          = require "./utils"
 YAML                            = require "yaml"
 
 require "dotenv-flow"
@@ -28,17 +30,21 @@ bot.on "ready", () ->
     console.log (red CROSSMARK + " Error loading #{underline "credentials.yaml"}:"), err
   
   ### # was testing embeds
-  bot.channels.cache.get "672514494903222311"
+  templog "Printing some embed..."
+  messageEmbed = await (bot.channels.cache.get "672514494903222311"
   .send {
     embed:
-      title: "Testing in progress..."
-      description: "Hello I'm a description"
+      title: "Re²-Testing in progress..."
+      description: "Re²-Testing the addition of additional hidden data inside embeds 👀"
       footer:
         text: "Hello I'm a footer"
         icon_url: "https://gitlab.com/Speykious/sorbot-3/-/raw/master/resources/blackorbit-sorbonne-logo.png"
-  }
+      hidden:
+        some_string: "Hello I'm a string"
+        something_else: yes
+  })
+  templogln green CHECKMARK + " Printed some embed"
   ###
-  
 
 if process.env.LOCAL
 then bot.login process.env.SLOCAL_TOKEN
