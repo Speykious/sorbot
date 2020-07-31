@@ -1,5 +1,4 @@
 {
-  "yaml.schemaStore.enable": true,
   "yaml.schemas": {
     "./.vscode/embed.schema.json": ["src/frontend/*.embed.yaml"]
   }
