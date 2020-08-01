@@ -13,6 +13,7 @@ require "dotenv-flow"
 
 bot = new Client {
   disableMentions: "everyone"
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 }
 
 bot.on "ready", () ->
@@ -41,6 +42,12 @@ bot.on "ready", () ->
   })
   templogln green CHECKMARK + " Printed some embed"
   ###
+
+bot.on "messageReactionAdd", (reaction, user) ->
+  console.log "OMG A REACTION WAS ADDED ->", reaction
+
+bot.on "messageReactionRemove", (reaction, user) ->
+  console.log "OMG A REACTION WAS REMOVED ->", reaction
 
 if process.env.LOCAL
 then bot.login process.env.SLOCAL_TOKEN
