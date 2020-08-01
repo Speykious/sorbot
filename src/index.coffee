@@ -1,5 +1,5 @@
 { rgb24, bold, red, underline,
-  green }                       = require "ansi-colors-ts"
+  green, blue, cyan, yellow }   = require "ansi-colors-ts"
 { authorize }                   = require "./mail/gindex"
 gmain                           = require "./mail/gmain"
 { Client }                      = require "discord.js"
@@ -44,14 +44,24 @@ bot.on "ready", () ->
   ###
 
 bot.on "messageReactionAdd", (reaction, user) ->
-  console.log "OMG A #{
-    if reaction.partial then "PARTIAL " else ""
-  }REACTION WAS ADDED ->", reaction
+  console.log """
+              #{bold green "A new reaction was added!"}
+              Relevant information:
+                - emoji   of the reaction: #{cyan   String reaction._emoji.name}
+                - user    of the reaction: #{blue   String user.id}
+                - message of the reaction: #{blue   String reaction.message.id}
+                - source  of the reaction: #{yellow String reaction.message.channel.type}
+              """
 
 bot.on "messageReactionRemove", (reaction, user) ->
-  console.log "OMG A #{
-    if reaction.partial then "PARTIAL " else ""
-  }REACTION WAS REMOVED ->", reaction
+  console.log """
+              #{bold red "A new reaction was removed!"}
+              Relevant information:
+                - emoji   of the reaction: #{cyan   String reaction._emoji.name}
+                - user    of the reaction: #{blue   String user.id}
+                - message of the reaction: #{blue   String reaction.message.id}
+                - source  of the reaction: #{yellow String reaction.message.channel.type}
+              """
 
 if process.env.LOCAL
 then bot.login process.env.SLOCAL_TOKEN
