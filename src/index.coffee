@@ -44,10 +44,14 @@ bot.on "ready", () ->
   ###
 
 bot.on "messageReactionAdd", (reaction, user) ->
-  console.log "OMG A REACTION WAS ADDED ->", reaction
+  console.log "OMG A #{
+    if reaction.partial then "PARTIAL " else ""
+  }REACTION WAS ADDED ->", reaction
 
 bot.on "messageReactionRemove", (reaction, user) ->
-  console.log "OMG A REACTION WAS REMOVED ->", reaction
+  console.log "OMG A #{
+    if reaction.partial then "PARTIAL " else ""
+  }REACTION WAS REMOVED ->", reaction
 
 if process.env.LOCAL
 then bot.login process.env.SLOCAL_TOKEN
