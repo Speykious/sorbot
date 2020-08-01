@@ -12,4 +12,13 @@ Reactons:
   with the @emoji character of the reaction as the key
   and a @path to the page it links to as the value.
 
+A menu event has to have those informations:
+- the id of the discord message
+- the id of the user
+- the emoji of the reaction
+
+The menu state contains:
+- the id of the discord message where the embed page is displayed
+- the path to the `.embed.yaml` file corresponding to the page
+
 ###
