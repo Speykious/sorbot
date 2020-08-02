@@ -20,6 +20,7 @@
   "private": true,
   "dependencies": {
     "ansi-colors-ts": "^0.0.1",
+    "cryptojs": "^2.5.3",
     "discord-commands-ts": "^0.0.2",
     "discord.js": "^12.2.0",
     "dotenv-flow": "^3.1.0",
@@ -31,9 +32,9 @@
     "yaml": "^1.10.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "coffeescript": "^2.5.1",
     "mocha": "^8.0.1",
-    "should": "^13.2.3",
     "sqlite3": "^5.0.0"
   }
 }
