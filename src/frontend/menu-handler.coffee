@@ -22,3 +22,29 @@ The menu state contains:
 - the path to the `.embed.yaml` file corresponding to the page
 
 ###
+
+{ red }       = require "ansi-colors-ts"
+{ CROSSMARK } = require "../utils"
+
+# Sends the menu as a message.
+# - menu: menu object typed according to the embed.schema.json yaml validation file.
+# - user: Discord.User
+# - msgid: discord snowflake representing the message id of the menu (optional).
+sendMenu = (menu, user, msgid) ->
+  try
+    if msgid
+      # If we have a msgid, we edit the corresponding message
+      msg = await user.dmChannel.messages.fetch msgid
+            .edit { embed: menu.embed }
+      return msg
+    else
+      # Else we send a new one
+      msg = await user.dmChannel.send { embed: menu.embed }
+      return msg
+  catch err
+    console.error (red CROSSMARK + " Discord API crisis:"), err
+    return undefined
+
+module.exports = {
+  sendMenu
+}
