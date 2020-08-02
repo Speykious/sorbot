@@ -5,7 +5,7 @@ connection = require "../initdb.coffee"
 
 User = connection.define "User", {
   id:
-    type: STRING 32
+    type: STRING 64
     primaryKey: true
   email:
     type: STRING
