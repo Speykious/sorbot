@@ -2,6 +2,7 @@
   green, blue, cyan, yellow }   = require "ansi-colors-ts"
 { authorize }                   = require "./mail/gindex"
 gmain                           = require "./mail/gmain"
+{ encryptid }                   = require "./encryption"
 { Client }                      = require "discord.js"
 { relative, delay, sendError,
   readf, CROSSMARK, CHECKMARK,
@@ -24,7 +25,7 @@ bot.on "ready", () ->
     # Authorize a client with credentials, then call the Gmail API.
     authorize (YAML.parse content), gmain
   catch err
-    console.log (red CROSSMARK + " Error loading #{underline "credentials.yaml"}:"), err
+    console.log (red CROSSMARK + " Crisis loading #{underline "credentials.yaml"}:"), err
   
   ### # was testing embeds
   templog "Printing some embed..."
@@ -62,6 +63,35 @@ bot.on "messageReactionRemove", (reaction, user) ->
                 - message of the reaction: #{blue   String reaction.message.id}
                 - source  of the reaction: #{yellow String reaction.message.channel.type}
               """
+
+  # CHILLEDFROGS, WE NEED DB REQUEST HERE
+  menuState = fetch_menuState_from_user_db
+              .using -> encryptid user.id
+  if not menuState then return
+
+  # Get the menu's message id
+  menuMsgid = menuState.slice 0, 18
+  if reaction.message.id != menuMsgid then return
+
+  try
+    mpath = "../src/frontend/pages/" + menuState.slice 19
+    pdir  = (split mpath, "/").pop().join("/") + "/"
+    menu  = YAML.parse readf mpath + ".embed.yaml"
+    reactonojis = Object.keys menu.reactons
+
+    reactonoji = reactonojis.find (e) -> e == reaction._emoji.name
+    if not reactonoji then return
+
+    linked = YAML.parse readf mpath + menu.reactons[reactonoji] + ".embed.yaml"
+    return sendMenu linked, user, reaction.message.id
+
+  catch err
+    console.log (red CROSSMARK + " Menu existential crisis:"), err
+
+  ###
+  We have to use the encrypted user.id
+  to fetch the menu state from the user db
+  ###
 
 if process.env.LOCAL
 then bot.login process.env.SLOCAL_TOKEN
