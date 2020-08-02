@@ -5,7 +5,7 @@ connection = require "../initdb.coffee"
 
 User = connection.define "User", {
   id:
-    type: BIGINT
+    type: STRING 32
     primaryKey: true
   email:
     type: STRING
@@ -14,7 +14,7 @@ User = connection.define "User", {
     validate:
       isEmail: true
   code:
-    type: STRING
+    type: STRING 6
   federatedServers:
     type: ARRAY BIGINT
   menuState:
