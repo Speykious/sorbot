@@ -65,7 +65,6 @@ bot.on "messageReactionRemove", (reaction, user) ->
                 - source  of the reaction: #{yellow String reaction.message.channel.type}
               """
 
-  # CHILLEDFROGS, WE NEED DB REQUEST HERE
   menuState = await User.findByPk(encryptid user).menuState
   if not menuState then return
 
