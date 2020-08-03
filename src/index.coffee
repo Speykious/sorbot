@@ -8,6 +8,7 @@ gmain                           = require "./mail/gmain"
   readf, CROSSMARK, CHECKMARK,
   templog, templogln }          = require "./utils"
 YAML                            = require "yaml"
+User                            = require "./db/models/User.coffee"
 
 require "dotenv-flow"
 .config()
@@ -65,8 +66,7 @@ bot.on "messageReactionRemove", (reaction, user) ->
               """
 
   # CHILLEDFROGS, WE NEED DB REQUEST HERE
-  menuState = fetch_menuState_from_user_db
-              .using -> encryptid user.id
+  menuState = await User.findByPk(encryptid user).menuState
   if not menuState then return
 
   # Get the menu's message id
