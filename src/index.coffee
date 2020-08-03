@@ -65,7 +65,7 @@ bot.on "messageReactionRemove", (reaction, user) ->
                 - source  of the reaction: #{yellow String reaction.message.channel.type}
               """
 
-  menuState = await User.findByPk(encryptid user).menuState
+  menuState = await User.findByPk(encryptid user.id).menuState
   if not menuState then return
 
   # Get the menu's message id
