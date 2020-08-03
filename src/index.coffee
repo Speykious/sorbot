@@ -12,9 +12,10 @@ require "dotenv-flow"
 bot = new Client {
   disableMentions: "everyone"
 }
+console.log (rgb24 0xAE6753) "Preparing the cup of coffee..."
 
 bot.on "ready", () ->
-  console.log (rgb24 0xAE6753) bold "Ready to... sip. ☕"
+  console.log (rgb24 0xAE6753) bold "Ready to sip. ☕"
   ###
   bot.channels.cache.get "672498488646434841"
   .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
