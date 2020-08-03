@@ -1,5 +1,6 @@
-path = require "path"
-fs   = require "fs"
+path     = require "path"
+fs       = require "fs"
+{ bold } = require "ansi-colors-ts"
 
 relative = (s) -> path.resolve __dirname, s
 delay = (ms) -> new Promise (resolve) -> setTimeout resolve, ms
@@ -25,8 +26,8 @@ writef = (path, data) -> fs.writeFileSync (relative path), data, "utf8"
 templog   = (s) -> process.stdout.write "\x1b[2K\r" + s
 templogln = (s) -> templog s + "\n"
 
-CHECKMARK = "✔"
-CROSSMARK = "✗"
+CHECKMARK = bold "🗸"
+CROSSMARK = bold "✗"
 
 module.exports = {
   relative
