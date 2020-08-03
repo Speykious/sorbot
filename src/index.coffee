@@ -8,7 +8,7 @@ gmain                           = require "./mail/gmain"
   readf, CROSSMARK, CHECKMARK,
   templog, templogln }          = require "./utils"
 YAML                            = require "yaml"
-User                            = require "./db/models/User.coffee"
+User                            = require "./db/models/User"
 
 require "dotenv-flow"
 .config()
