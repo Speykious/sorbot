@@ -79,7 +79,7 @@ bot.on "messageReactionRemove", (reaction, user) ->
   menuMsgid = menuState.slice 0, 18
   if reaction.message.id != menuMsgid then return
 
-  try
+  try # Get to the linked page and edit the message accordingly
     mpath = "../src/frontend/pages/" + menuState.slice 19
     pdir  = (split mpath, "/").pop().join("/") + "/"
     menu  = YAML.parse readf mpath + ".embed.yaml"
