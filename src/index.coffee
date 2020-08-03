@@ -72,7 +72,7 @@ bot.on "messageReactionRemove", (reaction, user) ->
     menuState = dbUser.menuState
     if not menuState then return
   catch err
-    console.error (red CROSSMARK "User existential database crisis:"), err
+    console.error (red CROSSMARK + " User existential database crisis:"), err
 
 
   # Get the menu's message id
