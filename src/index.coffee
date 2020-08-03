@@ -64,9 +64,16 @@ bot.on "messageReactionRemove", (reaction, user) ->
                 - message of the reaction: #{blue   String reaction.message.id}
                 - source  of the reaction: #{yellow String reaction.message.channel.type}
               """
+  
+  menuState = undefined
+  try # Manages the fetching of menuState
+    dbUser = await User.findByPk encryptid user.id
+    if not dbUser then throw "User #{blue user.id} doesn't exist in our database"
+    menuState = dbUser.menuState
+    if not menuState then return
+  catch err
+    console.error (red CROSSMARK "User existential database crisis:"), err
 
-  menuState = await User.findByPk(encryptid user.id).menuState
-  if not menuState then return
 
   # Get the menu's message id
   menuMsgid = menuState.slice 0, 18
@@ -85,7 +92,7 @@ bot.on "messageReactionRemove", (reaction, user) ->
     return sendMenu linked, user, reaction.message.id
 
   catch err
-    console.log (red CROSSMARK + " Menu existential crisis:"), err
+    console.error (red CROSSMARK + " Menu existential crisis:"), err
 
   ###
   We have to use the encrypted user.id
