@@ -1,7 +1,8 @@
 { bold, red, green, blue, underline } = require "ansi-colors-ts"
 { google }                            = require "googleapis"
-{ delay, readf, writef, CHECKMARK,
-  CROSSMARK, templog, templogln }     = require "../utils"
+{ logf, LOG, formatCrisis }           = require "../logging"
+{ delay, readf, writef,
+  CHECKMARK, CROSSMARK }              = require "../utils"
 readline                              = require "readline"
 YAML                                  = require "yaml"
 fs                                    = require "fs"
@@ -21,7 +22,7 @@ given callback function.
 @param {function} callback The callback to call with the authorized client.
 ###
 authorize = (credentials, callback) ->
-  templog "Authorizing gmail access..."
+  logf LOG.INIT, "Authorizing gmail access..."
   { client_secret, client_id, redirect_uris } = credentials.installed
   oAuth2Client = new google.auth.OAuth2 client_id, client_secret, redirect_uris[0]
 
@@ -29,9 +30,11 @@ authorize = (credentials, callback) ->
   try
     token = readf TOKEN_PATH
     oAuth2Client.setCredentials YAML.parse token
-    templogln green CHECKMARK + " Authorized gmail access"
+    logf LOG.INIT, "{#32ff64-fg}#{CHECKMARK} Authorized gmail access{/}"
     callback oAuth2Client
   catch err
+    logf LOG.INIT, (formatCrisis "Credentials",
+      "The Gmail token is missing! You need to go to {bold}SorBOT's stdin{/bold} to create a new one.")
     getNewToken oAuth2Client, callback
 
 ###
@@ -61,8 +64,10 @@ getNewToken = (oAuth2Client, callback) ->
       try
         writef TOKEN_PATH, (YAML.stringify token)
         console.log (bold "Token stored to"), (underline relative TOKEN_PATH)
+        logf LOG.INIT, "{bold}Token stored to{/} {underline}#{relative TOKEN_PATH}{/}"
       catch err
         console.error err
+        logf LOG.WTF, (formatCrisis "r/HolUp", err)
 
       callback oAuth2Client
 
