@@ -7,4 +7,5 @@ credentials.yaml
 token.yaml
 message.yaml
 test.coffee
+logs
 *~

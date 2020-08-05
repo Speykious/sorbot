@@ -1,7 +1,7 @@
 { green, blue, bold, dim, yellow } = require 'ansi-colors-ts'
 gapis                              = require 'googleapis'
-{ forEach, CHECKMARK, CROSSMARK,
-  templog, templogln }             = require '../utils'
+{ forEach, CHECKMARK, CROSSMARK }  = require '../utils'
+{ logf, LOG, formatCrisis }        = require '../logging'
 fs                                 = require 'fs'
 
 ###
@@ -15,7 +15,7 @@ their entered email address doesn't exist.
 getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
   listm = await gmail.users.messages.list { userId: "me", q: query, maxResults: maxFetch }
   if not listm.data.messages
-  then return templogln dim yellow CROSSMARK + " No messages to query :/"
+  then return logf LOG.MAIL, "{#ffff32-fg}{bold}#{CROSSMARK}{/bold} No messages to query :/{/}"
 
   counter = 0
   # overall: the variable that stores all the relevant data of all relevant messages
@@ -39,7 +39,9 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
       }
     
     counter++
-    templog "Messages: #{bold (String counter)}"
+
+    if counter == 1 or counter % 10 == 0
+    then logf LOG.MAIL, "Messages: {bold}#{String counter}{/}"
 
     # To get the email address that failed
     failed_recipient = message.data.payload.headers.find((header) ->
@@ -54,13 +56,13 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
       date: failing_date
     }
   
-  templogln green CHECKMARK + " Messages succesfully read"
+  logf LOG.MAIL, "{#32ff64-fg}{bold}#{CHECKMARK}{/bold} Messages succesfully read{/}"
 
   return overall
 
 # Main function to do gmail stuff.
 gmain = (oAuth2Client) ->
-  templog "Reading Existential Crisis messages..."
+  logf LOG.MAIL, "Reading Existential Crisis messages..."
   gmail = gapis.google.gmail { version: "v1", auth: oAuth2Client }
   # The curried arg of getUnreadMessages is the number of unread
   # messages to fetch. It will likely be changed in the future.
