@@ -17,3 +17,9 @@ LOG =
   MESSAGES:   aslog "messages"   # For discord message requests & errors
   MODERATION: aslog "moderation" # For discord administration info
   WTF:        aslog "wtf"        # For whatever other weird shit happens
+
+module.exports {
+  formatCrisis
+  logf
+  LOG
+}
