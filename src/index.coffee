@@ -26,7 +26,7 @@ bot.on "ready", () ->
     # Authorize a client with credentials, then call the Gmail API.
     authorize (YAML.parse content), gmain
   catch err
-    console.log (red CROSSMARK + " Error loading #{underline "credentials.yaml"}:"), err
+    console.log (red (bold CROSSMARK) + " Error loading #{underline "credentials.yaml"}:"), err
   
   ### # was testing embeds
   bot.channels.cache.get "672514494903222311"

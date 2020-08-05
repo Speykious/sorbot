@@ -15,7 +15,7 @@ their entered email address doesn't exist.
 getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
   listm = await gmail.users.messages.list { userId: "me", q: query, maxResults: maxFetch }
   if not listm.data.messages
-  then return templogln dim yellow CROSSMARK + " No messages to query :/"
+  then return templogln dim yellow (bold CROSSMARK) + " No messages to query :/"
 
   counter = 0
   # overall: the variable that stores all the relevant data of all relevant messages
@@ -54,7 +54,7 @@ getUnreadMessages = (maxFetch = 10) -> (gmail, query) ->
       date: failing_date
     }
   
-  templogln green CHECKMARK + " Messages succesfully read"
+  templogln green (bold CHECKMARK) + " Messages succesfully read"
 
   return overall
 
