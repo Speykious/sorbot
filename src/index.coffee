@@ -52,6 +52,7 @@ bot.on "ready", () ->
   templogln green CHECKMARK + " Printed some embed"
   ###
 
+###
 bot.on "messageReactionAdd", (reaction, user) ->
   console.log """
               #{bold green "A new reaction was added!"}
@@ -61,8 +62,10 @@ bot.on "messageReactionAdd", (reaction, user) ->
                 - message of the reaction: #{blue   String reaction.message.id}
                 - source  of the reaction: #{yellow String reaction.message.channel.type}
               """
+###
 
 bot.on "messageReactionRemove", (reaction, user) ->
+  ###
   console.log """
               #{bold red "A new reaction was removed!"}
               Relevant information:
@@ -71,15 +74,17 @@ bot.on "messageReactionRemove", (reaction, user) ->
                 - message of the reaction: #{blue   String reaction.message.id}
                 - source  of the reaction: #{yellow String reaction.message.channel.type}
               """
-  
+  ###
   menuState = undefined
   try # Manages the fetching of menuState
     dbUser = await User.findByPk encryptid user.id
-    if not dbUser then throw "User #{blue user.id} doesn't exist in our database"
+    if not dbUser then throw "User {#8c9eff-fg}#{user.id}{/} doesn't exist in our database"
     menuState = dbUser.menuState
     if not menuState then return
   catch err
-    console.error (red CROSSMARK + " User existential database crisis:"), err
+    # In this block we have to tell the user that they are not registered
+    # in our database and that they should contact us or something
+    logf LOG.DATABASE, (formatCrisis "Existential", err)
 
 
   # Get the menu's message id
@@ -99,7 +104,7 @@ bot.on "messageReactionRemove", (reaction, user) ->
     return sendMenu linked, user, reaction.message.id
 
   catch err
-    console.error (red CROSSMARK + " Menu existential crisis:"), err
+    logf LOG.MESSAGES, (formatCrisis "Menu Existential", err)
 
   ###
   We have to use the encrypted user.id

@@ -42,7 +42,7 @@ sendMenu = (menu, user, msgid) ->
       msg = await user.dmChannel.send { embed: menu.embed }
       return msg
   catch err
-    console.error (red CROSSMARK + " Discord API crisis:"), err
+    logf LOG.MESSAGES, (formatCrisis "Discord API", err)
     return undefined
 
 module.exports = {
