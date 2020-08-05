@@ -11,5 +11,9 @@ logf = (path) -> (...args) -> fs.appendFileSync (relative path), format(...args)
 aslog = (name) -> "../logs/#{name}.log"
 
 LOG =
-  INIT: aslog "init"
-  MAIL: aslog "mail"
+  INIT:       aslog "init"       # For every kind of initialization
+  MAIL:       aslog "mail"       # For mail related requests & errors
+  DATABASE:   aslog "database"   # For database related requests & errors
+  MESSAGES:   aslog "messages"   # For discord message requests & errors
+  MODERATION: aslog "moderation" # For discord administration info
+  WTF:        aslog "wtf"        # For whatever other weird shit happens
