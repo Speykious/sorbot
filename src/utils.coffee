@@ -1,6 +1,6 @@
-path = require "path"
-fs   = require "fs"
-{ bold } = require "ansi-colors-ts"
+path                        = require "path"
+fs                          = require "fs"
+{ logf, LOG, formatCrisis } = require "./logging"
 
 relative = (s) -> path.resolve __dirname, s
 delay = (ms) -> new Promise (resolve) -> setTimeout resolve, ms
@@ -8,7 +8,8 @@ delay = (ms) -> new Promise (resolve) -> setTimeout resolve, ms
 sendError = (channel, errorString, msDelay = 5000) ->
   errorMsg = await channel
     .send errorString
-    .catch () -> Promise.resolve()
+    .catch (err) -> logf LOG.MESSAGES, (formatCrisis "Message", err)
+  logf LOG.MESSAGES, "{bold}Sent error:{/} {#ff6432-fg}#{errorMsg.content}{/}"
   if errorMsg then errorMsg.delete { timeout: msDelay }
   return Promise.resolve errorMsg
 
@@ -26,8 +27,9 @@ writef = (path, data) -> fs.writeFileSync (relative path), data, "utf8"
 templog   = (s) -> process.stdout.write "\x1b[2K\r" + s
 templogln = (s) -> templog s + "\n"
 
-CHECKMARK = bold "🗸"
-CROSSMARK = bold "✗"
+CHECKMARK = "🗸"
+CROSSMARK = "✗"
+
 
 module.exports = {
   relative
@@ -40,4 +42,5 @@ module.exports = {
   CROSSMARK
   templog
   templogln
+  logf
 }
