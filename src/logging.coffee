@@ -7,7 +7,7 @@ fs                      = require "fs"
 formatCrisis = (crisis, crisisMsg) ->
   "{#ff6432-fg}[#{crisis} Crisis] {bold}#{CROSSMARK}{/} #{crisisMsg}"
 
-logf = (path, ...args) -> fs.appendFileSync (relative path), format(...args) + "\n"
+logf = (path, ...args) -> fs.appendFileSync path, format(...args) + "\n"
 
 aslog = undefined
 if process.env.LOCAL
