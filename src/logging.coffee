@@ -8,7 +8,11 @@ formatCrisis = (crisis, crisisMsg) ->
   "{#ff6432-fg}[#{crisis} Crisis] {bold}#{CROSSMARK}{/} #{crisisMsg}"
 
 logf = (path, ...args) -> fs.appendFileSync (relative path), format(...args) + "\n"
-aslog = (name) -> "../logs/#{name}.log"
+
+aslog = undefined
+if process.env.LOCAL
+then alog = (name) -> relative   "../logs/#{name}.log"
+else alog = (name) -> "/var/logs/sorbot-3/#{name}.log"
 
 LOG =
   INIT:       aslog "init"       # For every kind of initialization
