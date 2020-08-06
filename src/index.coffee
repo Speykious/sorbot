@@ -1,5 +1,3 @@
-{ rgb24, bold, red, underline,
-  green, blue, cyan, yellow }   = require "ansi-colors-ts"
 { authorize }                   = require "./mail/gindex"
 gmain                           = require "./mail/gmain"
 { encryptid }                   = require "./encryption"
@@ -33,7 +31,7 @@ bot.on "ready", () ->
     # Authorize a client with credentials, then call the Gmail API.
     authorize (YAML.parse content), gmain
   catch err
-    logf LOG.INIT, " when loading #{underline "credentials.yaml"}: #{err}"
+    logf LOG.INIT, " when loading {underline}credentials.yaml{/}: #{err}"
   
   ### # was testing embeds
   templog "Printing some embed..."

@@ -1,11 +1,11 @@
-{ bold, red, green, blue, underline } = require "ansi-colors-ts"
-{ google }                            = require "googleapis"
-{ logf, LOG, formatCrisis }           = require "../logging"
+{ bold, red, blue, underline } = require "ansi-colors-ts"
+{ google }                     = require "googleapis"
+{ logf, LOG, formatCrisis }    = require "../logging"
 { delay, readf, writef,
-  CHECKMARK, CROSSMARK }              = require "../utils"
-readline                              = require "readline"
-YAML                                  = require "yaml"
-fs                                    = require "fs"
+  CHECKMARK, CROSSMARK }       = require "../utils"
+readline                       = require "readline"
+YAML                           = require "yaml"
+fs                             = require "fs"
 
 # If modifying these scopes, delete token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"

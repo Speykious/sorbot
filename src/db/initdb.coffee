@@ -1,5 +1,4 @@
 { Sequelize }            = require "sequelize"
-{ red, green }           = require "ansi-colors-ts"
 { logf, LOG, formatCrisis } = require "../logging"
 { CROSSMARK, CHECKMARK } = require "../utils"
 

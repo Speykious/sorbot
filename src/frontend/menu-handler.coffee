@@ -23,7 +23,6 @@ The menu state contains:
 
 ###
 
-{ red }       = require "ansi-colors-ts"
 { CROSSMARK } = require "../utils"
 
 # Sends the menu as a message.

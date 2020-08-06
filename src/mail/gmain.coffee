@@ -1,7 +1,6 @@
-{ green, blue, bold, dim, yellow } = require 'ansi-colors-ts'
 gapis                              = require 'googleapis'
 { forEach, CHECKMARK, CROSSMARK }  = require '../utils'
-{ logf, LOG, formatCrisis }        = require '../logging'
+{ logf, LOG }                      = require '../logging'
 fs                                 = require 'fs'
 
 ###

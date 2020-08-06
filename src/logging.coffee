@@ -1,13 +1,13 @@
 { relative, CROSSMARK } = require "./utils"
 { format }              = require "util"
-fs                      = require "fs"
+{ appendFileSync }      = require "fs"
 
 # Actually don't praise currying in coffeescript
 # Note: the formatting syntax used is only useful for `blessed`
 formatCrisis = (crisis, crisisMsg) ->
   "{#ff6432-fg}[#{crisis} Crisis] {bold}#{CROSSMARK}{/} #{crisisMsg}"
 
-logf = (path, ...args) -> fs.appendFileSync path, format(...args) + "\n"
+logf = (path, ...args) -> appendFileSync path, format(...args) + "\n"
 
 aslog = undefined
 if process.env.LOCAL
