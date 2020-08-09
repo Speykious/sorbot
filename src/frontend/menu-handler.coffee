@@ -24,6 +24,7 @@ The menu state contains:
 ###
 
 { CROSSMARK } = require "../utils"
+{ logf, LOG } = require "../logging"
 
 # Sends the menu as a message.
 # - menu: menu object typed according to the embed.schema.json yaml validation file.
