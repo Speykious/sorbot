@@ -9,10 +9,9 @@ formatCrisis = (crisis, crisisMsg) ->
 
 logf = (path, ...args) -> appendFileSync path, format(...args) + "\n"
 
-aslog = undefined
-if process.env.LOCAL
-then alog = (name) -> relative   "../logs/#{name}.log"
-else alog = (name) -> "/var/logs/sorbot-3/#{name}.log"
+aslog = if process.env.LOCAL
+then (name) -> relative   "../logs/#{name}.log"
+else (name) -> "/var/logs/sorbot-3/#{name}.log"
 
 LOG =
   INIT:       aslog "init"       # For every kind of initialization
@@ -22,7 +21,7 @@ LOG =
   MODERATION: aslog "moderation" # For discord administration info
   WTF:        aslog "wtf"        # For whatever other weird shit happens
 
-module.exports {
+module.exports = {
   formatCrisis
   logf
   LOG

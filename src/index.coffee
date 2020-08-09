@@ -1,3 +1,6 @@
+require "dotenv-flow"
+.config()
+
 { authorize }                   = require "./mail/gindex"
 gmain                           = require "./mail/gmain"
 { encryptid }                   = require "./encryption"
@@ -8,8 +11,6 @@ gmain                           = require "./mail/gmain"
 YAML                            = require "yaml"
 User                            = require "./db/models/User"
 
-require "dotenv-flow"
-.config()
 
 bot = new Client {
   disableMentions: "everyone"

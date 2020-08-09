@@ -35,7 +35,5 @@ module.exports = {
   writef
   CHECKMARK
   CROSSMARK
-  templog
-  templogln
   logf
 }
