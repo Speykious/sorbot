@@ -35,5 +35,4 @@ module.exports = {
   writef
   CHECKMARK
   CROSSMARK
-  logf
 }
