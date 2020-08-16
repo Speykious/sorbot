@@ -1,8 +1,8 @@
 { bold, red, blue, underline } = require "ansi-colors-ts"
 { google }                     = require "googleapis"
-{ logf, LOG, formatCrisis }    = require "../logging"
 { delay, readf, writef,
-  CHECKMARK, CROSSMARK }       = require "../utils"
+  CHECKMARK, CROSSMARK,
+  logf, LOG, formatCrisis }    = require "../utilog"
 readline                       = require "readline"
 YAML                           = require "yaml"
 fs                             = require "fs"

@@ -1,15 +1,15 @@
 require "dotenv-flow"
 .config()
 
-{ authorize }                   = require "./mail/gindex"
-gmain                           = require "./mail/gmain"
-{ encryptid }                   = require "./encryption"
-{ Client }                      = require "discord.js"
+{ authorize }         = require "./mail/gindex"
+gmain                 = require "./mail/gmain"
+{ encryptid }         = require "./encryption"
+{ Client }            = require "discord.js"
 { relative, delay, sendError,
-  readf, CROSSMARK }            = require "./utils"
-{ logf, LOG, formatCrisis }     = require "./logging"
-YAML                            = require "yaml"
-User                            = require "./db/models/User"
+  readf, CROSSMARK, logf,
+  LOG, formatCrisis } = require "./utilog"
+YAML                  = require "yaml"
+User                  = require "./db/models/User"
 
 
 bot = new Client {

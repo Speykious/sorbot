@@ -1,6 +1,6 @@
 { Sequelize }               = require "sequelize"
-{ logf, LOG, formatCrisis } = require "../logging"
-{ CROSSMARK, CHECKMARK }    = require "../utils"
+{ CROSSMARK, CHECKMARK,
+  logf, LOG, formatCrisis } = require "../utilog"
 
 connection = if process.env.LOCAL
 then new Sequelize "sqlite::memory"

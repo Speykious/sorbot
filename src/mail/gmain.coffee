@@ -1,7 +1,7 @@
-gapis                              = require 'googleapis'
-{ forEach, CHECKMARK, CROSSMARK }  = require '../utils'
-{ logf, LOG }                      = require '../logging'
-fs                                 = require 'fs'
+gapis         = require 'googleapis'
+{ forEach, CHECKMARK, CROSSMARK,
+  logf, LOG } = require '../utilog'
+fs            = require 'fs'
 
 ###
 Lists the messages in the user's account.
