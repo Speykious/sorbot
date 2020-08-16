@@ -7,7 +7,8 @@
     "test": "mocha -w --require coffeescript/register \"tests/**/*.test.coffee\"",
     "start": "coffee src/index.coffee",
     "build": "coffee -bcmo client src",
-    "run-js": "node ."
+    "run-js": "node .",
+    "c-all": "yarn build && yarn run-js"
   },
   "files": [
     "client/**/*"
