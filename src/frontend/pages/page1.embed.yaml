@@ -1,0 +1,10 @@
+embed:
+  color: 0xff3232
+  title: First page
+  description: This is the first page of an embed menu
+  footer:
+    text: Do you want to see the second?
+    iconURL: https://gitlab.com/Speykious/sorbot-3/-/raw/master/resources/blackorbit-sorbonne-logo.png
+
+reactons:
+  🍵: page2

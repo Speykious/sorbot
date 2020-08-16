@@ -1,17 +1,20 @@
-{ rgb24, bold, red, underline } = require "ansi-colors-ts"
-{ authorize }                   = require "./mail/gindex"
-gmain                           = require "./mail/gmain"
-{ Client }                      = require "discord.js"
-{ relative, delay, sendError,
-  readf, CROSSMARK }            = require "./utils"
-{ logf, LOG, formatCrisis }     = require "./logging"
-YAML                            = require "yaml"
-
 require "dotenv-flow"
 .config()
 
+{ authorize }         = require "./mail/gindex"
+gmain                 = require "./mail/gmain"
+{ encryptid }         = require "./encryption"
+{ Client }            = require "discord.js"
+{ relative, delay, sendError,
+  readf, CROSSMARK, logf,
+  LOG, formatCrisis } = require "./utilog"
+YAML                  = require "yaml"
+User                  = require "./db/models/User"
+
+
 bot = new Client {
   disableMentions: "everyone"
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 }
 logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 
@@ -29,20 +32,83 @@ bot.on "ready", () ->
     # Authorize a client with credentials, then call the Gmail API.
     authorize (YAML.parse content), gmain
   catch err
-    logf LOG.INIT, " when loading #{underline "credentials.yaml"}: #{err}"
+    logf LOG.INIT, " when loading {underline}credentials.yaml{/}: #{err}"
   
   ### # was testing embeds
-  bot.channels.cache.get "672514494903222311"
+  templog "Printing some embed..."
+  messageEmbed = await (bot.channels.cache.get "672514494903222311"
   .send {
     embed:
-      title: "Testing in progress..."
-      description: "Hello I'm a description"
+      title: "Re²-Testing in progress..."
+      description: "Re²-Testing the addition of additional hidden data inside embeds 👀"
       footer:
         text: "Hello I'm a footer"
         icon_url: "https://gitlab.com/Speykious/sorbot-3/-/raw/master/resources/blackorbit-sorbonne-logo.png"
-  }
+      hidden:
+        some_string: "Hello I'm a string"
+        something_else: yes
+  })
+  templogln green CHECKMARK + " Printed some embed"
   ###
-  
+
+###
+bot.on "messageReactionAdd", (reaction, user) ->
+  console.log """
+              #{bold green "A new reaction was added!"}
+              Relevant information:
+                - emoji   of the reaction: #{cyan   String reaction._emoji.name}
+                - user    of the reaction: #{blue   String user.id}
+                - message of the reaction: #{blue   String reaction.message.id}
+                - source  of the reaction: #{yellow String reaction.message.channel.type}
+              """
+###
+
+bot.on "messageReactionRemove", (reaction, user) ->
+  ###
+  console.log """
+              #{bold red "A new reaction was removed!"}
+              Relevant information:
+                - emoji   of the reaction: #{cyan   String reaction._emoji.name}
+                - user    of the reaction: #{blue   String user.id}
+                - message of the reaction: #{blue   String reaction.message.id}
+                - source  of the reaction: #{yellow String reaction.message.channel.type}
+              """
+  ###
+  menuState = undefined
+  try # Manages the fetching of menuState
+    dbUser = await User.findByPk encryptid user.id
+    if not dbUser then throw "User {#8c9eff-fg}#{user.id}{/} doesn't exist in our database"
+    menuState = dbUser.menuState
+    if not menuState then return
+  catch err
+    # In this block we have to tell the user that they are not registered
+    # in our database and that they should contact us or something
+    logf LOG.DATABASE, (formatCrisis "Existential", err)
+
+
+  # Get the menu's message id
+  menuMsgid = menuState.slice 0, 18
+  if reaction.message.id != menuMsgid then return
+
+  try # Get to the linked page and edit the message accordingly
+    mpath = "../src/frontend/pages/" + menuState.slice 19
+    pdir  = (split mpath, "/").pop().join("/") + "/"
+    menu  = YAML.parse readf mpath + ".embed.yaml"
+    reactonojis = Object.keys menu.reactons
+
+    reactonoji = reactonojis.find (e) -> e == reaction._emoji.name
+    if not reactonoji then return
+
+    linked = YAML.parse readf mpath + menu.reactons[reactonoji] + ".embed.yaml"
+    return sendMenu linked, user, reaction.message.id
+
+  catch err
+    logf LOG.MESSAGES, (formatCrisis "Menu Existential", err)
+
+  ###
+  We have to use the encrypted user.id
+  to fetch the menu state from the user db
+  ###
 
 if process.env.LOCAL
 then bot.login process.env.SLOCAL_TOKEN

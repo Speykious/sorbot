@@ -5,21 +5,20 @@ connection = require "../initdb.coffee"
 
 User = connection.define "User", {
   id:
-    type: BIGINT
+    type: STRING 64
     primaryKey: true
-  
   email:
     type: STRING
     allowNull: false
     unique: true
     validate:
       isEmail: true
-  
   code:
-    type: STRING
-  
+    type: STRING 6
   federatedServers:
     type: ARRAY BIGINT
+  menuState:
+    type: STRING
 }
 
 module.exports = User

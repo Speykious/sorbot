@@ -1,5 +1,5 @@
 {
   "yaml.schemas": {
-    "./.vscode/embed.schema.json": ["src/frontend/*.embed.yaml"]
+    "./.vscode/embed.schema.json": ["src/frontend/**/*.embed.yaml"]
   }
 }
