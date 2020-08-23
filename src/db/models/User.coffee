@@ -1,5 +1,5 @@
 { Sequelize, DataTypes } = require "sequelize"
-connection = require "../initdb.coffee"
+connection = require "../initdb"
 
 { BIGINT, STRING, ARRAY } = DataTypes
 
