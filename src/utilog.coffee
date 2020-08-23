@@ -33,7 +33,7 @@ formatCrisis = (crisis, crisisMsg) ->
   "{#ff6432-fg}[#{crisis} Crisis] {bold}#{CROSSMARK}{/} #{crisisMsg}"
 
 formatUser = (user) ->
-  "{bold}#{user.username}##{user.tag}{/} ({#8c9eff-fg}#{user.id}{/})"
+  "{bold}#{user.tag}{/} ({#8c9eff-fg}#{user.id}{/})"
 
 logf = (path, ...args) -> fs.appendFileSync path, format(...args) + "\n"
 
