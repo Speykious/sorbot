@@ -1,15 +1,15 @@
 require "dotenv-flow"
 .config()
 
-{ authorize }         = require "./mail/gindex"
-gmain                 = require "./mail/gmain"
-{ encryptid }         = require "./encryption"
-{ Client }            = require "discord.js"
+{ authorize }              = require "./mail/gindex"
+gmain                      = require "./mail/gmain"
+{ encryptid }              = require "./encryption"
+{ Client }                 = require "discord.js"
 { relative, delay, sendError,
-  readf, CROSSMARK, logf,
-  LOG, formatCrisis } = require "./utilog"
-YAML                  = require "yaml"
-User                  = require "./db/models/User"
+  LOG, formatCrisis, formatUser,
+  readf, CROSSMARK, logf } = require "./utilog"
+YAML                       = require "yaml"
+User                       = require "./db/models/User"
 
 
 bot = new Client {
@@ -32,7 +32,7 @@ bot.on "ready", () ->
     # Authorize a client with credentials, then call the Gmail API.
     authorize (YAML.parse content), gmain
   catch err
-    logf LOG.INIT, " when loading {underline}credentials.yaml{/}: #{err}"
+    logf LOG.INIT, (formatCrisis "Loading", "({underline}credentials.yaml{/underline}) #{err}")
   
   ### # was testing embeds
   templog "Printing some embed..."
@@ -62,10 +62,14 @@ bot.on "messageReactionRemove", (reaction, user) ->
                 - source  of the reaction: #{yellow String reaction.message.channel.type}
               """
   ###
+
+  # We don't care about messages that don't come from dms
+  if reaction.message.channel.type != "dm" then return
+
   menuState = undefined
   try # Manages the fetching of menuState
     dbUser = await User.findByPk encryptid user.id
-    if not dbUser then throw "User {#8c9eff-fg}#{user.id}{/} doesn't exist in our database"
+    if not dbUser then throw "User #{formatUser user} doesn't exist in our database"
     menuState = dbUser.menuState
   catch err
     # In this block we have to tell the user that they are not registered
