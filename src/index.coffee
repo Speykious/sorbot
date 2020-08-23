@@ -30,20 +30,6 @@ bot.on "ready", () ->
 
   gmailer.authorize "token.yaml"
 
-  # testing embeds once again
-  logf LOG.MESSAGES, "Printing some embed..."
-  messageEmbed = await (bot.channels.cache.get "738013042570428427"
-  .send {
-    embed:
-      title: "Testing in progress..."
-      description: "Re²-Testing the `file://` protocol for embed logos 👀"
-      footer:
-        text: "Hello I'm a footer"
-        icon_url: "file:///home/speykious/git-repos/sorbot-3/resources/blackorbit-sorbonne-logo.png"
-  })
-  logf LOG.MESSAGES, "{#32ff64-fg}#{CHECKMARK} Printed some embed{/}"
-  
-
 
 bot.on "messageReactionRemove", (reaction, user) ->
   ###
