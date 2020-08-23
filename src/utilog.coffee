@@ -38,7 +38,7 @@ formatUser = (user) ->
 logf = (path, ...args) -> fs.appendFileSync path, format(...args) + "\n"
 
 aslog = if process.env.LOCAL
-then (name) -> relative   "../logs/#{name}.log"
+then (name) -> relative   "logs/#{name}.log"
 else (name) -> "/var/logs/sorbot-3/#{name}.log"
 
 LOG =
