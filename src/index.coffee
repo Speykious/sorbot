@@ -30,6 +30,21 @@ bot.on "ready", () ->
 
   gmailer.authorize "token.yaml"
 
+  # testing embeds once again
+  logf LOG.MESSAGES, "Printing some embed..."
+  messageEmbed = await (bot.channels.cache.get "672514494903222311"
+  .send {
+    embed:
+      title: "Testing in progress..."
+      description: "Re²-Testing the `file://` protocol for embed logos 👀"
+      footer:
+        text: "Hello I'm a footer"
+        icon_url: "file:///home/speykious/git-repos/sorbot-3/resources/blackorbit-sorbonne-logo.png"
+  })
+  logf LOG.MESSAGES, "{#32ff64-fg}#{CHECKMARK} Printed some embed{/}"
+  
+
+
 bot.on "messageReactionRemove", (reaction, user) ->
   ###
   console.log """
@@ -61,7 +76,7 @@ bot.on "messageReactionRemove", (reaction, user) ->
   if reaction.message.id != menuMsgid then return
 
   try # Get to the linked page and edit the message accordingly
-    mpath = "src/frontend/pages/" + menuState.slice 19
+    mpath = "resources/pages/" + menuState.slice 19
     pdir  = (split mpath, "/").pop().join("/") + "/"
     menu  = YAML.parse readf mpath + ".embed.yaml"
     reactonojis = Object.keys menu.reactons
