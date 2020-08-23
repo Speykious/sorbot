@@ -32,7 +32,7 @@ bot.on "ready", () ->
 
   # testing embeds once again
   logf LOG.MESSAGES, "Printing some embed..."
-  messageEmbed = await (bot.channels.cache.get "672514494903222311"
+  messageEmbed = await (bot.channels.cache.get "738013042570428427"
   .send {
     embed:
       title: "Testing in progress..."
