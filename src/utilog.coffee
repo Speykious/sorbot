@@ -2,7 +2,7 @@ path       = require "path"
 fs         = require "fs"
 { format } = require "util"
 
-relative = (s) -> path.resolve __dirname, s
+relative = (s) -> path.resolve __dirname, "../", s
 delay = (ms) -> new Promise (resolve) -> setTimeout resolve, ms
 
 sendError = (channel, errorString, msDelay = 5000) ->
