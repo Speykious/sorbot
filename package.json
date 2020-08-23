@@ -2,7 +2,7 @@
   "name": "sorbot-3",
   "version": "0.0.0",
   "description": "SorBOT 3, La toute nouvelle version de SorBOT, le bot Discord du serveur Sorbonne Jussieu !",
-  "main": "src/index.coffee",
+  "main": "client/index.js",
   "scripts": {
     "test": "mocha -w --require coffeescript/register \"tests/**/*.test.coffee\"",
     "start": "coffee src/index.coffee",
