@@ -32,6 +32,9 @@ CROSSMARK = "✗"
 formatCrisis = (crisis, crisisMsg) ->
   "{#ff6432-fg}[#{crisis} Crisis] {bold}#{CROSSMARK}{/} #{crisisMsg}"
 
+formatUser = (user) ->
+  "{bold}#{user.username}##{user.tag}{/} ({#8c9eff-fg}#{user.id}{/})"
+
 logf = (path, ...args) -> fs.appendFileSync path, format(...args) + "\n"
 
 aslog = if process.env.LOCAL
@@ -59,6 +62,7 @@ module.exports = {
   CROSSMARK
 
   formatCrisis
+  formatUser
   logf
   LOG
 }
