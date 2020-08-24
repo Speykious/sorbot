@@ -21,4 +21,4 @@ rsync -rah --progress resources ../sorbot-min/resources
 rsync -ah --progress credentials.yaml token.yaml ../sorbot-min/
 rsync -ah --progress bundle.env ../sorbot-min/.env
 
-echo -e "${bred}Success.$c"
+echo -e "${bgrn}Success.$c"
