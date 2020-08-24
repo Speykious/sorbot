@@ -2,7 +2,7 @@ node_modules
 client
 dist
 logs
-.env
+*.env
 yarn-error.log
 yarn.lock
 credentials.yaml
