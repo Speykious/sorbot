@@ -1,13 +1,12 @@
 node_modules
 client
 dist
+logs
 .env
-client
 yarn-error.log
 yarn.lock
 credentials.yaml
 token.yaml
 message.yaml
 test.coffee
-logs
 *~
