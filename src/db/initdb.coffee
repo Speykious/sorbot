@@ -3,7 +3,7 @@
   logf, LOG, formatCrisis } = require "../utilog"
 
 connection = if process.env.LOCAL
-then new Sequelize "sqlite::memory"
+then new Sequelize "postgres://postgres:#{process.env.DB_PASS}@localhost:5432/sorbot-dev"
 else new Sequelize "postgres://postgres:#{process.env.DB_PASS}@localhost:5432/sorbot"
 
 connection.sync()
