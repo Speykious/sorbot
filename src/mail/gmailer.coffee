@@ -106,7 +106,7 @@ class GMailer
 
       # message sending-failure notification identity-checker
       mailSys = message.data.payload.headers.find ((header) ->
-        (/^From$/.test header.name) && (/^Mail/.test header.value))
+        (header.name == "From") && (/^Mail/.test header.value))
       
       snippet = ""
       if mailSys
