@@ -1,0 +1,15 @@
+studentValidDomains:
+  - etu.upmc.fr
+  - etu.sorbonne-universite.fr
+
+PHDValidDomains:
+  - upmc.fr
+  - sorbonne-universite.fr
+  - lip6.fr
+  - lpsm.fr
+  - isir.fr
+  - inserm.fr
+  - ipgp.fr
+  - imj-prg.fr
+  - insp.jussieu.fr
+
