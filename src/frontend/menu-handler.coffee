@@ -23,7 +23,14 @@ The menu state contains:
 
 ###
 
-{ CROSSMARK, logf, LOG, isTester } = require "../utilog"
+{ CROSSMARK, readf, logf,
+  LOG, isTester } = require "../utilog"
+YAML              = require "yaml"
+
+mdir = "resources/pages/"
+
+# Gets the menu object from .embed.yaml files
+getMenu = (mpath) -> YAML.parse readf mdir + mpath + ".embed.yaml"
 
 # Sends the menu as a message.
 # - menu: menu object typed according to the embed.schema.json yaml validation file.
@@ -49,5 +56,7 @@ sendMenu = (menu, user, msgid) ->
     return undefined
 
 module.exports = {
+  getMenu
   sendMenu
+  mdir
 }
