@@ -1,6 +1,7 @@
 require "dotenv-flow"
 .config()
 
+User                       = require "./db/models/User"
 { GMailer }                = require "./mail/gmailer"
 { encryptid }              = require "./encryption"
 { Client }                 = require "discord.js"
@@ -8,7 +9,6 @@ require "dotenv-flow"
   LOG, formatCrisis, formatUser,
   readf, CROSSMARK, logf } = require "./utilog"
 YAML                       = require "yaml"
-User                       = require "./db/models/User"
 
 
 bot = new Client {
@@ -19,16 +19,31 @@ bot = new Client {
 gmailer = new GMailer ["readonly", "modify"], "credentials.yaml"
 
 logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
+
+
+
 bot.on "ready", () ->
   # Using the tea kanji instead of the emoji
   # because it doesn't render well with blessed :(
   logf LOG.INIT, "{bold}{#ae6753-fg}Ready to sip. 茶{/}"
-  ###
-  bot.channels.cache.get "672498488646434841"
-  .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
-  ###
+  # bot.channels.cache.get "672498488646434841"
+  # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
 
   gmailer.authorize "token.yaml"
+
+
+
+bot.on "guildMemberAdd", (member) ->
+  logf LOG.MODERATION, "Adding encrypted member {#32ff64-fg}#{encryptid member.id}{/}"
+
+  # Note: the `menu` variable doesn't exist yet <_<
+  sendMenu menu, member.id
+
+  # Add new entry in the database
+  # Primary key:
+  encryptid member.id
+
+
 
 
 bot.on "messageReactionRemove", (reaction, user) ->
