@@ -33,14 +33,11 @@ bot.on "ready", () ->
 
 bot.on "messageReactionRemove", (reaction, user) ->
   ###
-  console.log """
-              #{bold red "A new reaction was removed!"}
-              Relevant information:
-                - emoji   of the reaction: #{cyan   String reaction._emoji.name}
-                - user    of the reaction: #{blue   String user.id}
-                - message of the reaction: #{blue   String reaction.message.id}
-                - source  of the reaction: #{yellow String reaction.message.channel.type}
-              """
+  Relevant information:
+    - emoji   of the reaction: reaction._emoji.name
+    - user    of the reaction: user.id
+    - message of the reaction: reaction.message.id
+    - source  of the reaction: reaction.message.channel.type
   ###
 
   # We don't care about messages that don't come from dms
