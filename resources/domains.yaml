@@ -2,7 +2,8 @@ studentValidDomains:
   - etu.upmc.fr
   - etu.sorbonne-universite.fr
 
-PHDValidDomains:
+# r/technicallythetruth
+professorValidDomains:
   - upmc.fr
   - sorbonne-universite.fr
   - lip6.fr
