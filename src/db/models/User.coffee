@@ -6,13 +6,13 @@ connection = require "../initdb"
 User = connection.define "User", {
   id:
     type: STRING 64
-    primaryKey: true
+    primaryKey: yes
   email:
     type: STRING
-    allowNull: false
-    unique: true
+    allowNull: no
+    unique: yes
     validate:
-      isEmail: true
+      isEmail: yes
   code:
     type: STRING 6
   federatedServers:
