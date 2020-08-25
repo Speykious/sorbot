@@ -1,5 +1,6 @@
 { Sequelize, DataTypes } = require "sequelize"
 connection = require "../initdb"
+{ encryptid } = require "../../encryption.coffee"
 
 { BIGINT, STRING, ARRAY } = DataTypes
 
@@ -7,9 +8,12 @@ User = connection.define "User", {
   id:
     type: STRING 64
     primaryKey: yes
+    set: (value) ->
+      @setDataValue 'id', encryptid value
+      return
   email:
     type: STRING
-    allowNull: no
+    # allowNull: no
     unique: yes
     validate:
       isEmail: yes
