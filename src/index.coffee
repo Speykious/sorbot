@@ -1,6 +1,7 @@
 require "dotenv-flow"
 .config()
 
+{ mdir, getMenu }          = require "./frontend/menu-handler"
 User                       = require "./db/models/User"
 { GMailer }                = require "./mail/gmailer"
 { encryptid }              = require "./encryption"
@@ -37,6 +38,7 @@ bot.on "guildMemberAdd", (member) ->
   logf LOG.MODERATION, "Adding encrypted member {#32ff64-fg}#{encryptid member.id}{/}"
 
   # Note: the `menu` variable doesn't exist yet <_<
+  menu = getMenu "page1"
   sendMenu menu, member.id
 
   # Add new entry in the database
@@ -46,7 +48,7 @@ bot.on "guildMemberAdd", (member) ->
 
 
 
-bot.on "messageReactionRemove", (reaction, user) ->
+bot.on "messageReactionAdd", (reaction, user) ->
   ###
   Relevant information:
     - emoji   of the reaction: reaction._emoji.name
@@ -54,6 +56,9 @@ bot.on "messageReactionRemove", (reaction, user) ->
     - message of the reaction: reaction.message.id
     - source  of the reaction: reaction.message.channel.type
   ###
+
+  # I don't care about myself lol
+  if user.bot then return
 
   # We don't care about messages that don't come from dms
   if reaction.message.channel.type != "dm" then return
@@ -74,15 +79,15 @@ bot.on "messageReactionRemove", (reaction, user) ->
   if reaction.message.id != menuMsgid then return
 
   try # Get to the linked page and edit the message accordingly
-    mpath = "resources/pages/" + menuState.slice 19
+    mpath = mdir + menuState.slice 19
     pdir  = (split mpath, "/").pop().join("/") + "/"
-    menu  = YAML.parse readf mpath + ".embed.yaml"
+    menu  = getMenu mpath
     reactonojis = Object.keys menu.reactons
 
     reactonoji = reactonojis.find (e) -> e == reaction._emoji.name
     if not reactonoji then return
 
-    linked = YAML.parse readf mpath + menu.reactons[reactonoji] + ".embed.yaml"
+    linked = getMenu pdir + menu.reactons[reactonoji]
     return sendMenu linked, user, reaction.message.id
 
   catch err
