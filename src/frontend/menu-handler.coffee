@@ -23,13 +23,17 @@ The menu state contains:
 
 ###
 
-{ CROSSMARK, logf, LOG } = require "../utilog"
+{ CROSSMARK, logf, LOG, isTester } = require "../utilog"
 
 # Sends the menu as a message.
 # - menu: menu object typed according to the embed.schema.json yaml validation file.
 # - user: Discord.User
 # - msgid: discord snowflake representing the message id of the menu (optional).
 sendMenu = (menu, user, msgid) ->
+  if not process.env.LOCAL and
+     not isTester user
+  then return undefined
+
   try
     if msgid
       # If we have a msgid, we edit the corresponding message
@@ -38,7 +42,7 @@ sendMenu = (menu, user, msgid) ->
     else
       # Else we send a new one
       msg = await user.dmChannel.send { embed: menu.embed }
-      
+
     return msg
   catch err
     logf LOG.MESSAGES, (formatCrisis "Discord API", err)
