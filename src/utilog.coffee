@@ -49,7 +49,13 @@ LOG =
   MODERATION: aslog "moderation" # For discord administration info
   WTF:        aslog "wtf"        # For whatever other weird shit happens
 
+testers = [
+  "358960666238910465" # Speykious
+  "419624396710477834" # Toast
+  "194549333226422272" # Théo B.
+]
 
+isTester = (user) -> testers.includes user.id
 
 module.exports = {
   relative
@@ -65,4 +71,6 @@ module.exports = {
   formatUser
   logf
   LOG
+
+  isTester
 }
