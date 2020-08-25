@@ -35,11 +35,11 @@ sendMenu = (menu, user, msgid) ->
       # If we have a msgid, we edit the corresponding message
       msg = await user.dmChannel.messages.fetch msgid
                   .edit { embed: menu.embed }
-      return msg
     else
       # Else we send a new one
       msg = await user.dmChannel.send { embed: menu.embed }
-      return msg
+      
+    return msg
   catch err
     logf LOG.MESSAGES, (formatCrisis "Discord API", err)
     return undefined
