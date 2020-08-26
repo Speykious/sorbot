@@ -1,6 +1,6 @@
 { Sequelize }               = require "sequelize"
-{ CROSSMARK, CHECKMARK,
-  logf, LOG, formatCrisis } = require "../utilog"
+{ CROSSMARK, CHECKMARK }    = require "../constants"
+{ logf, LOG, formatCrisis } = require "../logging"
 
 connection = if process.env.LOCAL
 then new Sequelize "postgres://postgres:#{process.env.DB_PASS}@localhost:5432/sorbot-dev"
