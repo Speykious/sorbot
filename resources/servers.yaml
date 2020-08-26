@@ -34,18 +34,25 @@ federated:
   # because I intend to add more information in there,
   # such as the roles required to get into a federated server.
   748175609401704478:
-    name: mipi
-    roles:
-      # Roles will have the same name as the main-server,
-      # it will facilitate the autoroles code quite a lot
-      mipi:      748264512531988510
-      licence_1: 748175609401704479
+    # name: mipi
+    required_roles:
+      - mipi
+      - licence_1
 
   747918143401361499:
     name: bgc
+    required_roles:
+      - bgc
+      - licence_1
   
   746081743601402018:
     name: pcgi
+    required_roles:
+      - pcgi
+      - licence_1
   
   724338809164005466:
     name: l_info
+    required_roles:
+      - [informatique]
+      - [licence_2, licence_3]
