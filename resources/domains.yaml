@@ -1,9 +1,9 @@
-studentValidDomains:
+studentDomains:
   - etu.upmc.fr
   - etu.sorbonne-universite.fr
 
 # r/technicallythetruth
-professorValidDomains:
+professorDomains:
   - upmc.fr
   - sorbonne-universite.fr
   - lip6.fr
