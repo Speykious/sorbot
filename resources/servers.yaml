@@ -1,0 +1,51 @@
+main:
+  id: 672479260899803147 # Sorbonne Jussieu
+  roles:
+    admin:           672480366266810398
+    delegue:         688461983158108244
+    licence_1:       672487426031353919
+    licence_2:       672487679794872351
+    licence_3:       672487744936869919
+    master_1:        672487812821417984
+    master_2:        672487886674722849
+    mipi:            672509095927873546
+    bgc:             672511650708062229
+    pcgi:            672511212185059370
+    cmi:             691723513463046174
+    peip:            691723174685180014
+    sans_portail:    690681256069038141
+    double_cursus:   701069223614480425
+    polytech:        718897160824946718
+    doctorat:        672487980270878720
+    professeur:      687956789383528499
+    ancien_etudiant: 740665952835993631
+    squatteur:       675866816463241256
+    mathematiques:   672497199460122636
+    informatique:    672496477217751042
+    electronique:    672496558620540948
+    mecanique:       672496615554285578
+    physique:        672500447818416168
+    chimie:          672496682784784386
+    biologie:        672496869024333824
+    geologie:        672497085060218900
+
+federated:
+  # Making different keys instead of just storing server IDs
+  # because I intend to add more information in there,
+  # such as the roles required to get into a federated server.
+  748175609401704478:
+    name: mipi
+    roles:
+      # Roles will have the same name as the main-server,
+      # it will facilitate the autoroles code quite a lot
+      mipi:      748264512531988510
+      licence_1: 748175609401704479
+
+  747918143401361499:
+    name: bgc
+  
+  746081743601402018:
+    name: pcgi
+  
+  724338809164005466:
+    name: l_info
