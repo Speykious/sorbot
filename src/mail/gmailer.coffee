@@ -1,10 +1,10 @@
-{ bold, red, blue, underline } = require "ansi-colors-ts"
-{ google }                     = require "googleapis"
-{ delay, readf, writef, relative,
-  CHECKMARK, CROSSMARK,
-  logf, LOG, formatCrisis }    = require "../utilog"
-readline                       = require "readline"
-YAML                           = require "yaml"
+{ bold, red, blue, underline }     = require "ansi-colors-ts"
+{ CHECKMARK, CROSSMARK }           = require "../constants"
+{ logf, LOG, formatCrisis }        = require "../logging"
+{ relative, delay, readf, writef } = require "../helpers"
+{ google }                         = require "googleapis"
+readline                           = require "readline"
+YAML                               = require "yaml"
 
 class GMailer
   ###
