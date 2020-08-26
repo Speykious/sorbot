@@ -43,7 +43,7 @@ bot.on "guildMemberAdd", (member) ->
 
   # Add new entry in the database
   # Primary key:
-  encryptid member.id
+  member.id
 
 
 
