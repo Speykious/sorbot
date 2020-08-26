@@ -1,6 +1,7 @@
 path       = require "path"
 fs         = require "fs"
 { format } = require "util"
+YAML       = require "yaml"
 
 relative = (s) -> path.resolve __dirname, "../", s
 delay = (ms) -> new Promise (resolve) -> setTimeout resolve, ms
@@ -25,7 +26,7 @@ writef = (path, data) -> fs.writeFileSync (relative path), data, "utf8"
 CHECKMARK = "🗸"
 CROSSMARK = "✗"
 
-
+domains = YAML.parse readf "resources/domains.yaml"
 
 # Actually don't praise currying in coffeescript
 # Note: the formatting syntax used is only useful for `blessed`
@@ -66,6 +67,8 @@ module.exports = {
   writef
   CHECKMARK
   CROSSMARK
+
+  domains
 
   formatCrisis
   formatUser
