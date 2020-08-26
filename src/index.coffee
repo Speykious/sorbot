@@ -66,7 +66,7 @@ bot.on "messageReactionAdd", (reaction, user) ->
   menuState = undefined
   try # Manages the fetching of menuState
     dbUser = await User.findByPk encryptid user.id
-    if not dbUser then throw "User #{formatUser user} doesn't exist in our database"
+    unless dbUser then throw "User #{formatUser user} doesn't exist in our database"
     menuState = dbUser.menuState
   catch err
     # In this block we have to tell the user that they are not registered
@@ -85,7 +85,7 @@ bot.on "messageReactionAdd", (reaction, user) ->
     reactonojis = Object.keys menu.reactons
 
     reactonoji = reactonojis.find (e) -> e == reaction._emoji.name
-    if not reactonoji then return
+    unless reactonoji then return
 
     linked = getMenu pdir + menu.reactons[reactonoji]
     return sendMenu linked, user, reaction.message.id
