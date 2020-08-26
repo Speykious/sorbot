@@ -31,8 +31,13 @@ YAML                               = require "yaml"
 
 mdir = "resources/pages/"
 
+menuCache = {}
+
 # Gets the menu object from .embed.yaml files
-getMenu = (mpath) -> YAML.parse readf mdir + mpath + ".embed.yaml"
+getMenu = (mpath) ->
+  if not mpath of menuCache
+  then menuCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
+  return menuCache[mpath]
 
 # Sends the menu as a message.
 # - menu: menu object typed according to the embed.schema.json yaml validation file.
