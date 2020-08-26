@@ -1,15 +1,15 @@
 require "dotenv-flow"
 .config()
 
-{ mdir, getMenu }          = require "./frontend/menu-handler"
-User                       = require "./db/models/User"
-{ GMailer }                = require "./mail/gmailer"
-{ encryptid }              = require "./encryption"
-{ Client }                 = require "discord.js"
-{ relative, delay, sendError,
-  LOG, formatCrisis, formatUser,
-  readf, CROSSMARK, logf } = require "./utilog"
-YAML                       = require "yaml"
+{ mdir, getMenu }                       = require "./frontend/menu-handler"
+User                                    = require "./db/models/User"
+{ GMailer }                             = require "./mail/gmailer"
+{ encryptid }                           = require "./encryption"
+{ CROSSMARK }                           = require "./constants"
+{ Client }                              = require "discord.js"
+{ logf, LOG, formatCrisis, formatUser } = require "./logging"
+{ relative, delay, sendError, readf }   = require "./helpers"
+YAML                                    = require "yaml"
 
 
 bot = new Client {
