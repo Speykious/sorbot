@@ -23,9 +23,11 @@ The menu state contains:
 
 ###
 
-{ CROSSMARK, readf, logf,
-  LOG, isTester } = require "../utilog"
-YAML              = require "yaml"
+
+{ CROSSMARK, TESTERS }             = require "../constants"
+{ logf, LOG, formatCrisis }        = require "../logging"
+{ relative, delay, readf, writef } = require "../helpers"
+YAML                               = require "yaml"
 
 mdir = "resources/pages/"
 
@@ -38,7 +40,7 @@ getMenu = (mpath) -> YAML.parse readf mdir + mpath + ".embed.yaml"
 # - msgid: discord snowflake representing the message id of the menu (optional).
 sendMenu = (menu, user, msgid) ->
   if not process.env.LOCAL and
-     not isTester user
+     not user in TESTERS
   then return undefined
 
   try
