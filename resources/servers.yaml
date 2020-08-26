@@ -28,31 +28,3 @@ main:
     chimie:          672496682784784386
     biologie:        672496869024333824
     geologie:        672497085060218900
-
-federated:
-  # Making different keys instead of just storing server IDs
-  # because I intend to add more information in there,
-  # such as the roles required to get into a federated server.
-  748175609401704478:
-    # name: mipi
-    required_roles:
-      - mipi
-      - licence_1
-
-  747918143401361499:
-    name: bgc
-    required_roles:
-      - bgc
-      - licence_1
-  
-  746081743601402018:
-    name: pcgi
-    required_roles:
-      - pcgi
-      - licence_1
-  
-  724338809164005466:
-    name: l_info
-    required_roles:
-      - [informatique]
-      - [licence_2, licence_3]
