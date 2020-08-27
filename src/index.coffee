@@ -39,11 +39,17 @@ bot.on "guildMemberAdd", (member) ->
 
   # Note: the `menu` variable doesn't exist yet <_<
   menu = getMenu "page1"
-  sendMenu menu, member.id
+  menumsg = await sendMenu menu, member.id
+  unless menumsg then return # no need to send an error msg
 
   # Add new entry in the database
   # Primary key:
-  member.id
+  user = await User.create {
+    id: member.id
+    menuState: "#{menumsg.id}:page1"
+  }
+
+  logf LOG.DATABASE, "ID stored as: {#32ff64-fg}#{user.id}{/}"
 
 
 
