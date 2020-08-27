@@ -3,7 +3,8 @@ connection = require "../initdb"
 { encryptid } = require "../../encryption"
 { USER_TYPES, DOMAINS } = require "../../constants"
 
-{ BIGINT, TINYINT, STRING, ARRAY } = DataTypes
+{ ARRAY }                   = DataTypes
+{ BIGINT, TINYINT, STRING } = DataTypes.postgres
 
 User = connection.define "User", {
   id:

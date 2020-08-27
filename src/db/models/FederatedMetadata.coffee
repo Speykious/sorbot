@@ -1,7 +1,8 @@
 { Sequelize, DataTypes } = require "sequelize"
 connection = require "../initdb"
 
-{ BIGINT, ARRAY } = DataTypes
+{ ARRAY }  = DataTypes
+{ BIGINT } = DataTypes.postgres
 
 FederatedMetadata = connection.define "FederatedMetadata", {
   id:
