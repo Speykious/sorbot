@@ -35,5 +35,4 @@ module.exports = {
   writef
 
   sendError
-  isTester
 }
