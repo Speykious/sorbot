@@ -1,7 +1,7 @@
 { Sequelize, DataTypes } = require "sequelize"
 connection = require "../initdb"
 { encryptid } = require "../../encryption"
-{ DOMAINS } = require "../../constants"
+{ USER_TYPES, DOMAINS } = require "../../constants"
 
 { BIGINT, TINYINT, STRING, ARRAY } = DataTypes
 
