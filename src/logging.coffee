@@ -5,7 +5,7 @@
 logf = (path, args...) -> appendFileSync path, format(args...) + "\n"
 
 aslog = if process.env.LOCAL
-then (name) -> relative      "logs/#{name}.log"
+then (name) -> relative "logs/#{name}.log"
 else (name) -> "/var/log/sorbot-3/#{name}.log"
 
 LOG =
@@ -23,6 +23,18 @@ formatCrisis = (crisis, crisisMsg) ->
 
 formatUser = (user) ->
   "{bold}#{user.tag}{/} ({#8c9eff-fg}#{user.id}{/})"
+
+#####################
+## DISCORD HELPERS ##
+#####################
+
+sendError = (channel, errorString, msDelay = 5000) ->
+  errorMsg = await channel
+    .send errorString
+    .catch (err) -> logf LOG.MESSAGES, (formatCrisis "Message", err)
+  logf LOG.MESSAGES, "{bold}Sent error:{/} {#ff6432-fg}#{errorMsg.content}{/}"
+  if errorMsg then errorMsg.delete { timeout: msDelay }
+  return Promise.resolve errorMsg
 
 module.exports = {
   logf
