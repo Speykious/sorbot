@@ -1,10 +1,13 @@
-{ Sequelize }               = require "sequelize"
+{ Sequelize, DataTypes }    = require "sequelize"
 { CROSSMARK, CHECKMARK }    = require "../constants"
 { logf, LOG, formatCrisis } = require "../logging"
+{ format }                  = require "util"
 
-connection = if process.env.LOCAL
-then new Sequelize "postgres://postgres:#{process.env.DB_PASS}@localhost:5432/sorbot-dev"
-else new Sequelize "postgres://postgres:#{process.env.DB_PASS}@localhost:5432/sorbot"
+pe = process.env
+
+connection = if pe.LOCAL
+then new Sequelize "postgres://#{pe.USER}:#{pe.DB_PASS}@localhost:5432/sorbot-dev"
+else new Sequelize "postgres://sorbot:#{pe.DB_PASS}@localhost:5432/sorbot"
 
 connection.sync()
   .then logf LOG.DATABASE, "{#32ff64-fg}{bold}#{CHECKMARK}{/bold} Dank database connection established{/}"
