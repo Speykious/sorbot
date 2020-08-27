@@ -6,7 +6,7 @@ logf = (path, args...) -> appendFileSync path, format(args...) + "\n"
 
 aslog = if process.env.LOCAL
 then (name) -> relative      "logs/#{name}.log"
-else (name) -> "/var/logs/sorbot-3/#{name}.log"
+else (name) -> "/var/log/sorbot-3/#{name}.log"
 
 LOG =
   INIT:       aslog "init"       # For every kind of initialization
