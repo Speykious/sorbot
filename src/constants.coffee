@@ -1,7 +1,7 @@
 YAML      = require "yaml"
 { readf } = require "./helpers"
 
-# This is the most CAPITAList file that we'll ever have
+# This is the most CAPITAListic file that we'll ever have
 
 CHECKMARK = "🗸"
 CROSSMARK = "✗"
