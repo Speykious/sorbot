@@ -1,15 +1,11 @@
-{ Sequelize, DataTypes } = require "sequelize"
-connection = require "../initdb"
+{ DataTypes }     = require "sequelize"
+{ ARRAY, BIGINT } = DataTypes
 
-{ ARRAY }  = DataTypes
-{ BIGINT } = DataTypes.postgres
-
-FederatedMetadata = connection.define "FederatedMetadata", {
-  id:
-    type: BIGINT
-    primaryKey: yes
-  requiredRoles:
-    type: ARRAY ARRAY BIGINT
-}
-
-module.exports = FederatedMetadata
+module.exports = (connection) ->
+  connection.define "FederatedMetadata", {
+    id:
+      type: BIGINT
+      primaryKey: yes
+    requiredRoles:
+      type: ARRAY ARRAY BIGINT
+  }
