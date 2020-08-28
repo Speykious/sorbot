@@ -1,6 +1,7 @@
 { appendFileSync } = require "fs"
 { format }         = require "util"
 { relative }       = require "./helpers"
+{ CROSSMARK }      = require "./constants"
 
 logf = (path, args...) -> appendFileSync path, format(args...) + "\n"
 
