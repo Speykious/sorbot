@@ -39,7 +39,7 @@ bot.on "guildMemberAdd", (member) ->
 
   welcome = "page1"
   menu = getMenu welcome
-  menumsg = await sendMenu menu, member.id
+  menumsg = await sendMenu menu, member.user
   unless menumsg then return # no need to send an error msg
 
   # Add new entry in the database
