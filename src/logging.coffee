@@ -27,7 +27,7 @@ formatUser = (user) ->
 
 # Truncates a string. Make maxc > 3 to be sure it works.
 truncateStr = (s, maxc = 50) ->
-  if s.length < maxc then s
+  if s.length <= maxc then s
   else "#{s.slice 0, maxc - 3}..."
 
 #####################
