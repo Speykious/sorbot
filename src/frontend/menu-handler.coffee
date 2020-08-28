@@ -24,10 +24,10 @@ The menu state contains:
 ###
 
 
-{ CROSSMARK, TESTERS }             = require "../constants"
-{ logf, LOG, formatCrisis }        = require "../logging"
-{ relative, delay, readf, writef } = require "../helpers"
-YAML                               = require "yaml"
+{ CROSSMARK, TESTERS }                  = require "../constants"
+{ logf, LOG, formatCrisis, formatUser } = require "../logging"
+{ relative, delay, readf, writef }      = require "../helpers"
+YAML                                    = require "yaml"
 
 mdir = "resources/pages/"
 
@@ -44,9 +44,9 @@ getMenu = (mpath) ->
 # - user: Discord.User
 # - msgid: discord snowflake representing the message id of the menu (optional).
 sendMenu = (menu, user, msgid) ->
-  unless user in TESTERS and
-    not process.env.LOCAL
-  then return null
+  if process.env.LOCAL and user.id in TESTERS
+    logf LOG.MESSAGES, "Tried to send a menu to non-tester user #{formatUser user} in LOCAL mode"
+    return null
 
   try
     dmChannel = await user.createDM()
