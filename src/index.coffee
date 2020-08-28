@@ -107,6 +107,4 @@ bot.on "messageReactionAdd", (reaction, user) ->
 
 
 
-if process.env.LOCAL
-then bot.login process.env.SLOCAL_TOKEN
-else bot.login process.env.SORBOT_TOKEN
+bot.login process.env.SORBOT_TOKEN
