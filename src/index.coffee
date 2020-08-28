@@ -55,7 +55,7 @@ bot.on "guildMemberAdd", (member) ->
 
 bot.on "guildMemberRemove", (member) ->
   logf LOG.MODERATION, "Removing user #{formatUser member.user}"
-  dbUser = getdbUser member.user
+  dbUser = await getdbUser member.user
   unless dbUser then return
   # Yeeting dbUser out when someone leaves
   await dbUser.destroy()
@@ -78,7 +78,7 @@ bot.on "messageReactionAdd", (reaction, user) ->
   # We don't care about messages that don't come from dms
   if reaction.message.channel.type != "dm" then return
 
-  dbUser = getdbUser user
+  dbUser = await getdbUser user
   unless dbUser then return
 
   menuState = dbUser.menuState
