@@ -3,20 +3,21 @@
 { logf, LOG, formatCrisis } = require "../logging"
 { format }                  = require "util"
 
-User = require "./models/User"
-FederatedMetadata = require "./models/FederatedMetadata"
+genUser = require "./models/User"
+genFederatedMetadata = require "./models/FederatedMetadata"
 
 pe = process.env
 
 logf LOG.DATABASE, "{#ff8032-fg}Creating{/} connection..."
-connection = if pe.LOCAL
-then new Sequelize "postgres://#{pe.DB_USER}:#{pe.DB_PASS}@localhost:5432/sorbot-dev"
-else new Sequelize "postgres://sorbot:#{pe.DB_PASS}@localhost:5432/sorbot"
 
-logf LOG.DATABASE, "{#ff8032-fg}Defining{/} User model..."
-User              connection
-logf LOG.DATABASE, "{#ff8032-fg}Defining{/} FederatedMetadata model..."
-FederatedMetadata connection
+uri = if pe.LOCAL
+then "postgres://#{pe.DB_USER}:#{pe.DB_PASS}@localhost:5432/sorbot-dev"
+else "postgres://sorbot:#{pe.DB_PASS}@localhost:5432/sorbot"
+connection = new Sequelize uri, { logging: (msg...) -> logf LOG.DATABASE, msg... }
+
+logf LOG.DATABASE, "{#ff8032-fg}Defining{/} models..."
+User              = genUser              connection
+FederatedMetadata = genFederatedMetadata connection
 
 logf LOG.DATABASE, "{#ff8032-fg}Syncing{/} connection..."
 connection.sync()
