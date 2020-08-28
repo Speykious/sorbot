@@ -23,7 +23,6 @@
   "private": true,
   "dependencies": {
     "ansi-colors-ts": "^0.0.1",
-    "crypto-js": "^4.0.0",
     "discord-commands-ts": "^0.0.2",
     "discord.js": "^12.2.0",
     "dotenv-flow": "^3.1.0",
