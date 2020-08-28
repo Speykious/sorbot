@@ -1,7 +1,7 @@
 { DataTypes }           = require "sequelize"
 { encryptid }           = require "../../encryption"
 { USER_TYPES, DOMAINS } = require "../../constants"
-{ ARRAY, TINYINT, BIGINT, STRING } = DataTypes
+{ ARRAY, SMALLINT, BIGINT, STRING } = DataTypes
 
 module.exports = (connection) ->
   connection.define "User", {
@@ -12,7 +12,7 @@ module.exports = (connection) ->
         @setDataValue 'id', encryptid value
         return
     userType:
-      type: TINYINT
+      type: SMALLINT
     email:
       type: STRING
       unique: yes
