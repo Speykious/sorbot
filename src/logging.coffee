@@ -25,6 +25,11 @@ formatCrisis = (crisis, crisisMsg) ->
 formatUser = (user) ->
   "{bold}#{user.tag}{/} ({#8c9eff-fg}#{user.id}{/})"
 
+# Truncates a string. Make maxc > 3 to be sure it works.
+truncateStr = (s, maxc = 50) ->
+  if s.length < maxc then s
+  else "#{s.slice 0, maxc - 3}..."
+
 #####################
 ## DISCORD HELPERS ##
 #####################
@@ -43,4 +48,6 @@ module.exports = {
 
   formatCrisis
   formatUser
+  truncateStr
+  sendError
 }
