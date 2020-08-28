@@ -1,7 +1,7 @@
 require "dotenv-flow"
 .config()
 
-{ mdir, getMenu }                       = require "./frontend/menu-handler"
+{ mdir, getMenu, sendMenu }             = require "./frontend/menu-handler"
 { User }                                = require "./db/initdb"
 { GMailer }                             = require "./mail/gmailer"
 { encryptid }                           = require "./encryption"
