@@ -15,7 +15,9 @@ uri = if pe.LOCAL
 then "postgres://#{pe.DB_USER}:#{pe.DB_PASS}@localhost:5432/sorbot-dev"
 else "postgres://sorbot:#{pe.DB_PASS}@localhost:5432/sorbot"
 connection = new Sequelize uri, {
-  logging: (msg...) -> logf LOG.DATABASE, (msg.map truncateStr)...
+  logging: (msgs...) -> logf LOG.DATABASE, (msgs.map (msg) ->
+    truncateStr format msg
+  )...
 }
 
 logf LOG.DATABASE, "{#ff8032-fg}Defining{/} models..."
