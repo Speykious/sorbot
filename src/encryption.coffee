@@ -23,7 +23,7 @@ encryptid = (id) ->
 decryptid = (di) ->
   decipher = createDecipheriv "aes256", key, iv
   id  = decipher.update di, encoding, "binary"
-  id += decipher.final encoding
+  id += decipher.final "binary"
   return id
 
 
