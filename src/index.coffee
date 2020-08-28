@@ -37,16 +37,15 @@ bot.on "ready", () ->
 bot.on "guildMemberAdd", (member) ->
   logf LOG.MODERATION, "Adding encrypted member {#32ff64-fg}#{encryptid member.id}{/}"
 
-  # Note: the `menu` variable doesn't exist yet <_<
-  menu = getMenu "page1"
+  welcome = "page1"
+  menu = getMenu welcome
   menumsg = await sendMenu menu, member.id
   unless menumsg then return # no need to send an error msg
 
   # Add new entry in the database
-  # Primary key:
   user = await User.create {
     id: member.id
-    menuState: "#{menumsg.id}:page1"
+    menuState: "#{menumsg.id}:#{welcome}"
   }
 
   logf LOG.DATABASE, "ID stored as: {#32ff64-fg}#{user.id}{/}"
