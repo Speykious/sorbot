@@ -1,7 +1,8 @@
-{ Sequelize, DataTypes }    = require "sequelize"
-{ CROSSMARK, CHECKMARK }    = require "../constants"
-{ logf, LOG, formatCrisis } = require "../logging"
-{ format }                  = require "util"
+{ Sequelize, DataTypes } = require "sequelize"
+{ CROSSMARK, CHECKMARK } = require "../constants"
+{ logf, LOG, formatCrisis,
+  truncateStr }          = require "../logging"
+{ format }               = require "util"
 
 genUser = require "./models/User"
 genFederatedMetadata = require "./models/FederatedMetadata"
@@ -13,7 +14,9 @@ logf LOG.DATABASE, "{#ff8032-fg}Creating{/} connection..."
 uri = if pe.LOCAL
 then "postgres://#{pe.DB_USER}:#{pe.DB_PASS}@localhost:5432/sorbot-dev"
 else "postgres://sorbot:#{pe.DB_PASS}@localhost:5432/sorbot"
-connection = new Sequelize uri, { logging: (msg...) -> logf LOG.DATABASE, msg... }
+connection = new Sequelize uri, {
+  logging: (msg...) -> logf LOG.DATABASE, (msg.map truncateStr)...
+}
 
 logf LOG.DATABASE, "{#ff8032-fg}Defining{/} models..."
 User              = genUser              connection
