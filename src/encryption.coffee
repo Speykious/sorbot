@@ -1,14 +1,32 @@
-{ enc, AES } = require "crypto-js"
+{ createHash, createCipheriv, createDecipheriv } = require "crypto"
 
-passphrase = if process.env.LOCAL
-then process.env.LOCAL_PASSPHRASE
-else process.env.PASSPHRASE
+iv = Buffer.allocUnsafe(16)
+temphash = createHash "sha256"
+           .update process.env.IV
+           .digest()
+temphash.copy iv
 
-base64pass = String enc.Base64.parse passphrase
+key = createHash "sha256"
+      .update process.env.PASSPHRASE
+      .digest()
 
-encryptid = (id) -> String AES.encrypt id, base64pass
-decryptid = (encrypted) -> AES.decrypt encrypted, base64pass
-                           .toString enc.Utf8
+encoding = "base64"
+
+
+
+encryptid = (id) ->
+  cipher = createCipheriv "aes256", key, iv
+  di  = cipher.update id, "binary", encoding
+  di += cipher.final encoding
+  return di
+
+decryptid = (di) ->
+  decipher = createDecipheriv "aes256", key, iv
+  id  = decipher.update di, encoding, "binary"
+  id += decipher.final encoding
+  return id
+
+
 
 module.exports = {
   encryptid
