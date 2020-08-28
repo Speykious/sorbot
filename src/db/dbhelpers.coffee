@@ -1,4 +1,6 @@
-{ User } = require "./initdb"
+{ User }                                = require "./initdb"
+{ encryptid }                           = require "./encryption"
+{ logf, LOG, formatCrisis, formatUser } = require "./logging"
 
 getdbUser = (user) ->
   try # Manages the fetching of menuState
