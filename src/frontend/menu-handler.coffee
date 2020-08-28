@@ -35,7 +35,7 @@ menuCache = {}
 
 # Gets the menu object from .embed.yaml files
 getMenu = (mpath) ->
-  if not mpath of menuCache
+  unless mpath of menuCache
   then menuCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
   return menuCache[mpath]
 
@@ -44,18 +44,20 @@ getMenu = (mpath) ->
 # - user: Discord.User
 # - msgid: discord snowflake representing the message id of the menu (optional).
 sendMenu = (menu, user, msgid) ->
-  if not process.env.LOCAL and
-     not user in TESTERS
-  then return undefined
+  unless user in TESTERS and
+    not process.env.LOCAL
+  then return null
 
   try
+    dmChannel = await user.createDM()
+
     if msgid
       # If we have a msgid, we edit the corresponding message
-      msg = await user.dmChannel.messages.fetch msgid
+      msg = await dmChannel.messages.fetch msgid
                   .edit { embed: menu.embed }
     else
       # Else we send a new one
-      msg = await user.dmChannel.send { embed: menu.embed }
+      msg = await dmChannel.send { embed: menu.embed }
 
     return msg
   catch err
