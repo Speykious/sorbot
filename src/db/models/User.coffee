@@ -6,7 +6,7 @@
 module.exports = (connection) ->
   connection.define "User", {
     id:
-      type: STRING 64
+      type: STRING 44
       primaryKey: yes
       set: (value) ->
         @setDataValue 'id', encryptid value
