@@ -20,6 +20,7 @@ bot = new Client {
 
 gmailer = new GMailer ["readonly", "modify"], "credentials.yaml"
 
+console.log "Starting"
 logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 
 
@@ -32,6 +33,8 @@ bot.on "ready", () ->
   # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
 
   gmailer.authorize "token.yaml"
+  
+  console.log "Bot started successfully."
 
 
 
@@ -45,7 +48,7 @@ bot.on "guildMemberAdd", (member) ->
 
   # Add new entry in the database
   await User.create {
-    id: member.id
+    id: member.user.id
     menuState: "#{menumsg.id}:#{welcome}"
   }
 
