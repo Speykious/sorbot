@@ -2,9 +2,10 @@ require "dotenv-flow"
 .config()
 
 { mdir, getMenu, sendMenu }             = require "./frontend/menu-handler"
-{ User }                                = require "./db/initdb"
+{ getdbUser }                           = require "./db/dbhelpers"
 { GMailer }                             = require "./mail/gmailer"
 { encryptid }                           = require "./encryption"
+{ User }                                = require "./db/initdb"
 { CROSSMARK }                           = require "./constants"
 { Client }                              = require "discord.js"
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
@@ -35,7 +36,7 @@ bot.on "ready", () ->
 
 
 bot.on "guildMemberAdd", (member) ->
-  logf LOG.MODERATION, "Adding encrypted member {#32ff64-fg}#{encryptid member.id}{/}"
+  logf LOG.MODERATION, "Adding user #{formatUser member.user}"
 
   welcome = "page1"
   menu = getMenu welcome
@@ -43,13 +44,22 @@ bot.on "guildMemberAdd", (member) ->
   unless menumsg then return # no need to send an error msg
 
   # Add new entry in the database
-  user = await User.create {
+  await User.create {
     id: member.id
     menuState: "#{menumsg.id}:#{welcome}"
   }
 
-  logf LOG.DATABASE, "ID stored as: {#32ff64-fg}#{user.id}{/}"
+  logf LOG.DATABASE, "User #{formatUser member.user} added"
 
+
+
+bot.on "guildMemberRemove", (member) ->
+  logf LOG.MODERATION, "Removing user #{formatUser member.user}"
+  dbUser = getdbUser member.user
+  unless dbUser then return
+  # Yeeting dbUser out when someone leaves
+  await dbUser.destroy()
+  logf LOG.DATABASE, "User #{formatUser member.user} removed"
 
 
 
@@ -68,16 +78,10 @@ bot.on "messageReactionAdd", (reaction, user) ->
   # We don't care about messages that don't come from dms
   if reaction.message.channel.type != "dm" then return
 
-  menuState = undefined
-  try # Manages the fetching of menuState
-    dbUser = await User.findByPk encryptid user.id
-    unless dbUser then throw "User #{formatUser user} doesn't exist in our database"
-    menuState = dbUser.menuState
-  catch err
-    # In this block we have to tell the user that they are not registered
-    # in our database and that they should contact us or something
-    return logf LOG.DATABASE, (formatCrisis "Existential", err)
+  dbUser = getdbUser user
+  unless dbUser then return
 
+  menuState = dbUser.menuState
 
   # Get the menu's message id
   menuMsgid = menuState.slice 0, 18
