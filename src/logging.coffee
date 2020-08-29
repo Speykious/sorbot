@@ -1,7 +1,7 @@
-{ appendFileSync } = require "fs"
-{ formatWithOptions }         = require "util"
-{ relative }       = require "./helpers"
-{ CROSSMARK }      = require "./constants"
+{ appendFileSync }    = require "fs"
+{ formatWithOptions } = require "util"
+{ relative }          = require "./helpers"
+{ CROSSMARK }         = require "./constants"
 
 logf = (path, args...) -> appendFileSync path,
   (formatWithOptions { colors: true }, "", args...) + "\n"
