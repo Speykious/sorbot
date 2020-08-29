@@ -50,20 +50,19 @@ sendMenu = (menu, user, msgid) ->
       return null
     
     logf LOG.MESSAGES, "Sending menu to tester", formatUser user
-
+  
   try
     dmChannel = await user.createDM()
-
+    
     msg = undefined
-    if msgid # If we have a msgid, we edit the corresponding message
+    if msgid # If we have a msgid, we delete the corresponding message
       msg = await dmChannel.messages.fetch msgid
+      await msg.delete()
       msg = await msg.edit { embed: menu.embed }
-    else # Else we send a new one
-      msg = await dmChannel.send { embed: menu.embed }
-
-    logf LOG.MESSAGES, menu.reactons
-    logf LOG.MESSAGES, [emoji for emoji of menu.reactons]
-
+    
+    # We send a new one
+    msg = await dmChannel.send { embed: menu.embed }
+    
     # WE CAN'T REMOVE ANY REACTIONS IN DM CHANNELS
     await msg.react emoji for emoji of menu.reactons
     
