@@ -58,7 +58,6 @@ sendMenu = (menu, user, msgid) ->
     if msgid # If we have a msgid, we delete the corresponding message
       msg = await dmChannel.messages.fetch msgid
       await msg.delete()
-      msg = await msg.edit { embed: menu.embed }
     
     # We send a new one
     msg = await dmChannel.send { embed: menu.embed }
