@@ -92,7 +92,7 @@ bot.on "messageReactionAdd", (reaction, user) ->
 
   try # Get to the linked page and edit the message accordingly
     mpath = mdir + menuState.slice 19
-    pdir  = (split mpath, "/").pop().join("/") + "/"
+    pdir  = mpath.split("/").pop().join("/") + "/"
     menu  = getMenu mpath
     reactonojis = Object.keys menu.reactons
 
