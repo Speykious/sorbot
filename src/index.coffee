@@ -91,8 +91,10 @@ bot.on "messageReactionAdd", (reaction, user) ->
   if reaction.message.id != menuMsgid then return
 
   try # Get to the linked page and edit the message accordingly
-    mpath = mdir + menuState.slice 19
-    pdir  = mpath.split("/").pop().join("/") + "/"
+    mpath = menuState.slice 19
+    pdir  = mpath.split("/")
+    pdir.pop()
+    pdir = pdir.join("/") + "/"
     menu  = getMenu mpath
     reactonojis = Object.keys menu.reactons
 
