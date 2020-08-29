@@ -44,21 +44,27 @@ getMenu = (mpath) ->
 # - user: Discord.User
 # - msgid: discord snowflake representing the message id of the menu (optional).
 sendMenu = (menu, user, msgid) ->
-  if process.env.LOCAL and user.id in TESTERS
-    logf LOG.MESSAGES, "Tried to send a menu to non-tester user #{formatUser user} in LOCAL mode"
-    return null
+  if process.env.LOCAL
+    if not (user.id in TESTERS)
+      logf LOG.MESSAGES, "Tried to send a menu to non-tester user", formatUser user, "in LOCAL mode"
+      return null
+    
+    logf LOG.MESSAGES, "Sending menu to tester", formatUser user
 
   try
     dmChannel = await user.createDM()
 
-    if msgid
-      # If we have a msgid, we edit the corresponding message
+    msg = undefined
+    if msgid # If we have a msgid, we edit the corresponding message
       msg = await dmChannel.messages.fetch msgid
                   .edit { embed: menu.embed }
-    else
-      # Else we send a new one
+    else # Else we send a new one
       msg = await dmChannel.send { embed: menu.embed }
 
+    logf LOG.MESSAGES, menu.reactons
+    logf LOG.MESSAGES, [emoji for emoji of menu.reactons]
+    await msg.react emoji for emoji of menu.reactons
+    
     return msg
   catch err
     logf LOG.MESSAGES, (formatCrisis "Discord API", err)
