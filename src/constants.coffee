@@ -8,6 +8,7 @@ CROSSMARK = "✗"
 
 TESTERS = [
   "358960666238910465" # Speykious
+  "654002031538864151" # Spey's Role Manager
   "419624396710477834" # Toast
   "194549333226422272" # Théo B.
 ]
