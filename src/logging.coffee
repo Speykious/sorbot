@@ -3,8 +3,9 @@
 { relative }          = require "./helpers"
 { CROSSMARK }         = require "./constants"
 
-logf = (path, args...) -> appendFileSync path,
-  (formatWithOptions { colors: true }, "", args...) + "\n"
+colmat = (args...) -> formatWithOptions { colors: true }, "", args...
+
+logf = (path, args...) -> appendFileSync path, (colmat args...) + "\n"
 
 aslog = if process.env.LOCAL
 then (name) -> relative "logs/#{name}.log"
@@ -21,7 +22,7 @@ LOG =
 # Actually don't praise currying in coffeescript
 # Note: the formatting syntax used is only useful for `blessed`
 formatCrisis = (crisis, crisisMsg) ->
-  "{#ff6432-fg}[#{crisis} Crisis] {bold}#{CROSSMARK}{/} #{crisisMsg}"
+  colmat "{#ff6432-fg}[#{crisis} Crisis] {bold}#{CROSSMARK}{/}", crisisMsg
 
 formatUser = (user) ->
   "{bold}#{user.tag}{/} ({#8c9eff-fg}#{user.id}{/})"
@@ -44,6 +45,7 @@ sendError = (channel, errorString, msDelay = 5000) ->
   return Promise.resolve errorMsg
 
 module.exports = {
+  colmat
   logf
   LOG
 
