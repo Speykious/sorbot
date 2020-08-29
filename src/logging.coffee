@@ -1,9 +1,10 @@
 { appendFileSync } = require "fs"
-{ format }         = require "util"
+{ formatWithOptions }         = require "util"
 { relative }       = require "./helpers"
 { CROSSMARK }      = require "./constants"
 
-logf = (path, args...) -> appendFileSync path, format(args...) + "\n"
+logf = (path, args...) -> appendFileSync path,
+  (formatWithOptions { colors: true }, "", args...) + "\n"
 
 aslog = if process.env.LOCAL
 then (name) -> relative "logs/#{name}.log"
