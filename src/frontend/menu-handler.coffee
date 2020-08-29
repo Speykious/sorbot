@@ -56,13 +56,15 @@ sendMenu = (menu, user, msgid) ->
 
     msg = undefined
     if msgid # If we have a msgid, we edit the corresponding message
-      msg = (await dmChannel.messages.fetch msgid)
-                  .edit { embed: menu.embed }
+      msg = await dmChannel.messages.fetch msgid
+      msg = await msg.edit { embed: menu.embed }
     else # Else we send a new one
       msg = await dmChannel.send { embed: menu.embed }
 
     logf LOG.MESSAGES, menu.reactons
     logf LOG.MESSAGES, [emoji for emoji of menu.reactons]
+
+    # WE CAN'T REMOVE ANY REACTIONS IN DM CHANNELS
     await msg.react emoji for emoji of menu.reactons
     
     return msg
