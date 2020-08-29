@@ -56,7 +56,7 @@ sendMenu = (menu, user, msgid) ->
 
     msg = undefined
     if msgid # If we have a msgid, we edit the corresponding message
-      msg = await dmChannel.messages.fetch msgid
+      msg = (await dmChannel.messages.fetch msgid)
                   .edit { embed: menu.embed }
     else # Else we send a new one
       msg = await dmChannel.send { embed: menu.embed }
