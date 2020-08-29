@@ -13,6 +13,7 @@ require "dotenv-flow"
 YAML                                    = require "yaml"
 
 
+
 bot = new Client {
   disableMentions: "everyone"
   partials: ['MESSAGE', 'CHANNEL', 'REACTION']
@@ -92,18 +93,26 @@ bot.on "messageReactionAdd", (reaction, user) ->
 
   try # Get to the linked page and edit the message accordingly
     mpath = menuState.slice 19
-    pdir  = mpath.split("/")
+
+    pdir = mpath.split("/")
     pdir.pop()
     pdir = pdir.join("/") + "/"
-    menu  = getMenu mpath
+    if pdir is "/" then pdir = ""
+    
+    menu = getMenu mpath
     reactonojis = Object.keys menu.reactons
 
     reactonoji = reactonojis.find (e) -> e == reaction._emoji.name
     unless reactonoji then return
+    
+    console.log menu.reactons
+    linked = pdir + menu.reactons[reactonoji]
+    lkmenu = getMenu linked
+    menumsg = await sendMenu lkmenu, user, reaction.message.id
+    unless menumsg then return
 
-    linked = getMenu pdir + menu.reactons[reactonoji]
-    return sendMenu linked, user, reaction.message.id
-
+    dbUser.menuState = "#{menumsg.id}:#{linked}"
+    await dbUser.save()
   catch err
     logf LOG.MESSAGES, (formatCrisis "Menu Existential", err)
 
