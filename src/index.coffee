@@ -10,7 +10,7 @@ require "dotenv-flow"
 { Client }                              = require "discord.js"
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
 { relative, delay, sendError, readf }   = require "./helpers"
-{ resolve }                             = require "path"
+{ join }                                = require "path"
 YAML                                    = require "yaml"
 
 
@@ -94,11 +94,14 @@ bot.on "messageReactionAdd", (reaction, user) ->
 
   try # Get to the linked page and edit the message accordingly
     mpath = menuState.slice 19
-
+    console.log mpath
     pdir = mpath.split("/")
+    console.log "pdir:", pdir
     pdir.pop()
+    console.log "pdir (pop):", pdir
     pdir = pdir.join("/") + "/"
     if pdir is "/" then pdir = ""
+    console.log "pdir (join):", pdir
     
     menu = getMenu mpath
     reactonojis = Object.keys menu.reactons
@@ -106,8 +109,9 @@ bot.on "messageReactionAdd", (reaction, user) ->
     reactonoji = reactonojis.find (e) -> e == reaction._emoji.name
     unless reactonoji then return
     
-    console.log menu.reactons
-    linked = resolve pdir + menu.reactons[reactonoji]
+    console.log "menu reactons:", menu.reactons
+    linked = join pdir + menu.reactons[reactonoji]
+    console.log "linked:", linked
     lkmenu = getMenu linked
     menumsg = await sendMenu lkmenu, user, reaction.message.id
     unless menumsg then return
