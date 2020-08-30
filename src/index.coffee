@@ -10,6 +10,7 @@ require "dotenv-flow"
 { Client }                              = require "discord.js"
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
 { relative, delay, sendError, readf }   = require "./helpers"
+{ resolve }                             = require "path"
 YAML                                    = require "yaml"
 
 
@@ -106,7 +107,7 @@ bot.on "messageReactionAdd", (reaction, user) ->
     unless reactonoji then return
     
     console.log menu.reactons
-    linked = pdir + menu.reactons[reactonoji]
+    linked = resolve pdir + menu.reactons[reactonoji]
     lkmenu = getMenu linked
     menumsg = await sendMenu lkmenu, user, reaction.message.id
     unless menumsg then return
