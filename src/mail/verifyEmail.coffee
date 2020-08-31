@@ -1,0 +1,4 @@
+
+
+verifyEmail = (dbUser, user, email) ->
+  

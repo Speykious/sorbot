@@ -1,5 +1,6 @@
 { bold, red, blue, underline }     = require "ansi-colors-ts"
 getMessages                        = require "./getMessages"
+verifyEmail                        = require "./verifyEmail"
 { CHECKMARK, CROSSMARK }           = require "../constants"
 { logf, LOG, formatCrisis }        = require "../logging"
 { relative, delay, readf, writef } = require "../helpers"
@@ -46,6 +47,9 @@ class GMailer
   
   getMessages: (query, maxFetch = 10) ->
     (getMessages.bind @) query, maxFetch
+  
+  verifyEmail: (dbUser, user, email) ->
+    (verifyEmail.bind @) dbUser, user, email
   
   ###
   Lists the unread existential crisis messages.

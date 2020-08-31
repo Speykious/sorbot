@@ -131,6 +131,7 @@ bot.on "message", (msg) ->
   if dbUser.email is null
     # Do email verification stuff here
     # Something to do with the gmailer
+    gmailer.verifyEmail dbUser, msg.author, msg.content
   else if dbUser.code is null
     # Do code verification stuff here
   else
