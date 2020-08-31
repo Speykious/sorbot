@@ -35,7 +35,6 @@ bot.on "ready", () ->
   # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
 
   gmailer.authorize "token.yaml"
-  
   console.log "Bot started successfully."
 
 
@@ -131,6 +130,7 @@ bot.on "message", (msg) ->
   # - If email and code, the user is verified
   if dbUser.email is null
     # Do email verification stuff here
+    # Something to do with the gmailer
   else if dbUser.code is null
     # Do code verification stuff here
   else
