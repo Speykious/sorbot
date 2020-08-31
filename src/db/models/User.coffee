@@ -20,7 +20,7 @@ module.exports = (connection) ->
         isEmail: yes
         isUniversityEmail: (value) ->
           unless (value.split '@')[1] in DOMAINS.studentDomains or
-                (value.split '@')[1] in DOMAINS.professorDomains
+                 (value.split '@')[1] in DOMAINS.professorDomains
             throw new Error "Not a university email address"
         canBeNull: (value) ->
           unless @userType & USER_TYPES.FORMER or @userType & USER_TYPES.GUEST
