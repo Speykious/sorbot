@@ -115,15 +115,25 @@ bot.on "message", (msg) ->
   if msg.author.bot then return
   
   # We STILL don't care about messages that don't come from dms
+  # Although we will care a bit later when introducing admin commands
   if msg.channel.type isnt "dm" then return
   
-  dbUser = await getdbUser user
+  dbUser = await getdbUser msg.author
   unless dbUser then return
-  logf LOG.MESSAGES,
-    "email of ", (formatUser msg.author), " be like:",
-    dbUser.email
   
-
+  # Remember from SorBOT 2:
+  # - If no email, we try to register the email
+  # - If email but no code, we verify the code
+  # - If email and code, the user is verified
+  if dbUser.email is null
+    # Do email verification stuff here
+  else if dbUser.code is null
+    # Do code verification stuff here
+  else
+    # More stuff is gonna go here probably,
+    # like user commands to request your
+    # decrypted data from the database
+    msg.author.send "Vous êtes vérifié(e), vous n'avez plus rien à craindre. *(more options coming soon™)*"
 
 
 bot.login process.env.SORBOT_TOKEN
