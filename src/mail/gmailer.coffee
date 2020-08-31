@@ -1,4 +1,5 @@
 { bold, red, blue, underline }     = require "ansi-colors-ts"
+getMessages                        = require "./getMessages"
 { CHECKMARK, CROSSMARK }           = require "../constants"
 { logf, LOG, formatCrisis }        = require "../logging"
 { relative, delay, readf, writef } = require "../helpers"
@@ -42,7 +43,10 @@ class GMailer
       logf LOG.INIT, (formatCrisis "Credentials",
         "The Gmail token is missing! You need to go to {bold}SorBOT's stdin{/bold} to create a new one.")
       @getNewToken tokenfile
-
+  
+  getMessages: (query, maxFetch = 10) ->
+    (getMessages.bind @) query, maxFetch
+  
   ###
   Lists the unread existential crisis messages.
   Return the messages to let them be used in
@@ -53,7 +57,7 @@ class GMailer
   ###
   getUECMessages: (maxFetch = 10) ->
     logf LOG.MAIL, "Reading Existential Crisis messages..."
-    return @getMessages maxFetch, "is:unread label:existential-crisis"
+    return @getMessages "is:unread label:existential-crisis", maxFetch
 
   ###
   Get and store new token after prompting for user authorization.
@@ -87,60 +91,6 @@ class GMailer
         catch err
           console.error err
           logf LOG.WTF, (formatCrisis "r/HolUp", err)
-
-  ###
-  Lists and returns the messages in the user's account.
-  @param {number} maxFetch - The maximum number of messages to query.
-  @param {string} query - The gmail query instructions.
-  ###
-  getMessages = (maxFetch = 10, query) ->
-    listm = await @gmail.users.messages.list { userId: "me", q: query, maxResults: maxFetch }
-    if not listm.data.messages
-      logf LOG.MAIL, "{#ffff32-fg}{bold}#{CROSSMARK}{/bold} No messages to query :/{/}"
-      return []
-
-    counter = 0
-    # overall: the variable that stores all the relevant data of all relevant messages
-    overall = await forEach listm.data.messages, (messageData) ->
-      message = await @gmail.users.messages.get { userId: "me", id: messageData.id }
-
-      # message sending-failure notification identity-checker
-      mailSys = message.data.payload.headers.find ((header) ->
-        (header.name == "From") && (/^Mail/.test header.value))
-      
-      snippet = ""
-      if mailSys
-        # message.data.snippet is the readable content of the email
-        snippet = message.data.snippet.replace /&#39;/g, "'"
-        # To make the relevant message appear to be read in the mailbox
-        @gmail.users.messages.modify {
-          userId: "me"
-          id: messageData.id
-          addLabelIds: []
-          removeLabelIds: ["UNREAD"]
-        }
-      
-      counter++
-
-      if counter == 1 or counter % 10 == 0
-      then logf LOG.MAIL, "Messages: {bold}#{String counter}{/}"
-
-      # To get the email address that failed
-      failed_recipient = message.data.payload.headers.find((header) ->
-        header.name == "X-Failed-Recipients").value
-      # To get the date of when it failed
-      failing_date = message.data.payload.headers.find((header) ->
-        header.name == "Date").value
-      
-      return {
-        content: snippet
-        email: failed_recipient
-        date: failing_date
-      }
-    
-    logf LOG.MAIL, "{#32ff64-fg}{bold}#{CHECKMARK}{/bold} Messages succesfully read{/}"
-
-    return overall
 
 
 
