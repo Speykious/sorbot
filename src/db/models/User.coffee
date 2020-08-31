@@ -17,14 +17,15 @@ module.exports = (connection) ->
       type: STRING
       unique: yes
       validate:
-        isEmail: yes
+        isEmail:
+          msg: "Ceci n'est pas une adresse mail."
         isUniversityEmail: (value) ->
           unless (value.split '@')[1] in DOMAINS.studentDomains or
                  (value.split '@')[1] in DOMAINS.professorDomains
-            throw new Error "Not a university email address"
+            throw new Error "Ceci n'est pas une adresse mail de Sorbonne Jussieu."
         canBeNull: (value) ->
           unless @userType & USER_TYPES.FORMER or @userType & USER_TYPES.GUEST
-            throw new Error "Email must be supplied for this user type"
+            throw new Error "Une adresse mail doit être renseignée pour ce type d'utilisateur."
     code:
       type: STRING 6
     federatedServers:
