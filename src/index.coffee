@@ -6,7 +6,7 @@ require "dotenv-flow"
 { GMailer }                             = require "./mail/gmailer"
 { encryptid }                           = require "./encryption"
 { User }                                = require "./db/initdb"
-{ CROSSMARK }                           = require "./constants"
+{ CROSSMARK, SERVERS }                  = require "./constants"
 { Client }                              = require "discord.js"
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
 { relative, delay, sendError, readf }   = require "./helpers"
@@ -41,6 +41,10 @@ bot.on "ready", () ->
 
 
 bot.on "guildMemberAdd", (member) ->
+  # For now we only care about the main server.
+  # Federated server autoverification coming soon™
+  if member.guild.id isnt SERVERS.main.id then return
+
   logf LOG.MODERATION, "Adding user #{formatUser member.user}"
 
   welcome = "page1"

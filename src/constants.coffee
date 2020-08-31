@@ -14,6 +14,7 @@ TESTERS = [
 ]
 
 DOMAINS = YAML.parse readf "resources/domains.yaml"
+SERVERS = YAML.parse readf "resources/servers.yaml"
 
 USER_TYPES =
   STUDENT:   1 << 0
@@ -26,5 +27,6 @@ module.exports = {
   CROSSMARK
   TESTERS
   DOMAINS
+  SERVERS
   USER_TYPES
 }
