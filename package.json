@@ -10,7 +10,8 @@
     "run-js": "node .",
     "erase-logs": "env LOCAL=YEET coffee erase-logs.coffee",
     "c-all": "yarn build && yarn run-js",
-    "all": "yarn erase-logs && clear && yarn c-all"
+    "all": "yarn erase-logs && clear && yarn c-all",
+    "dev": "yarn erase-logs && clear && yarn start"
   },
   "files": [
     "client/**/*"
