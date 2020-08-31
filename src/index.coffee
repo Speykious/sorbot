@@ -13,7 +13,6 @@ require "dotenv-flow"
 { join }                                = require "path"
 YAML                                    = require "yaml"
 
-# Modification juse for powerline demonstration
 
 bot = new Client {
   disableMentions: "everyone"
