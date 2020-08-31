@@ -13,7 +13,7 @@ require "dotenv-flow"
 { join }                                = require "path"
 YAML                                    = require "yaml"
 
-
+# Modification juse for powerline demonstration
 
 bot = new Client {
   disableMentions: "everyone"
@@ -68,50 +68,37 @@ bot.on "guildMemberRemove", (member) ->
 
 
 
+# The messageReactionAdd event is only used when handling the menus
 bot.on "messageReactionAdd", (reaction, user) ->
-  ###
-  Relevant information:
-    - emoji   of the reaction: reaction._emoji.name
-    - user    of the reaction: user.id
-    - message of the reaction: reaction.message.id
-    - source  of the reaction: reaction.message.channel.type
-  ###
-
   # I don't care about myself lol
   if user.bot then return
 
   # We don't care about messages that don't come from dms
-  if reaction.message.channel.type != "dm" then return
+  if reaction.message.channel.type isnt "dm" then return
 
   dbUser = await getdbUser user
   unless dbUser then return
-
   menuState = dbUser.menuState
 
   # Get the menu's message id
   menuMsgid = menuState.slice 0, 18
-  if reaction.message.id != menuMsgid then return
+  if reaction.message.id isnt menuMsgid then return
 
   try # Get to the linked page and edit the message accordingly
     mpath = menuState.slice 19
-    console.log mpath
+
     pdir = mpath.split("/")
-    console.log "pdir:", pdir
     pdir.pop()
-    console.log "pdir (pop):", pdir
     pdir = pdir.join("/") + "/"
     if pdir is "/" then pdir = ""
-    console.log "pdir (join):", pdir
     
     menu = getMenu mpath
-    reactonojis = Object.keys menu.reactons
 
+    reactonojis = Object.keys menu.reactons
     reactonoji = reactonojis.find (e) -> e == reaction._emoji.name
     unless reactonoji then return
     
-    console.log "menu reactons:", menu.reactons
     linked = join pdir + menu.reactons[reactonoji]
-    console.log "linked:", linked
     lkmenu = getMenu linked
     menumsg = await sendMenu lkmenu, user, reaction.message.id
     unless menumsg then return
@@ -120,6 +107,22 @@ bot.on "messageReactionAdd", (reaction, user) ->
     await dbUser.save()
   catch err
     logf LOG.MESSAGES, (formatCrisis "Menu Existential", err)
+
+
+
+bot.on "message", (msg) ->
+  # I don't care about myself lol
+  if msg.author.bot then return
+  
+  # We STILL don't care about messages that don't come from dms
+  if msg.channel.type isnt "dm" then return
+  
+  dbUser = await getdbUser user
+  unless dbUser then return
+  logf LOG.MESSAGES,
+    "email of ", (formatUser msg.author), " be like:",
+    dbUser.email
+  
 
 
 
