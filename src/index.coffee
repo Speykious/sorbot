@@ -19,7 +19,7 @@ bot = new Client {
   partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 }
 
-gmailer = new GMailer ["readonly", "modify"], "credentials.yaml"
+gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.yaml"
 
 console.log "Starting"
 logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
