@@ -20,7 +20,7 @@ sendEmail = (gmail, request) ->
     MIME-Version: 1.0
     Subject: #{utf8Subject}
     
-    html: #{request.content}
+    #{request.content}
     """
 
   # The body needs to be base64url encoded.
@@ -54,7 +54,7 @@ verifyEmail = (dbUser, user, email) ->
   
   # Send mail here
   await sendEmail @gmail, {
-    from: "bot.sorbonne.jussieu@gmail.com"
+    from: "SorBOT 3 <bot.sorbonne.jussieu@gmail.com>"
     to: email
     subject: "Code de confirmation"
     content: """
