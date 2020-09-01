@@ -43,7 +43,7 @@ class GMailer
     catch err
       logf LOG.INIT, (formatCrisis "Credentials",
         "The Gmail token is missing! You need to go to {bold}SorBOT's stdin{/bold} to create a new one.")
-      @getNewToken tokenfile
+      await @getNewToken tokenfile
   
   getMessages: (query, maxFetch = 10) ->
     (getMessages.bind @) query, maxFetch
@@ -78,25 +78,28 @@ class GMailer
       input: process.stdin,
       output: process.stdout,
     }
-    rl.question (blue "Enter the code from that page here: "), (code) ->
-      rl.close()
-      me.oAuth2Client.getToken code, (err, token) ->
-        if err
-          console.error "#{bold red CROSSMARK} Error retrieving access token:", err
-          console.error "Please try again."
-          return me.getNewToken tokenfile
 
-        me.oAuth2Client.setCredentials token
+    return new Promise (resolve, reject) ->
+      rl.question (blue "Enter the code from that page here: "), (code) ->
+        rl.close()
+        me.oAuth2Client.getToken code, (err, token) ->
+          if err
+            console.error "#{bold red CROSSMARK} Error retrieving access token:", err
+            console.error "Please try again."
+            return await me.getNewToken tokenfile
 
-        # Store the token to disk for later program executions
-        try
-          writef tokenfile, (YAML.stringify token)
-          console.log (bold "Token stored to"), (underline relative tokenfile)
-          logf LOG.INIT, "{bold}Token stored to{/} {underline}#{relative tokenfile}{/}"
-        catch err
-          console.error err
-          logf LOG.WTF, (formatCrisis "r/HolUp", err)
+          me.oAuth2Client.setCredentials token
 
+          # Store the token to disk for later program executions
+          try
+            writef tokenfile, (YAML.stringify token)
+            console.log (bold "Token stored to"), (underline relative tokenfile)
+            logf LOG.INIT, "{bold}Token stored to{/} {underline}#{relative tokenfile}{/}"
+            resolve token
+          catch err
+            console.error err
+            logf LOG.WTF, (formatCrisis "r/HolUp", err)
+            reject err
 
 
 module.exports = {
