@@ -67,11 +67,12 @@ class GMailer
   Get and store new token after prompting for user authorization.
   @param {string} tokenfile - Path to the yaml file containing the gmail auth token.
   ###
-  getNewToken = (tokenfile) ->
+  getNewToken: (tokenfile) ->
     authUrl = @oAuth2Client.generateAuthUrl {
       access_type: "offline"
       scope: @scopes
     }
+    me = @
     console.log (blue "Authorize this app by visiting this url:"), authUrl
     rl = readline.createInterface {
       input: process.stdin,
@@ -79,13 +80,13 @@ class GMailer
     }
     rl.question (blue "Enter the code from that page here: "), (code) ->
       rl.close()
-      @oAuth2Client.getToken code, (err, token) ->
+      me.oAuth2Client.getToken code, (err, token) ->
         if err
           console.error "#{bold red CROSSMARK} Error retrieving access token:", err
           console.error "Please try again."
-          return @getNewToken tokenfile
+          return me.getNewToken tokenfile
 
-        @oAuth2Client.setCredentials token
+        me.oAuth2Client.setCredentials token
 
         # Store the token to disk for later program executions
         try
