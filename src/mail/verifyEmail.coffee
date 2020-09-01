@@ -16,9 +16,9 @@ sendEmail = (gmail, request) ->
     """
     From: #{request.from}
     To: #{request.to}
-    Content-Type: text/html charset=utf-8
-    MIME-Version: 1.0
     Subject: #{utf8Subject}
+    MIME-Version: 1.0
+    Content-Type: text/html; charset=utf-8
     
     #{request.content}
     """
@@ -49,6 +49,7 @@ verifyEmail = (dbUser, user, email) ->
     logf LOG.MAIL, "Email {#ff8032-fg}#{email}{/} saved for user", formatUser user
   catch valerr
     messages = valerr.errors.map (e) -> e.message
+               .reverse()
     logf LOG.MAIL, (formatCrisis "Mail Validation", messages)
     return
   
