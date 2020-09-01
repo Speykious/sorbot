@@ -24,7 +24,9 @@ module.exports = (connection) ->
                  (value.split '@')[1] in DOMAINS.professorDomains
             throw new Error "Ceci n'est pas une adresse mail de Sorbonne Jussieu."
         canBeNull: (value) ->
-          unless @userType & USER_TYPES.FORMER or @userType & USER_TYPES.GUEST
+          unless value isnt null or
+              @userType & (USER_TYPES.FORMER | USER_TYPES.GUEST) or
+              not @userType
             throw new Error "Une adresse mail doit être renseignée pour ce type d'utilisateur."
     code:
       type: STRING 6
