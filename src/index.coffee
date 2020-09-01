@@ -127,7 +127,7 @@ bot.on "message", (msg) ->
   # - If no email, we try to register the email
   # - If email but no code, we verify the code
   # - If email and code, the user is verified
-  if dbUser.email is null
+  if dbUser.email is null or true
     # Do email verification stuff here
     # Something to do with the gmailer
     await gmailer.verifyEmail dbUser, msg.author, msg.content
