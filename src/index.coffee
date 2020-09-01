@@ -33,7 +33,7 @@ bot.on "ready", () ->
   # bot.channels.cache.get "672498488646434841"
   # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
 
-  gmailer.authorize "token.yaml"
+  await gmailer.authorize "token.yaml"
   console.log "Bot started successfully."
 
 
