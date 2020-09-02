@@ -1,0 +1,11 @@
+SorBOT 3 - Code
+
+----------------
+
+Bonjour {tag},
+
+Renvoyez au bot un message
+privé dans Discord contenant
+uniquement le code suivant :
+
+{code}
