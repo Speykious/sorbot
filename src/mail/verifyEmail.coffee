@@ -1,4 +1,5 @@
 { logf, LOG, formatCrisis, formatUser } = require "../logging"
+{ readf }                               = require "../helpers"
 
 # Sends an email using a request object.
 #
@@ -14,13 +15,20 @@ sendEmail = (gmail, request) ->
   utf8Subject = "=?utf-8?B?#{(Buffer.from request.subject).toString "base64"}?="
   message =
     """
+    MIME-Version: 1.0
     From: #{request.from}
     To: #{request.to}
     Subject: #{utf8Subject}
-    MIME-Version: 1.0
-    Content-Type: text/html; charset=utf-8
+    Content-Type: multipart/alternative; boundary="boundary-text"
+
+    --boundary-text
+    Content-Type: text/plain; charset="utf-8"
+
+    #{request.text}
+    --boundary-text
+    Content-Type: text/html; charset="utf-8"
     
-    #{request.content}
+    #{request.html}--boundary-text--
     """
 
   # The body needs to be base64url encoded.
@@ -36,7 +44,7 @@ sendEmail = (gmail, request) ->
       raw: encodedMessage
   }
   console.log message
-  console.log "Sent email: ", res.data
+  console.log "Sent email:", res.data
   return res.data
 
 
@@ -58,10 +66,8 @@ verifyEmail = (dbUser, user, email) ->
     from: "SorBOT 3 <bot.sorbonne.jussieu@gmail.com>"
     to: email
     subject: "Code de confirmation"
-    content: """
-             Ceci est un <b>test</b>.
-             J'espère que ça marche 🤔
-             """
+    text: readf "resources/confirmation-email.txt"
+    html: readf "resources/confirmation-email.html"
   }
 
 module.exports = verifyEmail
