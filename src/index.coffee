@@ -125,14 +125,12 @@ bot.on "message", (msg) ->
   
   # Remember from SorBOT 2:
   # - If no email, we try to register the email
-  # - If email but no code, we verify the code
-  # - If email and code, the user is verified
-  if dbUser.email is null
-    # Do email verification stuff here
-    # Something to do with the gmailer
+  # - If email and code, we verify the code
+  # - If email but no code, the user is verified
+  if dbUser.email is null # Email verification stuff
     await gmailer.verifyEmail dbUser, msg.author, msg.content
-  else if dbUser.code is null
-    # Do code verification stuff here
+  else if dbUser.code # Code verification stuff
+    
   else
     # More stuff is gonna go here probably,
     # like user commands to request your
