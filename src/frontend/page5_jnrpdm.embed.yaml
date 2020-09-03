@@ -1,7 +1,7 @@
 embed :
   title : Je ne reçois pas de mail
   description : |
-    Veillez à vous assurer de la validité de votre adresse.\n
+    Veillez à vous assurer de la validité de votre adresse.
     Si le problème persiste, merci de contacter un administrateur.
   color : 34d9ff
   footer :

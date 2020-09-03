@@ -1,16 +1,18 @@
 embed :
   title : Je suis professeur ou enseignant-chercheur
   description : |
-    Les noms de domaines acceptés pour la vérification des mails professeurs sont :\n
-    → upmc.fr\n
-    → sorbonne-universite.fr\n
-    → lip6.fr\n
-    → lpsm.fr\n
-    → isir.fr\n
-    → inserm.fr\n
-    → ipgp.fr\n
-    → imj-prg.fr\n
-    → insp.jussieu.fr\n\n
+    Les noms de domaines acceptés pour la vérification des mails professeurs sont :
+
+    → upmc.fr
+    → sorbonne-universite.fr
+    → lip6.fr
+    → lpsm.fr
+    → isir.fr
+    → inserm.fr
+    → ipgp.fr
+    → imj-prg.fr
+    → insp.jussieu.fr
+
     Dans le cas où vous n’ayez accès à aucune adresse avec ces noms de domaines, merci de bien vouloir contacter un administrateur pour clarifier votre situation.
   color : 34d9ff
   footer :
