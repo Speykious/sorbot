@@ -35,8 +35,24 @@ bot.on "ready", () ->
 
   await gmailer.authorize "token.yaml"
   console.log "Bot started successfully."
+  
 
-
+  tester = await (await bot.guilds.fetch "672479260899803147")
+                  .members.fetch "654002031538864151"
+  
+  dmChannel = await tester.user.createDM()
+  (await dmChannel.messages.fetch "751211880558755911")
+    .delete()
+  
+  ###
+  dbUser = await getdbUser tester.user
+  welcome = "accueil"
+  menu = getMenu welcome
+  menumsg = await sendMenu menu, tester.user
+  unless menumsg then return # no need to send an error msg
+  dbUser.menuState = "#{menumsg.id}:#{welcome}"
+  await dbUser.save()
+  ###
 
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.

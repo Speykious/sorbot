@@ -24,10 +24,10 @@ The menu state contains:
 ###
 
 
-{ CROSSMARK, TESTERS }                  = require "../constants"
-{ logf, LOG, formatCrisis, formatUser } = require "../logging"
-{ relative, delay, readf, writef }      = require "../helpers"
-YAML                                    = require "yaml"
+{ CROSSMARK, TESTERS }                      = require "../constants"
+{ logf, LOG, formatCrisis, formatUser }     = require "../logging"
+{ relative, delay, readf, writef, forEach } = require "../helpers"
+YAML                                        = require "yaml"
 
 mdir = "resources/pages/"
 
@@ -61,9 +61,10 @@ sendMenu = (menu, user, msgid) ->
     
     # We send a new one
     msg = await dmChannel.send { embed: menu.embed }
-    
+    msg.createReactionCollector ((a) -> a), { time: 300 }
     # WE CAN'T REMOVE ANY REACTIONS IN DM CHANNELS
-    await msg.react emoji for emoji of menu.reactions
+    forEach (Object.keys menu.reactions), (emoji) ->
+      if msg then msg.react(emoji).catch (e) -> console.log e
     
     return msg
   catch err
