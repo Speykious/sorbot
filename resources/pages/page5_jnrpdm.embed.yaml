@@ -1,11 +1,11 @@
-embed :
-  title : Je ne reçois pas de mail
-  description : |
+embed:
+  title: Je ne reçois pas de mail
+  description: |
     Veillez à vous assurer de la validité de votre adresse.
     Si le problème persiste, merci de contacter un administrateur.
-  color : 34d9ff
-  footer :
-    text : 📄 ~ Revenir au sommaire
+  color: 34d9ff
+  footer:
+    text: 📄 ~ Revenir au sommaire
   
-reactions :
-  📄 : accueil
+reactions:
+  📄: accueil

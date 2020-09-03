@@ -1,15 +1,15 @@
-embed :
-  title : Je suis étudiant
-  description : |
+embed:
+  title: Je suis étudiant
+  description: |
     Les noms de domaines acceptés pour la vérification des mails étudiants sont :
 
     → etu.upmc.fr
     → etu.sorbonne-universite.fr
     
     Dans le cas où vous n’ayez accès à aucune adresse avec ces noms de domaines, merci de nous contacter pour clarifier votre situation.
-  color : 34d9ff
-  footer :
-    text : 📄 ~ Revenir au sommaire
+  color: 34d9ff
+  footer:
+    text: 📄 ~ Revenir au sommaire
 
-reactions :
-  📄 : accueil
+reactions:
+  📄: accueil

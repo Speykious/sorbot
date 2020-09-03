@@ -1,6 +1,6 @@
-embed :
-  title : Qui somme-nous ?
-  description : |
+embed:
+  title: Qui somme-nous ?
+  description: |
     Un petit groupe d’étudiants bénévoles ayant initialement souhaité regroupé sur Discord quelques étudiants de Jussieu.
 
     À l’annonce du confinement nous avons pris l’initiative de rehausser nos objectifs en créant un serveur pouvant accueillir tant étudiants que professeurs en vue de soutenir comme nous le pouvions le travail de continuité pédagogique assuré par les professeurs.
@@ -8,9 +8,9 @@ embed :
     Discord étant une plateforme sur laquelle nous avions déjà quelques années d’expérience, elle nous a parut tout à fait appropriée pour fournir des espaces d’échanges pour les étudiants. Par la suite le serveur a vu se réaliser des séances de questions/réponses avec les professeurs, des séances de TD et même des séances de cours.
     
     Depuis, nous poursuivons la gestion du serveur pour assurer une plateforme rassemblant les étudiants pour s’entraider, faciliter la communication et en faire un endroit plaisant pour partager et échanger sur la vie de l’Université.
-  color : 34d9ff
-  footer :
-    text : 📄 ~ Revenir au sommaire
+  color: 34d9ff
+  footer:
+    text: 📄 ~ Revenir au sommaire
   
-reactions :
-  📄 : accueil
+reactions:
+  📄: accueil

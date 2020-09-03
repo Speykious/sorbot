@@ -1,6 +1,6 @@
-embed :
-  title : Guides de prise en main de Discord
-  description : |
+embed:
+  title: Guides de prise en main de Discord
+  description: |
     Ayant conscience que Discord n’est pas connu de tout le monde, nous avons pris soin de vous confectionner des guides de prise en main Discord (tant pour la version smartphone que pour la version sur ordinateur).
 
     Ils vous donneront les bases pour interagir sur les différents espaces que propose Discord. Vous n’êtes pas obligés de tout lire, mais si vous avez un questionnement, sachez qu’il y a de fortes chances que la réponse s’y trouve.
@@ -8,9 +8,9 @@ embed :
     Guide de prise en main de Discord pour ordinateur :
     
     Guide de prise en main de Discord pour smartphone :
-  color : 34d9ff
-  footer :
-    text : 📄 ~ Revenir au sommaire
+  color: 34d9ff
+  footer:
+    text: 📄 ~ Revenir au sommaire
   
-reactions :
-  📄 : accueil
+reactions:
+  📄: accueil

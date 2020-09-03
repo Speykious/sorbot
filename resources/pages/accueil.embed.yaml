@@ -1,6 +1,6 @@
-embed :
-  title : Bienvenue !
-  description : |
+embed:
+  title: Bienvenue !
+  description: |
     Nous vous souhaitons la bienvenue sur le serveur Sorbonne Jussieu ! Ce serveur est un espace prévu pour assurer un lien entre les différents étudiants de Jussieu. Vous y trouverez des salons pour toutes les thématiques enseignées à Jussieu et tous les niveaux.
 
     Ce serveur n’est cependant pas tout publique, pour y accéder il vous faudra suivre quelques instructions. Rendez vous dans la rubrique « Accéder au serveur » du sommaire.
@@ -17,16 +17,16 @@ embed :
     7️⃣ ~ Guide d’utilisation de Discord
     8️⃣ ~ Qui sommes nous ?
     9️⃣ ~ Qu’est-ce que SorBOT ?
-  color : 34d9ff
+  color: 34d9ff
   
-reactions :
-  0️⃣ : page0_aas
-  1️⃣ : page1_jse
-  2️⃣ : page2_jspoec
-  3️⃣ : page3_jsumdpdsu
-  4️⃣ : page4_jsupe
-  5️⃣ : page5_jnrpdm
-  6️⃣ : page6_rgpd
-  7️⃣ : page7_gud
-  8️⃣ : page8_qsn
-  9️⃣ : page9_qqs
+reactions:
+  0️⃣: page0_aas
+  1️⃣: page1_jse
+  2️⃣: page2_jspoec
+  3️⃣: page3_jsumdpdsu
+  4️⃣: page4_jsupe
+  5️⃣: page5_jnrpdm
+  6️⃣: page6_rgpd
+  7️⃣: page7_gud
+  8️⃣: page8_qsn
+  9️⃣: page9_qqs

@@ -1,9 +1,9 @@
-embed :
-  title : Je suis un membre du personnel de Sorbonne Université
-  description : Merci de bien vouloir contacter un administrateur pour nous permettre de clarifier votre situation.
-  color : 34d9ff
-  footer :
-    text : 📄 ~ Revenir au sommaire
+embed:
+  title: Je suis un membre du personnel de Sorbonne Université
+  description: Merci de bien vouloir contacter un administrateur pour nous permettre de clarifier votre situation.
+  color: 34d9ff
+  footer:
+    text: 📄 ~ Revenir au sommaire
   
-reactions :
-  📄 : accueil
+reactions:
+  📄: accueil

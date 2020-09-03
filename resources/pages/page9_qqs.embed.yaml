@@ -1,13 +1,13 @@
-embed :
-  title : Qui est SorBOT ?
-  description : |
+embed:
+  title: Qui est SorBOT ?
+  description: |
     SorBOT est un automate programmé (aussi appelé bot sur Discord) par nos soins. Il a pour but de gérer la vérification de tous les nouveaux membres ainsi que d’assurer la sécurité du serveur et des serveurs fédérés.
     
     Son code est accessible via le lien suivant:
     ‹(lien)›
-  color : 34d9ff
-  footer :
-    text : 📄 ~ Revenir au sommaire
+  color: 34d9ff
+  footer:
+    text: 📄 ~ Revenir au sommaire
   
-reactions :
-  📄 : accueil
+reactions:
+  📄: accueil

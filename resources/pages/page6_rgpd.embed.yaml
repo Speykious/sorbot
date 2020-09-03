@@ -1,6 +1,6 @@
-embed :
-  title : RGPD
-  description : |
+embed:
+  title: RGPD
+  description: |
     L'automate SorBOT a été mis à jour afin de répondre plus explicitement au **RGPD** (**R**èglement **G**énéral de la **P**rotection des **D**onnées). En effet, 
     nous n'avions pas spécifié que nous stockions votre adresse mail **U-RUL** (**U**niversitaire ou **R**attachée à **U**n **L**aboratoire), ainsi que votre ID 
     Discord dès lors que vous la renseignez lors du processus de vérification.
@@ -12,14 +12,14 @@ embed :
     du serveur aux étudiants et aux enseignants rattachés à l’université*, et les utilisateurs venant avec l'intention de perturber le serveur au moyen de trolling 
     ou de spam (incidents ayant eu lieu par le passé) sont bien plus facilement filtrés.
 
-    La donnée est stockée tant que vous restez sur le serveur __**Sorbonne Jussieu**__ : en effet, elle est automatiquement effacée de la base de données dès lors 
+    La donnée est stockée tant que vous restez sur le serveur __**Sorbonne Jussieu**__: en effet, elle est automatiquement effacée de la base de données dès lors 
     que vous quittez le serveur.
     
     Ainsi, nous considérerons que vous agréez au stockage de votre adresse mail U-RUL et à son association à votre ID Discord tant que vous restez sur le serveur. 
     Si vous n'y agréez pas, vous pouvez quitter le serveur, et il n'en restera plus aucune trace.
-  color : 34d9ff
-  footer :
-    text : 📄 ~ Revenir au sommaire
+  color: 34d9ff
+  footer:
+    text: 📄 ~ Revenir au sommaire
   
-reactions :
-  📄 : accueil
+reactions:
+  📄: accueil

@@ -1,6 +1,6 @@
-embed :
-  title : Je suis professeur ou enseignant-chercheur
-  description : |
+embed:
+  title: Je suis professeur ou enseignant-chercheur
+  description: |
     Les noms de domaines acceptés pour la vérification des mails professeurs sont :
 
     → upmc.fr
@@ -14,11 +14,11 @@ embed :
     → insp.jussieu.fr
 
     Dans le cas où vous n’ayez accès à aucune adresse avec ces noms de domaines, merci de bien vouloir contacter un administrateur pour clarifier votre situation.
-  color : 34d9ff
-  footer :
-    text : 📄 ~ Revenir au sommaire
+  color: 34d9ff
+  footer:
+    text: 📄 ~ Revenir au sommaire
   
   
 
-reactions :
-  📄 : accueil
+reactions:
+  📄: accueil
