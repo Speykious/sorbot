@@ -5,9 +5,9 @@ in the path `src/frontend/pages/`.
 
 EmbedMenu:
   @embed (MessageEmbed) - The actual formatted message on the page
-  @reactons (Reactons) - The Reactons (Reaction + Button) for navigation
+  @reactions (Reactions) - The reactions for navigation
 
-Reactons:
+reactions:
   A key/value pair
   with the @emoji character of the reaction as the key
   and a @path to the page it links to as the value.
@@ -63,7 +63,7 @@ sendMenu = (menu, user, msgid) ->
     msg = await dmChannel.send { embed: menu.embed }
     
     # WE CAN'T REMOVE ANY REACTIONS IN DM CHANNELS
-    await msg.react emoji for emoji of menu.reactons
+    await msg.react emoji for emoji of menu.reactions
     
     return msg
   catch err

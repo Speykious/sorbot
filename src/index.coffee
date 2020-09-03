@@ -41,6 +41,8 @@ bot.on "ready", () ->
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
   # Federated server autoverification coming soon™
+  logf LOG.MODERATION, member.guild.id
+  logf LOG.MODERATION, SERVERS.main.id
   if member.guild.id isnt SERVERS.main.id then return
 
   logf LOG.MODERATION, "Adding user #{formatUser member.user}"
@@ -96,11 +98,11 @@ bot.on "messageReactionAdd", (reaction, user) ->
     
     menu = getMenu mpath
 
-    reactonojis = Object.keys menu.reactons
-    reactonoji = reactonojis.find (e) -> e == reaction._emoji.name
-    unless reactonoji then return
+    reactiontojis = Object.keys menu.reactions
+    reactiontoji = reactiontojis.find (e) -> e == reaction._emoji.name
+    unless reactiontoji then return
     
-    linked = join pdir + menu.reactons[reactonoji]
+    linked = join pdir + menu.reactions[reactiontoji]
     lkmenu = getMenu linked
     menumsg = await sendMenu lkmenu, user, reaction.message.id
     unless menumsg then return
