@@ -130,7 +130,11 @@ bot.on "message", (msg) ->
   if dbUser.email is null # Email verification stuff
     await gmailer.verifyEmail dbUser, msg.author, msg.content
   else if dbUser.code # Code verification stuff
-    
+    if msg.content == dbUser.code
+      dbUser.code = null
+      # Hmmmmmmm what do we do here
+    else
+      sendError msg.channel, "**Erreur :** Le code n'est pas le bon. Réessayez."
   else
     # More stuff is gonna go here probably,
     # like user commands to request your
