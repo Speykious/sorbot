@@ -3,15 +3,15 @@ embed:
   description: |
     Les noms de domaines acceptés pour la vérification des mails professeurs sont :
 
-    → 「upmc.fr」
-    → 「sorbonne-universite.fr」
-    → 「lip6.fr」
-    → 「lpsm.fr」
-    → 「isir.fr」
-    → 「inserm.fr」
-    → 「ipgp.fr」
-    → 「imj-prg.fr」
-    → 「insp.jussieu.fr」
+    → **「upmc.fr」**
+    → **「sorbonne-universite.fr」**
+    → **「lip6.fr」**
+    → **「lpsm.fr」**
+    → **「isir.fr」**
+    → **「inserm.fr」**
+    → **「ipgp.fr」**
+    → **「imj-prg.fr」**
+    → **「insp.jussieu.fr」**
 
     Dans le cas où vous n’ayez accès à aucune adresse avec ces noms de domaines, merci de bien vouloir contacter un administrateur pour clarifier votre situation.
   color: 34d9ff
