@@ -1,0 +1,12 @@
+embed :
+  title : Accéder au serveur
+  description : |
+    Pour accéder au serveur il vous faudra transmettre une adresse mail prouvant votre appartenance à Sorbonne Université. Vous devez indiquer votre adresse mail en message privé à SorBOT (c’est-à-dire ici). Vous recevrez sous quelques minutes un mail contenant un code. Pensez à regarder vos spams.\n\n
+    Une fois ce code récupéré, vous devez l’envoyer en message privé à SorBOT (toujours ici). Vous aurez par la suite accès à l’intégralité du serveur.\n\n
+    Des précisions vous seront apportées selon que vous soyez étudiant, enseignant, personnel de Sorbonne ou personne extérieure à Sorbonne. Prenez le temps de les consulter via le sommaire.
+  color : 34d9ff
+  footer :
+    text : 📄 ~ Revenir au sommaire
+  
+reactions :
+  📄 : accueil
