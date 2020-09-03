@@ -45,7 +45,7 @@ bot.on "guildMemberAdd", (member) ->
 
   logf LOG.MODERATION, "Adding user #{formatUser member.user}"
 
-  welcome = "page1"
+  welcome = "accueil"
   menu = getMenu welcome
   menumsg = await sendMenu menu, member.user
   unless menumsg then return # no need to send an error msg
