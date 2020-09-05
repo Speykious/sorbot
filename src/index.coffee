@@ -17,6 +17,7 @@ YAML                                    = require "yaml"
 bot = new Client {
   disableMentions: "everyone"
   partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+  restTimeOffset: 100
 }
 
 gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.yaml"
@@ -36,7 +37,16 @@ bot.on "ready", () ->
   await gmailer.authorize "token.yaml"
   console.log "Bot started successfully."
   
-
+  mainguild   = await bot.guilds.fetch SERVERS.main.id
+  ch_sommaire = await mainguild.channels.cache.get "738013042570428427"
+  await ch_sommaire.send {
+    embed:
+      description:
+        """
+        [https://www.youtube.com/watch?v=dQw4w9WgXcQ](https://i.imgur.com/g0dwkW6.png)
+        """
+  }
+  ###
   tester = await (await bot.guilds.fetch "672479260899803147")
                   .members.fetch "654002031538864151"
   
@@ -47,6 +57,7 @@ bot.on "ready", () ->
   unless menumsg then return # no need to send an error msg
   dbUser.menuState = "#{menumsg.id}:#{welcome}"
   await dbUser.save()
+  ###
 
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
