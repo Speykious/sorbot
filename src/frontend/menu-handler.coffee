@@ -64,7 +64,7 @@ sendMenu = (menu, user, msgid) ->
     msg.createReactionCollector ((a) -> a), { time: 300 }
     # WE CAN'T REMOVE ANY REACTIONS IN DM CHANNELS
     forEach (Object.keys menu.reactions), (emoji) ->
-      if msg then msg.react(emoji).catch (e) -> console.log e
+      unless msg.deleted then msg.react(emoji).catch (e) -> console.log e
     
     return msg
   catch err
