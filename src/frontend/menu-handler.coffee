@@ -6,6 +6,7 @@ in the path `src/frontend/pages/`.
 EmbedMenu:
   @embed (MessageEmbed) - The actual formatted message on the page
   @reactions (Reactions) - The reactions for navigation
+  @thread (string) - The channel name where the menu should be if in a text channel
 
 reactions:
   A key/value pair
@@ -39,14 +40,16 @@ getMenu = (mpath) ->
   then menuCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
   return menuCache[mpath]
 
-# Sends the menu as a message.
+# Sends the menu as a dm message.
 # - menu: menu object typed according to the embed.schema.json yaml validation file.
 # - user: Discord.User
 # - msgid: discord snowflake representing the message id of the menu (optional).
-sendMenu = (menu, user, msgid) ->
+sendDmMenu = (menu, user, msgid) ->
   if process.env.LOCAL
-    if not (user.id in TESTERS)
-      logf LOG.MESSAGES, "Tried to send a menu to non-tester user", formatUser user, "in LOCAL mode"
+    unless (user.id in TESTERS)
+      logf LOG.MESSAGES,
+        "Tried to send a menu to non-tester user",
+        (formatUser user), "in LOCAL mode {#ff6432-fg}(prevented){/}"
       return null
     
     logf LOG.MESSAGES, "Sending menu to tester", formatUser user
@@ -54,25 +57,43 @@ sendMenu = (menu, user, msgid) ->
   try
     dmChannel = await user.createDM()
     
-    msg = undefined
     if msgid # If we have a msgid, we delete the corresponding message
       msg = await dmChannel.messages.fetch msgid
       await msg.delete()
     
     # We send a new one
     msg = await dmChannel.send { embed: menu.embed }
-    msg.createReactionCollector ((a) -> a), { time: 300 }
-    # WE CAN'T REMOVE ANY REACTIONS IN DM CHANNELS
-    forEach (Object.keys menu.reactions), (emoji) ->
-      unless msg.deleted then msg.react(emoji).catch (e) -> console.log e
+    return msg
+  catch err
+    logf LOG.MESSAGES, (formatCrisis "Discord API", err)
+    return undefined
+
+
+
+# Sends the menu as a message on a text channel.
+# - menu: menu object typed according to the embed.schema.json yaml validation file.
+# - channel: Discord.TextChannel
+# - msgid: discord snowflake representing the message id of the menu (optional).
+sendMenu = (menu, channel, msgid) ->
+  try
+    msg = undefined
+    if msgid # If we have a msgid, we edit the corresponding message
+      msg = await channel.messages.fetch msgid
+      await msg.edit { embed : menu.embed }
+    else
+      # We send a new one
+      msg = await channel.send { embed: menu.embed }
     
     return msg
   catch err
     logf LOG.MESSAGES, (formatCrisis "Discord API", err)
     return undefined
 
+
+
 module.exports = {
   getMenu
+  sendDmMenu
   sendMenu
   mdir
 }
