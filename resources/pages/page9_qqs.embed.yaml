@@ -7,7 +7,8 @@ embed:
     ‹ https://gitlab.com/Speykious/sorbot-3 ›
   color: 34d9ff
   footer:
-    text: 📄 ~ Revenir au sommaire
+    text: >-
+      [[S]]({accueil}) ~ Revenir au sommaire
   
 reactions:
   📄: accueil

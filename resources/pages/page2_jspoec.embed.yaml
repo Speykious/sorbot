@@ -16,7 +16,8 @@ embed:
     Dans le cas où vous n’ayez accès à aucune adresse avec ces noms de domaines, merci de bien vouloir contacter un administrateur pour clarifier votre situation.
   color: 34d9ff
   footer:
-    text: 📄 ~ Revenir au sommaire
+    text: >-
+      [[S]]({accueil}) ~ Revenir au sommaire
   
   
 

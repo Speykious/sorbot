@@ -10,7 +10,8 @@ embed:
     Des précisions vous seront apportées selon que vous soyez étudiant, enseignant, personnel de Sorbonne ou personne extérieure à Sorbonne. Prenez le temps de les consulter via le sommaire.
   color: 34d9ff
   footer:
-    text: 📄 ~ Revenir au sommaire
+    text: >-
+      [[S]]({accueil}) ~ Revenir au sommaire
   
 reactions:
   📄: accueil

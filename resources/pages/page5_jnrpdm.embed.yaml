@@ -5,7 +5,8 @@ embed:
     Si le problème persiste, merci de **contacter un administrateur**.
   color: 34d9ff
   footer:
-    text: 📄 ~ Revenir au sommaire
+    text: >-
+      [[S]]({accueil}) ~ Revenir au sommaire
   
 reactions:
   📄: accueil

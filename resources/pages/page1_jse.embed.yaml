@@ -9,7 +9,8 @@ embed:
     Dans le cas où vous n’ayez accès à aucune adresse avec ces noms de domaines, merci de nous contacter pour clarifier votre situation.
   color: 34d9ff
   footer:
-    text: 📄 ~ Revenir au sommaire
+    text: >-
+      [[S]]({accueil}) ~ Revenir au sommaire
 
 reactions:
   📄: accueil

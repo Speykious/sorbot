@@ -1,0 +1,13 @@
+embed:
+  title: Bienvenue !
+  description: |
+    RTFM (more description coming soon(tm))
+  color: 34d9ff
+  footer:
+    text: >-
+      [[S]]({accueil}) ~ Revenir au sommaire
+  
+reactions:
+  📄: accueil
+
+thread: no-mail

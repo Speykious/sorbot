@@ -9,16 +9,16 @@ embed:
 
     📄 __SOMMAIRE__ 📄
     
-    0️⃣ **~ Accéder au serveur
-    1️⃣ ~ Je suis étudiant
-    2️⃣ ~ Je suis professeur ou enseignant-chercheur
-    3️⃣ ~ Je suis un membre du personnel de Sorbonne Université	
-    4️⃣ ~ Je suis une personne extérieure
-    5️⃣ ~ Je ne reçois pas de mail
-    6️⃣ ~ RGPD
-    7️⃣ ~ Guide d’utilisation de Discord
-    8️⃣ ~ Qui sommes nous ?
-    9️⃣ ~ Qu’est-ce que SorBOT ?**
+    [[0]]({page0_aas}) **~ Accéder au serveur**
+    [[1]]({page1_jse}) **~ Je suis étudiant**
+    [[2]]({page2_jspoec}) **~ Je suis professeur ou enseignant-chercheur**
+    [[3]]({page3_jsumdpdsu}) **~ Je suis un membre du personnel de Sorbonne Université	**
+    [[4]]({page4_jsupe}) **~ Je suis une personne extérieure**
+    [[5]]({page5_jnrpdm}) **~ Je ne reçois pas de mail**
+    [[6]]({page6_rgpd}) **~ RGPD**
+    [[7]]({page7_gud}) **~ Guide d’utilisation de Discord**
+    [[8]]({page8_qsn}) **~ Qui sommes nous ?**
+    [[9]]({page9_qqs}) **~ Qu’est-ce que SorBOT ?**
   color: 34d9ff
   
 reactions:

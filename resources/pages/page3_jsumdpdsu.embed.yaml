@@ -3,7 +3,8 @@ embed:
   description: Merci de bien vouloir **contacter un administrateur** pour nous permettre de clarifier votre situation.
   color: 34d9ff
   footer:
-    text: 📄 ~ Revenir au sommaire
+    text: >-
+      [[S]]({accueil}) ~ Revenir au sommaire
   
 reactions:
   📄: accueil

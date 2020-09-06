@@ -19,7 +19,8 @@ embed:
     Si vous n'y agréez pas, vous pouvez quitter le serveur, et il n'en restera plus aucune trace.
   color: 34d9ff
   footer:
-    text: 📄 ~ Revenir au sommaire
+    text: >-
+      [[S]]({accueil}) ~ Revenir au sommaire
   
 reactions:
   📄: accueil
