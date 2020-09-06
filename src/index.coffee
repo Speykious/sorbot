@@ -123,14 +123,7 @@ bot.on "message", (msg) ->
   
   # We STILL don't care about messages that don't come from dms
   # Although we will care a bit later when introducing admin commands
-  if msg.channel.type isnt "dm"
-    unless msg.author.id in TESTERS then return
-    unless msg.content is "SYSTEM CALL: GENERATE CHANNEL ELEMENT" then return
-    mainguild.channels.create "systemu-tesuto", {
-      topic: "それはテストです。"
-      parent: 751750178058534912
-    }
-    return
+  if msg.channel.type isnt "dm" then return
   
   dbUser = await getdbUser msg.author
   unless dbUser then return
