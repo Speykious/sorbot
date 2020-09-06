@@ -1,7 +1,7 @@
 require "dotenv-flow"
 .config()
 
-generatePages                           = require "./frontend/generate-pages"
+{ generatePages, syscall }              = require "./frontend/generate-pages"
 { mdir, getMenu, sendMenu }             = require "./frontend/menu-handler"
 { getdbUser }                           = require "./db/dbhelpers"
 { GMailer }                             = require "./mail/gmailer"
@@ -124,22 +124,11 @@ bot.on "message", (msg) ->
   
   # We STILL don't care about messages that don't come from dms
   # Although we will care a bit later when introducing admin commands
-  if msg.channel.type isnt "dm" then
-    mdir = "resources/pages/"
-    menus = [ "accueil"
-      "page0_aas"
-      "page1_jse"
-      "page2_jspoec"
-      "page3_jsumdpdsu"
-      "page4_jsupe"
-      "page5_jnrpdm"
-      "page6_rgpd"
-      "page7_gud"
-      "page8_qsn"
-      "page9_qqs"
-    ].map (pagename) -> YAML.parse readf mdir + pagename + ".embed.yaml"
+  if msg.channel.type isnt "dm"
+    unless msg.author.id in TESTERS then return
 
-    await generatePages menus, mainguild, "751750178058534912"
+    syscall mainguild, msg
+    return
   
   dbUser = await getdbUser msg.author
   unless dbUser then return
