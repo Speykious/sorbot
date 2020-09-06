@@ -6,7 +6,7 @@ require "dotenv-flow"
 { GMailer }                             = require "./mail/gmailer"
 { encryptid }                           = require "./encryption"
 { User }                                = require "./db/initdb"
-{ CROSSMARK, SERVERS }                  = require "./constants"
+{ CROSSMARK, SERVERS, TESTERS }         = require "./constants"
 { Client }                              = require "discord.js"
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
 { relative, delay, sendError, readf }   = require "./helpers"
@@ -25,7 +25,7 @@ gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.ya
 console.log "Starting"
 logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 
-
+mainguild = undefined
 
 bot.on "ready", () ->
   # Using the tea kanji instead of the emoji
@@ -33,25 +33,24 @@ bot.on "ready", () ->
   logf LOG.INIT, "{bold}{#ae6753-fg}Ready to sip. 茶{/}"
   # bot.channels.cache.get "672498488646434841"
   # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
-
+  
   await gmailer.authorize "token.yaml"
   console.log "Bot started successfully."
   
-  tester = await (await bot.guilds.fetch "672479260899803147")
-                  .members.fetch "654002031538864151"
+  mainguild = await bot.guilds.fetch SERVERS.main.id
+  tester    = await mainguild.members.fetch "654002031538864151"
+  
   
   
 
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
   # Federated server autoverification coming soon™
-  logf LOG.MODERATION, member.guild.id
-  logf LOG.MODERATION, SERVERS.main.id
-  if member.guild.id isnt SERVERS.main.id then return
+  if member.guild.id isnt mainguild.id then return
 
   logf LOG.MODERATION, "Adding user #{formatUser member.user}"
 
-  welcome = "accueil"
+  welcome = "welcomedm"
   menu = getMenu welcome
   menumsg = await sendMenu menu, member.user
   unless menumsg then return # no need to send an error msg
@@ -124,7 +123,14 @@ bot.on "message", (msg) ->
   
   # We STILL don't care about messages that don't come from dms
   # Although we will care a bit later when introducing admin commands
-  if msg.channel.type isnt "dm" then return
+  if msg.channel.type isnt "dm"
+    unless msg.author.id in TESTERS then return
+    unless msg.content is "SYSTEM CALL: GENERATE CHANNEL ELEMENT" then return
+    mainguild.channels.create "systemu-tesuto", {
+      topic: "それはテストです。"
+      parent: 751750178058534912
+    }
+    return
   
   dbUser = await getdbUser msg.author
   unless dbUser then return
