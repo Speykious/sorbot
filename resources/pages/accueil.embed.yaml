@@ -9,29 +9,17 @@ embed:
 
     📄 __SOMMAIRE__ 📄
     
-    [[0]]({page0_aas}) **~ Accéder au serveur**
-    [[1]]({page1_jse}) **~ Je suis étudiant**
-    [[2]]({page2_jspoec}) **~ Je suis professeur ou enseignant-chercheur**
-    [[3]]({page3_jsumdpdsu}) **~ Je suis un membre du personnel de Sorbonne Université**
-    [[4]]({page4_jsupe}) **~ Je suis une personne extérieure**
-    [[5]]({page5_jnrpdm}) **~ Je ne reçois pas de mail**
-    [[6]]({page6_rgpd}) **~ RGPD**
-    [[7]]({page7_gud}) **~ Guide d’utilisation de Discord**
-    [[8]]({page8_qsn}) **~ Qui sommes nous ?**
-    [[9]]({page9_qqs}) **~ Qu’est-ce que SorBOT ?**
+    `[0]` **~ [Accéder au serveur]({page0_aas})**
+    `[1]` **~ [Je suis étudiant]({page1_jse})**
+    `[2]` **~ [Je suis professeur ou enseignant-chercheur]({page2_jspoec})**
+    `[3]` **~ [Je suis un membre du personnel de Sorbonne Université]({page3_jsumdpdsu})**
+    `[4]` **~ [Je suis une personne extérieure]({page4_jsupe})**
+    `[5]` **~ [Je ne reçois pas de mail]({page5_jnrpdm})**
+    `[6]` **~ [RGPD]({page6_rgpd})**
+    `[7]` **~ [Guide d’utilisation de Discord]({page7_gud})**
+    `[8]` **~ [Qui sommes nous ?]({page8_qsn})**
+    `[9]` **~ [Qu’est-ce que SorBOT ?]({page9_qqs})**
   color: 34d9ff
-  
-reactions:
-  0️⃣: page0_aas
-  1️⃣: page1_jse
-  2️⃣: page2_jspoec
-  3️⃣: page3_jsumdpdsu
-  4️⃣: page4_jsupe
-  5️⃣: page5_jnrpdm
-  6️⃣: page6_rgpd
-  7️⃣: page7_gud
-  8️⃣: page8_qsn
-  9️⃣: page9_qqs
 
 thread:
   name: sommaire

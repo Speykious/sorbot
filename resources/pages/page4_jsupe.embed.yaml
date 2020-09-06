@@ -6,12 +6,6 @@ embed:
     Vous pourrez nous énoncer les motifs qui vous poussent à rejoindre ce serveur. 
     Nous nous gardons le droit de vous refuser l'accès au serveur ou de vous le retirer ultérieurement en cas de comportement inapproprié.
   color: 34d9ff
-  footer:
-    text: >-
-      [[S]]({accueil}) ~ Revenir au sommaire  
-
-reactions:
-  📄: accueil
 
 thread:
   name: whoami

@@ -3,13 +3,9 @@ embed:
   description: |
     Veillez à vous assurer de la validité de votre adresse.
     Si le problème persiste, merci de **contacter un administrateur**.
+
+    [[S]](https://www.youtube.com/) ~ Revenir au sommaire
   color: 34d9ff
-  footer:
-    text: >-
-      [[S]]({accueil}) ~ Revenir au sommaire
-  
-reactions:
-  📄: accueil
 
 thread:
   name: no-mail

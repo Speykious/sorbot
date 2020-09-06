@@ -6,13 +6,7 @@ embed:
     Son code est accessible via le lien suivant:
     ‹ https://gitlab.com/Speykious/sorbot-3 ›
   color: 34d9ff
-  footer:
-    text: >-
-      [[S]]({accueil}) ~ Revenir au sommaire
   
-reactions:
-  📄: accueil
-
 thread:
   name: whoarewe
   topic: Être ou ne pas ếtre communiste ? Tel est la question 🤔

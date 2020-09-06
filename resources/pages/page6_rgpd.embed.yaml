@@ -18,13 +18,7 @@ embed:
     Ainsi, nous considérerons que vous agréez au stockage de votre adresse mail U-RUL et à son association à votre ID Discord tant que vous restez sur le serveur. 
     Si vous n'y agréez pas, vous pouvez quitter le serveur, et il n'en restera plus aucune trace.
   color: 34d9ff
-  footer:
-    text: >-
-      [[S]]({accueil}) ~ Revenir au sommaire
   
-reactions:
-  📄: accueil
-
 thread:
   name: privacy
   topic: Nous possédons vos données 👀

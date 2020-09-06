@@ -9,13 +9,7 @@ embed:
     
     Depuis, nous poursuivons la gestion du serveur pour assurer une plateforme rassemblant les étudiants pour s’entraider, faciliter la communication et en faire un endroit plaisant pour partager et échanger sur la vie de l’Université.
   color: 34d9ff
-  footer:
-    text: >-
-      [[S]]({accueil}) ~ Revenir au sommaire
   
-reactions:
-  📄: accueil
-
 thread:
   name: whoarewe
   topic: Être ou ne pas ếtre communiste ? Tel est la question 🤔

@@ -2,13 +2,7 @@ embed:
   title: Je suis un membre du personnel de Sorbonne Université
   description: Merci de bien vouloir **contacter un administrateur** pour nous permettre de clarifier votre situation.
   color: 34d9ff
-  footer:
-    text: >-
-      [[S]]({accueil}) ~ Revenir au sommaire
   
-reactions:
-  📄: accueil
-
 thread:
   name: whoami
   topic: Je pense, donc je suis... Étudiant ? 🤔

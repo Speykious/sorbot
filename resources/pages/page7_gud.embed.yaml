@@ -11,13 +11,7 @@ embed:
 
     Lien vers l'aide générale de Discord : ‹ https://support.discord.com/hc/fr ›
   color: 34d9ff
-  footer:
-    text: >-
-      [[S]]({accueil}) ~ Revenir au sommaire
   
-reactions:
-  📄: accueil
-
 thread:
   name: guide-discord
   topic: Nous vous avons fourni des aides sur-mesure !
