@@ -11,4 +11,6 @@ embed:
 reactions:
   📄: accueil
 
-thread: no-mail
+thread:
+  name: no-mail
+  topic: Vous ne recevez pas de mail ?

@@ -15,4 +15,6 @@ embed:
 reactions:
   📄: accueil
 
-thread: whoami
+thread:
+  name: whoami
+  topic: Je pense, donc je suis... Étudiant ? 🤔

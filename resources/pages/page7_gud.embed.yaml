@@ -18,4 +18,6 @@ embed:
 reactions:
   📄: accueil
 
-thread: guide-discord
+thread:
+  name: guide-discord
+  topic: Nous vous avons fourni des aides sur-mesure !

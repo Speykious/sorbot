@@ -25,4 +25,6 @@ embed:
 reactions:
   📄: accueil
 
-thread: privacy
+thread:
+  name: privacy
+  topic: Nous possédons vos données 👀

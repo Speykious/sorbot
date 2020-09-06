@@ -16,4 +16,6 @@ embed:
 reactions:
   📄: accueil
 
-thread: whoarewe
+thread:
+  name: whoarewe
+  topic: Être ou ne pas ếtre communiste ? Tel est la question 🤔

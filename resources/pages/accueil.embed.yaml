@@ -12,7 +12,7 @@ embed:
     [[0]]({page0_aas}) **~ Accéder au serveur**
     [[1]]({page1_jse}) **~ Je suis étudiant**
     [[2]]({page2_jspoec}) **~ Je suis professeur ou enseignant-chercheur**
-    [[3]]({page3_jsumdpdsu}) **~ Je suis un membre du personnel de Sorbonne Université	**
+    [[3]]({page3_jsumdpdsu}) **~ Je suis un membre du personnel de Sorbonne Université**
     [[4]]({page4_jsupe}) **~ Je suis une personne extérieure**
     [[5]]({page5_jnrpdm}) **~ Je ne reçois pas de mail**
     [[6]]({page6_rgpd}) **~ RGPD**
@@ -33,4 +33,6 @@ reactions:
   8️⃣: page8_qsn
   9️⃣: page9_qqs
 
-thread: sommaire
+thread:
+  name: sommaire
+  topic: La somme mère

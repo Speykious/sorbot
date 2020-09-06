@@ -16,4 +16,6 @@ embed:
 reactions:
   📄: accueil
 
-thread: acceder-au-serveur
+thread:
+  name: acceder-au-serveur
+  topic: Comment Pénétrer dans la Guilde
