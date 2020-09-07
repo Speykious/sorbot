@@ -61,7 +61,7 @@ bot.on "ready", () ->
   mainguild = await bot.guilds.fetch SERVERS.main.id
 
   loading.step "Bot started successfully."
-
+  setTimeout (-> console.log ""), 1000
 
 
 bot.on "guildMemberAdd", (member) ->

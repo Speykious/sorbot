@@ -32,19 +32,21 @@ class LoadingBar
     p = Math.min 1, @i / @max
     full = Math.floor @cwidth * p
     tiny = Math.floor (@cwidth * p - full) * 8
-    return @bo + @ano + (blocks[8].repeat full)
-      + (if tiny is 0 then "" else blocks[tiny])
-      + (if p >= 1 then "" else blocks[0].repeat @cwidth - full - (if tiny then 1 else 0))
-      + @anc + @bc + " " + (if p >= 1 then b + grn else b) + (p * 100).toFixed(2).padStart 3
-      + "%" + c + " - #{msg}"
+
+    tr = @bo + @ano + (blocks[8].repeat full)
+    tr += (if tiny is 0 then "" else blocks[tiny])
+    tr += (if p >= 1 then "" else blocks[0].repeat @cwidth - full - (if tiny then 1 else 0))
+    tr += @anc + @bc + " " + (if p >= 1 then b + grn else b) + (p * 100).toFixed(2).padStart 3
+    tr += "%" + c + " - #{@msg}"
+    return tr
   
   clearInterval: -> if @interval then clearInterval @interval
   startInterval: ->
     @interval = setInterval (->
       process.stdout.write "\x1b[2K\r#{@progress()}"
       if @i >= @max then @clearInterval()
-    ), 50
+    ).bind(@), 50
 
-loading = new LoadingBar 18, "║║", 25, 0x34d9ff
+loading = new LoadingBar 17, "║║", 25, 0x34d9ff
 
 module.exports = loading
