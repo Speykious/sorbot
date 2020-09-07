@@ -15,6 +15,7 @@ TESTERS = [
 
 DOMAINS = YAML.parse readf "resources/domains.yaml"
 SERVERS = YAML.parse readf "resources/servers.yaml"
+GUILDS = {}
 
 USER_TYPES =
   STUDENT:   1 << 0
@@ -29,4 +30,5 @@ module.exports = {
   DOMAINS
   SERVERS
   USER_TYPES
+  GUILDS
 }
