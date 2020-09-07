@@ -1,7 +1,7 @@
 require "dotenv-flow"
 .config()
 
-{ generatePages, syscall }              = require "./frontend/generate-pages"
+syscall                                 = require "./frontend/syscall"
 { mdir, getMenu, sendMenu }             = require "./frontend/menu-handler"
 { getdbUser }                           = require "./db/dbhelpers"
 { GMailer }                             = require "./mail/gmailer"
