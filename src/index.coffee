@@ -47,6 +47,13 @@ logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 mainguild = undefined
 
 bot.on "ready", () ->
+  await bot.user.setPresence {
+    activity:
+      type: "PLAYING"
+      name: "with your data 👀"
+      url: "https://gitlab.com/Speykious/sorbot-3"
+  }
+  
   # Using the tea kanji instead of the emoji
   # because it doesn't render well with blessed :(
   logf LOG.INIT, "{bold}{#ae6753-fg}Ready to sip. 茶{/}"
@@ -59,7 +66,7 @@ bot.on "ready", () ->
   
   loading.step "Fetching main guild..."
   mainguild = await bot.guilds.fetch SERVERS.main.id
-
+  
   loading.step "Bot started successfully."
   setTimeout (-> console.log ""), 1000
 
@@ -70,6 +77,7 @@ bot.on "guildMemberAdd", (member) ->
   if member.guild.id isnt mainguild.id then return
   
   logf LOG.MODERATION, "Adding user #{formatUser member.user}"
+  await member.roles.add SERVERS.main.roles.non_verifie
   
   welcome = "welcomedm"
   menu = getMenu welcome
@@ -83,7 +91,6 @@ bot.on "guildMemberAdd", (member) ->
   }
   
   logf LOG.DATABASE, "User #{formatUser member.user} added"
-
 
 
 bot.on "guildMemberRemove", (member) ->
@@ -162,6 +169,8 @@ bot.on "message", (msg) ->
   else if dbUser.code # Code verification stuff
     if msg.content == dbUser.code
       dbUser.code = null
+      member = await mainguild.members.fetch msg.author.id
+      
       # Hmmmmmmm what do we do here
     else
       sendError msg.channel, "**Erreur :** Le code n'est pas le bon. Réessayez."
