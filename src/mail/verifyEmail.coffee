@@ -43,8 +43,8 @@ sendEmail = (gmail, request) ->
     requestBody:
       raw: encodedMessage
   }
-  console.log message
-  console.log "Sent email:", res.data
+  
+  logf LOG.EMAIL "Sent email:", res.data
   return res.data
 
 
@@ -54,11 +54,11 @@ verifyEmail = (dbUser, user, email) ->
   try # All the Sequelize validation process goes here
     dbUser.email = email
     await dbUser.save()
-    logf LOG.MAIL, "Email {#ff8032-fg}#{email}{/} saved for user", formatUser user
+    logf LOG.EMAIL, "Email {#ff8032-fg}#{email}{/} saved for user", formatUser user
   catch valerr
     messages = valerr.errors.map (e) -> e.message
                .reverse()
-    logf LOG.MAIL, (formatCrisis "Mail Validation", messages)
+    logf LOG.EMAIL, (formatCrisis "Mail Validation", messages)
     return
   
   # Send mail here

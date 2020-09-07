@@ -60,7 +60,7 @@ class GMailer
   @param {string} query - The gmail query instructions.
   ###
   getUECMessages: (maxFetch = 10) ->
-    logf LOG.MAIL, "Reading Existential Crisis messages..."
+    logf LOG.EMAIL, "Reading Existential Crisis messages..."
     return @getMessages "is:unread label:existential-crisis", maxFetch
 
   ###

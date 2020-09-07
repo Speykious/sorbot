@@ -11,7 +11,7 @@ Lists and returns the messages in the user's account.
 getMessages = (query, maxFetch = 10) ->
   listm = await @gmail.users.messages.list { userId: "me", q: query, maxResults: maxFetch }
   if not listm.data.messages
-    logf LOG.MAIL, "{#ffff32-fg}{bold}#{CROSSMARK}{/bold} No messages to query :/{/}"
+    logf LOG.EMAIL, "{#ffff32-fg}{bold}#{CROSSMARK}{/bold} No messages to query :/{/}"
     return []
 
   counter = 0
@@ -36,7 +36,7 @@ getMessages = (query, maxFetch = 10) ->
       }
     
     if counter % 10 == 0
-      logf LOG.MAIL, "Messages: {bold}#{String counter}{/}"
+      logf LOG.EMAIL, "Messages: {bold}#{String counter}{/}"
 
     counter++
 
@@ -53,7 +53,7 @@ getMessages = (query, maxFetch = 10) ->
       date: failing_date
     }
   
-  logf LOG.MAIL, "{#32ff64-fg}{bold}#{CHECKMARK}{/bold} Messages succesfully read{/}"
+  logf LOG.EMAIL, "{#32ff64-fg}{bold}#{CHECKMARK}{/bold} Messages succesfully read{/}"
 
   return overall
 

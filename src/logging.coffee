@@ -13,7 +13,7 @@ else (name) -> "/var/log/sorbot-3/#{name}.log"
 
 LOG =
   INIT:       aslog "init"       # For every kind of initialization
-  MAIL:       aslog "mail"       # For mail related requests & errors
+  EMAIL:       aslog "mail"       # For mail related requests & errors
   DATABASE:   aslog "database"   # For database related requests & errors
   MESSAGES:   aslog "messages"   # For discord message requests & errors
   MODERATION: aslog "moderation" # For discord administration info
