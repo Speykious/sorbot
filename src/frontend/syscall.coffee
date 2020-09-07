@@ -26,8 +26,8 @@ updateMenus = ->
   menus = pagenames.map (pagename) -> YAML.parse readf mdir + pagename + ".embed.yaml"
 
 saveMenus = ->
-  writef "resources/menumsgs.yaml",
-    YAML.stringify menumsgs.map (menumsg) -> ({ ch: menumsg.channel.id, msg: menumsg.id })
+  menumsgids = menumsgs.map (menumsg) -> ({ ch: menumsg.channel.id, msg: menumsg.id })
+  writef "resources/menumsgs.yaml", YAML.stringify menumsgids
 
 # Generates the embed pages in their corresponding threads
 generatePages = (menus, guild, parentId) ->
@@ -48,9 +48,16 @@ generatePages = (menus, guild, parentId) ->
           parent: parentId
         }
     
+    # And here we witness the weirdest condition logic
+    # ever seen in the entire history of programming
+    # in its natural habitat
     unless menumsgs[i]
       menumsgs[i] = await channelCache[menu.thread.name].send { embed: menu.embed }
-    else await menumsgs[i].edit { embed: menu.embed }
+    else if menumsgs[i].client.user.id is menumsgs[i].author.id
+      await menumsgs[i].edit { embed: menu.embed }
+    else
+      await menumsgs[i].delete()
+      menumsgs[i] = await channelCache[menu.thread.name].send { embed: menu.embed }
 
     channeler menus, i + 1
 
