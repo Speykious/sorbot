@@ -15,7 +15,7 @@ loading.step "Loading discord.js..."
 loading.step "Loading generic utils..."
 { relative, delay, sendError, readf }   = require "./helpers"
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
-{ CROSSMARK, SERVERS, TESTERS }         = require "./constants"
+{ CROSSMARK, SERVERS, GUILDS, TESTERS } = require "./constants"
 { encryptid }                           = require "./encryption"
 
 loading.step "Loading gmailer..."
@@ -44,8 +44,6 @@ gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.ya
 loading.step "Preparing the cup of coffee..."
 logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 
-mainguild = undefined
-
 bot.on "ready", () ->
   await bot.user.setPresence {
     activity:
@@ -65,7 +63,7 @@ bot.on "ready", () ->
   await gmailer.authorize "token.yaml"
   
   loading.step "Fetching main guild..."
-  mainguild = await bot.guilds.fetch SERVERS.main.id
+  GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
   
   loading.step "Bot started successfully."
   setTimeout (-> console.log ""), 1000
@@ -74,7 +72,7 @@ bot.on "ready", () ->
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
   # Federated server autoverification coming soon™
-  if member.guild.id isnt mainguild.id then return
+  if member.guild.id isnt GUILDS.MAIN.id then return
   
   logf LOG.MODERATION, "Adding user #{formatUser member.user}"
   await member.roles.add SERVERS.main.roles.non_verifie
@@ -154,7 +152,7 @@ bot.on "message", (msg) ->
   if msg.channel.type isnt "dm"
     unless msg.author.id in TESTERS then return
     
-    syscall mainguild, msg
+    syscall GUILDS.MAIN, msg
     return
   
   dbUser = await getdbUser msg.author
@@ -169,7 +167,7 @@ bot.on "message", (msg) ->
   else if dbUser.code # Code verification stuff
     if msg.content == dbUser.code
       dbUser.code = null
-      member = await mainguild.members.fetch msg.author.id
+      member = await GUILDS.MAIN.members.fetch msg.author.id
       
       # Hmmmmmmm what do we do here
     else
