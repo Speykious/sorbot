@@ -39,10 +39,8 @@ bot.on "ready", () ->
   console.log "Bot started successfully."
   
   mainguild = await bot.guilds.fetch SERVERS.main.id
-  tester    = await mainguild.members.fetch "654002031538864151"
-  
-  
-  
+
+
 
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
