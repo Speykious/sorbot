@@ -7,7 +7,8 @@
 #   from:    string
 #   to:      string
 #   subject: string
-#   content: string
+#   text:    string
+#   html:    string
 sendEmail = (gmail, request) ->
   # | You can use UTF-8 encoding for the subject using the method below.
   # | You can also just use a plain string if you don't need anything fancy.
@@ -48,6 +49,7 @@ sendEmail = (gmail, request) ->
   return res.data
 
 
+
 # Validates the email address through Sequelize
 # before sending the confirmation code.
 verifyEmail = (dbUser, user, email) ->
@@ -65,7 +67,7 @@ verifyEmail = (dbUser, user, email) ->
   await sendEmail @gmail, {
     from: "SorBOT 3 <bot.sorbonne.jussieu@gmail.com>"
     to: email
-    subject: "Code de confirmation"
+    subject: "Discord - Code de confirmation"
     text: readf "resources/confirmation-email.txt"
     html: readf "resources/confirmation-email.html"
   }
