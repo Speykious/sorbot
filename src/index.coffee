@@ -168,7 +168,7 @@ bot.on "message", (msg) ->
     if msg.content == dbUser.code
       dbUser.code = null
       member = await GUILDS.MAIN.members.fetch msg.author.id
-      
+      member.roles.add [SERVERS.main.roles.membre, SERVERS.main.roles.indecis]
       # Hmmmmmmm what do we do here
     else
       sendError msg.channel, "**Erreur :** Le code n'est pas le bon. Réessayez."
