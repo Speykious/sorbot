@@ -9,4 +9,5 @@ credentials.yaml
 token.yaml
 message.yaml
 test.coffee
+Session.vim
 *~
