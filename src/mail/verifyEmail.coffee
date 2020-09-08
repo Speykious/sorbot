@@ -4,6 +4,13 @@
 { UniqueConstraintError }               = require "sequelize"
 sendEmail                               = require "./sendEmail"
 
+codeset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+generateCode = (l) ->
+  c = ""
+  while l > 0
+    c += codeset[Math.floor Math.random() * (codeset.length - 0.001)]
+    l--
+  return c
 
 
 # Validates the email address through Sequelize
@@ -11,8 +18,9 @@ sendEmail                               = require "./sendEmail"
 verifyEmail = (dbUser, user, email) ->
   try # All the Sequelize validation process goes here
     dbUser.email = email
+    dbUser.code = generateCode 6
     await dbUser.save()
-    logf LOG.EMAIL, "Email {#ff8032-fg}#{email}{/} saved for user", formatUser user
+    logf LOG.EMAIL, "Email {#ff8032-fg}#{email}{/} (code {#ffee64-fg}#{dbUser.code}{/}) saved for user", formatUser user
 
   catch valerr
     if valerr instanceof UniqueConstraintError
@@ -38,7 +46,8 @@ verifyEmail = (dbUser, user, email) ->
       }
       
       return
-
+    
+    console.log valerr
     messages = valerr.errors.map((e) -> e.message).reverse()
     logf LOG.EMAIL, (formatCrisis "Mail Validation", messages[0])
     
@@ -58,8 +67,10 @@ verifyEmail = (dbUser, user, email) ->
     subject: "Discord - Code de confirmation"
     text: readf "resources/confirmation-email.txt"
       .replace(/\{tag\}/g, user.tag)
-      .replace(/\{code\}/g, somecode)
+      .replace(/\{code\}/g, dbUser.code)
     html: readf "resources/confirmation-email.html"
+      .replace(/\{tag\}/g, user.tag)
+      .replace(/\{code\}/g, dbUser.code)
   }
 
   await user.dmChannel.send {
