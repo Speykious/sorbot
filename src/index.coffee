@@ -44,7 +44,7 @@ gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.ya
 loading.step "Preparing the cup of coffee..."
 logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 
-bot.on "ready", () ->
+bot.on "ready", ->
   await bot.user.setPresence {
     activity:
       type: "PLAYING"
@@ -58,7 +58,6 @@ bot.on "ready", () ->
   # bot.channels.cache.get "672498488646434841"
   # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
   
-
   loading.step "Authorizing the gmailer..."
   await gmailer.authorize "token.yaml"
   
@@ -169,9 +168,20 @@ bot.on "message", (msg) ->
       dbUser.code = null
       member = await GUILDS.MAIN.members.fetch msg.author.id
       member.roles.add [SERVERS.main.roles.membre, SERVERS.main.roles.indecis]
-      # Hmmmmmmm what do we do here
+      
+      await member.user.send {
+        embed:
+          title: "Vous êtes vérifié.e"
+          description:
+            """
+            Vous avez désormais le rôle @Membre sur le serveur.
+            N'oubliez pas de choisir vos rôles dans le salon #rôles.
+            Tant que vous n'aurez pas choisi votre rôle d'année d'études,
+            vous aurez aussi le rôle @Indécis.
+            """
+      }
     else
-      sendError msg.channel, "**Erreur :** Le code n'est pas le bon. Réessayez."
+      await sendError msg.channel, "**Erreur :** Le code n'est pas le bon. Réessayez."
   else
     # More stuff is gonna go here probably,
     # like user commands to request your
