@@ -65,8 +65,10 @@ bot.on "ready", ->
   GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
   
   loading.step "Bot started successfully."
-  setTimeout (-> console.log ""), 1000
+  setTimeout (-> console.log ""), 100
 
+  ethings = await gmailer.getUECMessages()
+  logf LOG.EMAIL, ethings
 
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
