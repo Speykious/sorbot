@@ -57,11 +57,22 @@ class GMailer
   a useful way, like telling discord users that
   their entered email address doesn't exist.
   @param {number} maxFetch - The maximum number of messages to query.
-  @param {string} query - The gmail query instructions.
   ###
   getUECMessages: (maxFetch = 10) ->
     logf LOG.EMAIL, "Reading Existential Crisis messages..."
     return @getMessages "is:unread label:existential-crisis", maxFetch
+
+  ###
+  Lists the unread sorbonne crisis messages.
+  Return the messages to let them be used in
+  a useful way, like telling discord users that
+  their entered email address doesn't exist.
+  @param {number} maxFetch - The maximum number of messages to query.
+  ###
+  getUSCMessages: (maxFetch = 10) ->
+    logf LOG.EMAIL, "Reading Sorbonne Crisis messages..."
+    return @getMessages "is:unread label:sorbonne-crisis", maxFetch
+
 
   ###
   Get and store new token after prompting for user authorization.
