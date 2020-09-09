@@ -1,5 +1,5 @@
 { bold, red, blue, underline }     = require "ansi-colors-ts"
-getMessages                        = require "./getMessages"
+getThreads                        = require "./getThreads"
 verifyEmail                        = require "./verifyEmail"
 { CHECKMARK, CROSSMARK }           = require "../constants"
 { logf, LOG, formatCrisis }        = require "../logging"
@@ -45,8 +45,8 @@ class GMailer
         "The Gmail token is missing! You need to go to {bold}SorBOT's stdin{/bold} to create a new one.")
       await @getNewToken tokenfile
   
-  getMessages: (query, maxFetch = 10) ->
-    (getMessages.bind @) query, maxFetch
+  getThreads: (query, maxFetch = 10) ->
+    (getThreads.bind @) query, maxFetch
   
   verifyEmail: (dbUser, user, email) ->
     (verifyEmail.bind @) dbUser, user, email
@@ -58,9 +58,9 @@ class GMailer
   their entered email address doesn't exist.
   @param {number} maxFetch - The maximum number of messages to query.
   ###
-  getUECMessages: (maxFetch = 10) ->
-    logf LOG.EMAIL, "Reading Existential Crisis messages..."
-    return @getMessages "is:unread label:existential-crisis", maxFetch
+  getUECThreads: (maxFetch = 10) ->
+    logf LOG.EMAIL, "Reading Existential Crisis threads..."
+    return @getThreads "is:unread label:existential-crisis", maxFetch
 
   ###
   Lists the unread sorbonne crisis messages.
@@ -69,9 +69,9 @@ class GMailer
   their entered email address doesn't exist.
   @param {number} maxFetch - The maximum number of messages to query.
   ###
-  getUSCMessages: (maxFetch = 10) ->
-    logf LOG.EMAIL, "Reading Sorbonne Crisis messages..."
-    return @getMessages "is:unread label:sorbonne-crisis", maxFetch
+  getUSCThreads: (maxFetch = 10) ->
+    logf LOG.EMAIL, "Reading Sorbonne Crisis threads..."
+    return @getThreads "is:unread label:sorbonne-crisis", maxFetch
 
 
   ###
