@@ -18,8 +18,9 @@ loading.step "Loading generic utils..."
 { CROSSMARK, SERVERS, GUILDS, TESTERS } = require "./constants"
 { encryptid }                           = require "./encryption"
 
-loading.step "Loading gmailer..."
-{ GMailer }                             = require "./mail/gmailer"
+loading.step "Loading gmailer and email crisis handler..."
+GMailer                                 = require "./mail/gmailer"
+EmailCrisisHandler                      = require "./mail/crisisHandler"
 
 loading.step "Loading frontend functions..."
 syscall                                 = require "./frontend/syscall"
@@ -38,8 +39,66 @@ bot = new Client {
   restTimeOffset: 100
 }
 
-loading.step "Instantiating new GMailer..."
+loading.step "Instantiating new GMailer and EmailCrisisHandler..."
 gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.yaml"
+
+# - slowT          {number}  - period for the slow read mode, in seconds
+# - fastT          {number}  - period for the fast read mode, in seconds
+# - maxThreads     {number}  - Maximum number of threads globally
+# - maxThreadsSlow {number}  - Maximum number of threads only for slow mode
+# - maxThreadsFast {number}  - Maximum number of threads only for fast mode
+# - guild          {Guild}   - The main discord guild to handle the crisis with
+# - gmailer        {GMailer} - The gmailer to read the email threads with
+# - embedUEC       {Embed}   - The embed error report for Unread Existential Crisis
+# - embedUSC       {Embed}   = The embed error report for Unread Sorbonne Crisis
+emailCH = new EmailCrisisHandler {
+  gmailer
+
+  # About those embeds, I'm probably gonna isolate
+  # them in a yaml file somewhere in resources/...
+
+  embedUEC: (th) ->
+    embed:
+      title: "Existential Crisis : Adresse Introuvable"
+      description:
+        """
+        L'adresse que vous avez renseignée, `#{th[0].to}`, semble ne pas exister.
+        Nous vous invitons à réessayer avec une autre adresse mail universitaire.
+        """
+      fields: [
+        {
+          name: "Headers du mail envoyé",
+          value: "```yaml\n#{YAML.stringify th[0]}```"
+        },
+        {
+          name: "Headers de la notification de fail"
+          value: "```yaml\n#{YAML.stringify th[1]}```"
+        }
+      ]
+      footer: "Hmmmmmm 🤔"
+
+  embedUSC: (th) ->
+    embed:
+      title: "Sorbonne Crisis : Retour à l'envoyeur"
+      description:
+        """
+        Pour une raison ou une autre, nous n'avons pas réussi à envoyer un mail à l'adresse `#{th[0].to}`.
+        **Nous vous invitons donc à envoyer un mail depuis votre adresse universitaire à l'adresse `bot.sorbonne.jussieu@gmail.com`.**
+        Le sujet du mail doit obligatoirement être votre tag discord, à savoir de la forme `pseudo#1234`, sinon il nous sera impossible de vous vérifier.
+        Vous êtes libre d'écrire ce que vous voulez dans le corps du mail.
+        """
+      fields: [
+        {
+          name: "Headers du mail envoyé",
+          value: "```yaml\n#{YAML.stringify th[0]}```"
+        },
+        {
+          name: "Headers de la notification de fail"
+          value: "```yaml\n#{YAML.stringify th[1]}```"
+        }
+      ]
+      footer: "Hmmmmm² 🤔"
+}
 
 loading.step "Preparing the cup of coffee..."
 logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
@@ -67,8 +126,13 @@ bot.on "ready", ->
   loading.step "Bot started successfully."
   setTimeout (-> console.log ""), 100
 
-  ethings = await gmailer.getUECMessages()
-  logf LOG.EMAIL, ethings
+  # ethings = await gmailer.getUECThreads 3
+  # console.log YAML.stringify ethings
+  # ethonks = await gmailer.getUSCThreads 3
+  # console.log YAML.stringify ethonks
+  emailCH.guild = GUILDS.MAIN
+  emailCH.gmailer = gmailer
+  emailCH.procU()
 
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
