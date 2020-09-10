@@ -113,6 +113,5 @@ class GMailer
             reject err
 
 
-module.exports = {
-  GMailer
-}
+module.exports = GMailer
+
