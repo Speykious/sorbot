@@ -48,8 +48,8 @@ class GMailer
   getThreads: (query, maxFetch = 10) ->
     (getThreads.bind @) query, maxFetch
   
-  verifyEmail: (dbUser, user, email) ->
-    (verifyEmail.bind @) dbUser, user, email
+  verifyEmail: (args...) ->
+    (verifyEmail.bind @) args...
   
   ###
   Lists the unread existential crisis messages.
