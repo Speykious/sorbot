@@ -15,7 +15,7 @@ generateCode = (l) ->
 
 # Validates the email address through Sequelize
 # before sending the confirmation code.
-verifyEmail = (dbUser, user, email) ->
+verifyEmail = (dbUser, user, email, crisisHandler) ->
   try # All the Sequelize validation process goes here
     dbUser.email = email
     dbUser.code = generateCode 6
@@ -83,5 +83,7 @@ verifyEmail = (dbUser, user, email) ->
       color: 0x32ff64
       footer: FOOTER
   }
+
+  crisisHandler.request()
 
 module.exports = verifyEmail

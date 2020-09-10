@@ -131,7 +131,7 @@ bot.on "ready", ->
     console.log ""
     emailCH.guild = GUILDS.MAIN
     emailCH.gmailer = gmailer
-    emailCH.procU()
+    emailCH.activate()
   ), 100
 
 
@@ -229,7 +229,7 @@ bot.on "message", (msg) ->
   # - If email and code, we verify the code
   # - If email but no code, the user is verified
   if dbUser.email is null # Email verification stuff
-    await gmailer.verifyEmail dbUser, msg.author, msg.content
+    await gmailer.verifyEmail dbUser, msg.author, msg.content, emailCH
   else if dbUser.code # Code verification stuff
     if msg.content == dbUser.code
       dbUser.code = null

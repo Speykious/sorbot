@@ -59,8 +59,8 @@ class EmailCrisisHandler
     @activateSlow()
     @activateFast()
 
-  activateSlow: -> @_slowInt = setInterval @procU, @slowT
-  activateFast: -> @_fastInt = setInterval @procC, @fastT
+  activateSlow: -> @_slowInt = setInterval @procU, (@slowT * 1000)
+  activateFast: -> @_fastInt = setInterval @procC, (@fastT * 1000)
 
   deactivate: ->
     @deactivateSlow()
@@ -93,18 +93,22 @@ class EmailCrisisHandler
     member = await @guild.members.fetch decryptid user.id
     logf LOG.MESSAGES, "Sending error report to user #{formatUser member.user} ({#32aa80-fg}'#{embed.title}'{/})"
     await member.user.send embed
-
+  
   proc: (maxThreads) ->
     # Existential Crisis
-    console.log "Existential Crisis threads:"
     ethreads = await @gmailer.getUECThreads maxThreads
     ethreads.map ((eth) -> @handleThread eth, @embedUEC).bind @
-
+    
     # Sorbonne Crisis
-    console.log "Sorbonne Crisis threads:"
     sthreads = await @gmailer.getUSCThreads maxThreads
     sthreads.map ((sth) -> @handleThread sth, @embedUSC).bind @
   
+  request: -> @requestFast = on
+  
   procU: -> @proc @maxThreadsSlow
-
+  procC: ->
+    if @requestFast
+      @proc @maxThreadsFast
+      @requestFast = off
+  
 module.exports = EmailCrisisHandler
