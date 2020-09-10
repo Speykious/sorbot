@@ -1,7 +1,8 @@
-{ EmptyResultError }                = require "sequelize"
-{ User }                            = require "../db/initdb"
-{ decryptid }                       = require "../encryption"
-{ logf, LOG, colmat, formatCrisis } = require "../logging"
+{ EmptyResultError }         = require "sequelize"
+{ User }                     = require "../db/initdb"
+{ decryptid }                = require "../encryption"
+{ logf, LOG, colmat,
+  formatCrisis, formatUser } = require "../logging"
 
 ###
 The idea here:
@@ -59,8 +60,8 @@ class EmailCrisisHandler
     @activateSlow()
     @activateFast()
 
-  activateSlow: -> @_slowInt = setInterval @procU, (@slowT * 1000)
-  activateFast: -> @_fastInt = setInterval @procC, (@fastT * 1000)
+  activateSlow: -> @_slowInt = setInterval (@procU.bind @), (@slowT * 1000)
+  activateFast: -> @_fastInt = setInterval (@procC.bind @), (@fastT * 1000)
 
   deactivate: ->
     @deactivateSlow()
@@ -103,9 +104,11 @@ class EmailCrisisHandler
     sthreads = await @gmailer.getUSCThreads maxThreads
     sthreads.map ((sth) -> @handleThread sth, @embedUSC).bind @
   
-  request: -> @requestFast = on
+  request: ->
+    @requestFast = on
   
-  procU: -> @proc @maxThreadsSlow
+  procU: ->
+    @proc @maxThreadsSlow
   procC: ->
     if @requestFast
       @proc @maxThreadsFast
