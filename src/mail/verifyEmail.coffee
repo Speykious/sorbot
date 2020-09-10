@@ -49,7 +49,6 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
       
       return
     
-    console.log valerr
     messages = valerr.errors.map((e) -> e.message).reverse()
     logf LOG.EMAIL, (formatCrisis "Mail Validation", messages[0])
     
