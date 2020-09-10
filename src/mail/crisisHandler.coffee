@@ -1,5 +1,7 @@
-{ User } = require "../db/initdb"
-{ decryptid } = require "../encryption"
+{ EmptyResultError }                = require "sequelize"
+{ User }                            = require "../db/initdb"
+{ decryptid }                       = require "../encryption"
+{ logf, LOG, colmat, formatCrisis } = require "../logging"
 
 ###
 The idea here:
@@ -42,6 +44,7 @@ class EmailCrisisHandler
     
     @maxThreadsSlow = options.maxThreadsSlow or options.maxThreads or 20
     @maxThreadsFast = options.maxThreadsFast or options.maxThreads or 5
+    @requestFast = off
     
     @guild   = options.guild
     @gmailer = options.gmailer
@@ -66,26 +69,41 @@ class EmailCrisisHandler
   deactivateSlow: -> clearInterval @_slowInt
   deactivateFast: -> clearInterval @_fastInt
 
-  proc: (maxThreads) ->
-    # Existential Crisis
-    ethreads = await @gmailer.getUECThreads maxThreads
-    for eth in ethreads
-      # first message: what has been sent
-      # second message: delivery failure notice
-      console.log eth
-      
-      # Since emails are necessarily unique, that hardcode is safe
-      euser = (await User.findAll {
+  handleThread: (th, g_embed) ->
+    # first message: what has been sent
+    # second message: delivery failure notice
+    embed = g_embed th
+    
+    try
+      # Since emails are necessarily unique, that '[0]' hardcode is safe
+      user = (await User.findAll {
         where:
-          email: eth[0].to
+          email: th[0].to
+        rejectOnEmpty: yes
       })[0]
       
-      console.log "Embed to send:", (@embedUEC eth)
-      console.log "User to send it to:", (decryptid euser.id)
+    catch err
+      unless err instanceof EmptyResultError
+        logf LOG.WTF, "What the fuck just happened? <_<\n#{colmat err}"
+        return
+      
+      logf LOG.DATABASE, (formatCrisis "Query", "User for email {#ff8032-fg}#{th[0].to}{/} has not been found")
+      return
     
+    member = await @guild.members.fetch decryptid user.id
+    logf LOG.MESSAGES, "Sending error report to user #{formatUser member.user} ({#32aa80-fg}'#{embed.title}'{/})"
+    await member.user.send embed
+
+  proc: (maxThreads) ->
+    # Existential Crisis
+    console.log "Existential Crisis threads:"
+    ethreads = await @gmailer.getUECThreads maxThreads
+    ethreads.map ((eth) -> @handleThread eth, @embedUEC).bind @
+
     # Sorbonne Crisis
+    console.log "Sorbonne Crisis threads:"
     sthreads = await @gmailer.getUSCThreads maxThreads
-    console.log "(Read Sorbonne Crisis messages)"
+    sthreads.map ((sth) -> @handleThread sth, @embedUSC).bind @
   
   procU: -> @proc @maxThreadsSlow
 
