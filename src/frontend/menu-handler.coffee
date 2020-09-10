@@ -25,7 +25,7 @@ The menu state contains:
 ###
 
 
-{ CROSSMARK, TESTERS }                      = require "../constants"
+{ CROSSMARK, TESTERS, FOOTER }              = require "../constants"
 { logf, LOG, formatCrisis, formatUser }     = require "../logging"
 { relative, delay, readf, writef, forEach } = require "../helpers"
 YAML                                        = require "yaml"
@@ -37,7 +37,8 @@ menuCache = {}
 # Gets the menu object from .embed.yaml files
 getMenu = (mpath) ->
   unless mpath of menuCache
-  then menuCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
+    menuCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
+    menuCache[mpath].footer = FOOTER
   return menuCache[mpath]
 
 # Sends the menu as a dm message.

@@ -13,7 +13,7 @@ else (name) -> "/var/log/sorbot-3/#{name}.log"
 
 LOG =
   INIT:       aslog "init"       # For every kind of initialization
-  EMAIL:       aslog "mail"       # For mail related requests & errors
+  EMAIL:      aslog "mail"       # For email related requests & errors
   DATABASE:   aslog "database"   # For database related requests & errors
   MESSAGES:   aslog "messages"   # For discord message requests & errors
   MODERATION: aslog "moderation" # For discord administration info
@@ -36,6 +36,7 @@ truncateStr = (s, maxc = 50) ->
 ## DISCORD HELPERS ##
 #####################
 
+###
 sendError = (channel, errorString, msDelay = 5000) ->
   errorMsg = await channel
     .send errorString
@@ -43,6 +44,7 @@ sendError = (channel, errorString, msDelay = 5000) ->
   logf LOG.MESSAGES, "{bold}Sent error:{/} {#ff6432-fg}#{errorMsg.content}{/}"
   if errorMsg then errorMsg.delete { timeout: msDelay }
   return Promise.resolve errorMsg
+###
 
 module.exports = {
   colmat
@@ -52,5 +54,5 @@ module.exports = {
   formatCrisis
   formatUser
   truncateStr
-  sendError
+  # sendError
 }

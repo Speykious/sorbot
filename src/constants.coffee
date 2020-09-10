@@ -1,5 +1,6 @@
-YAML      = require "yaml"
-{ readf } = require "./helpers"
+YAML        = require "yaml"
+{ readf }   = require "./helpers"
+{ version } = require "../package.json"
 
 # This is the most CAPITAListic file that we'll ever have
 
@@ -16,6 +17,9 @@ TESTERS = [
 DOMAINS = YAML.parse readf "resources/domains.yaml"
 SERVERS = YAML.parse readf "resources/servers.yaml"
 GUILDS = {}
+FOOTER =
+  iconURL: "https://i.imgur.com/e3K2oaW.png"
+  text: "SorBOT [v#{version}]"
 
 USER_TYPES =
   STUDENT:   1 << 0
@@ -31,4 +35,5 @@ module.exports = {
   SERVERS
   USER_TYPES
   GUILDS
+  FOOTER
 }

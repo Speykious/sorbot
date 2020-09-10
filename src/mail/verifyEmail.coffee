@@ -1,4 +1,4 @@
-{ GUILDS }                              = require "../constants"
+{ GUILDS, FOOTER }                      = require "../constants"
 { logf, LOG, formatCrisis, formatUser } = require "../logging"
 { readf }                               = require "../helpers"
 { UniqueConstraintError }               = require "sequelize"
@@ -31,6 +31,7 @@ verifyEmail = (dbUser, user, email) ->
           title: "Erreur de Validation"
           description: "L'adresse mail `#{email}` est déjà utilisée par un autre membre."
           color: 0xff3232
+          footer: FOOTER
       }
       
       chbot = GUILDS.MAIN.channels.cache.get "672514494903222311"
@@ -43,6 +44,7 @@ verifyEmail = (dbUser, user, email) ->
             value: email
           }]
           color: 0xffee32
+          footer: FOOTER
       }
       
       return
@@ -56,6 +58,7 @@ verifyEmail = (dbUser, user, email) ->
         title: "Erreur de Validation"
         description: messages[0]
         color: 0xff3232
+        footer: FOOTER
     }
     
     return
@@ -78,6 +81,7 @@ verifyEmail = (dbUser, user, email) ->
       title: "Mail de confirmation envoyé"
       description: "Un mail de confirmation a été envoyé à l'adresse `#{email}`."
       color: 0x32ff64
+      footer: FOOTER
   }
 
 module.exports = verifyEmail

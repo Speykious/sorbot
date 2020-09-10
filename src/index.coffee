@@ -13,9 +13,10 @@ loading.step "Loading discord.js..."
 { Client }                              = require "discord.js"
 
 loading.step "Loading generic utils..."
-{ relative, delay, sendError, readf }   = require "./helpers"
+{ relative, delay, readf }              = require "./helpers"
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
-{ CROSSMARK, SERVERS, GUILDS, TESTERS } = require "./constants"
+{ CROSSMARK, SERVERS,
+  GUILDS, TESTERS, FOOTER }             = require "./constants"
 { encryptid }                           = require "./encryption"
 
 loading.step "Loading gmailer and email crisis handler..."
@@ -75,7 +76,8 @@ emailCH = new EmailCrisisHandler {
           value: "```yaml\n#{YAML.stringify th[1]}```"
         }
       ]
-      footer: "Hmmmmmm 🤔"
+      color: 0xff6432
+      footer: FOOTER
 
   embedUSC: (th) ->
     embed:
@@ -97,7 +99,8 @@ emailCH = new EmailCrisisHandler {
           value: "```yaml\n#{YAML.stringify th[1]}```"
         }
       ]
-      footer: "Hmmmmm² 🤔"
+      color: 0xa3334c
+      footer: FOOTER
 }
 
 loading.step "Preparing the cup of coffee..."
@@ -124,15 +127,13 @@ bot.on "ready", ->
   GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
   
   loading.step "Bot started successfully."
-  setTimeout (-> console.log ""), 100
+  setTimeout ( ->
+    console.log ""
+    emailCH.guild = GUILDS.MAIN
+    emailCH.gmailer = gmailer
+    emailCH.procU()
+  ), 100
 
-  # ethings = await gmailer.getUECThreads 3
-  # console.log YAML.stringify ethings
-  # ethonks = await gmailer.getUSCThreads 3
-  # console.log YAML.stringify ethonks
-  emailCH.guild = GUILDS.MAIN
-  emailCH.gmailer = gmailer
-  emailCH.procU()
 
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
@@ -245,9 +246,17 @@ bot.on "message", (msg) ->
             Tant que vous n'aurez pas choisi votre rôle d'année d'études,
             vous aurez aussi le rôle @Indécis.
             """
+          color: 0x32ff64
+          footer: FOOTER
       }
     else
-      await sendError msg.channel, "**Erreur :** Le code n'est pas le bon. Réessayez."
+      await msg.channel.send {
+        embed:
+          title: "Code invalide"
+          description: "**Erreur :** Le code n'est pas le bon. Réessayez."
+          color: 0xff3232
+          footer: FOOTER
+      }
   else
     # More stuff is gonna go here probably,
     # like user commands to request your
