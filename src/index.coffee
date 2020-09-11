@@ -25,7 +25,7 @@ EmailCrisisHandler                      = require "./mail/crisisHandler"
 
 loading.step "Loading frontend functions..."
 syscall                                 = require "./frontend/syscall"
-{ mdir, getMenu, sendMenu }             = require "./frontend/menu-handler"
+{ mdir, getMenu, sendDmMenu }           = require "./frontend/menu-handler"
 
 loading.step "Loading dbhelpers..."
 { getdbUser }                           = require "./db/dbhelpers"
@@ -145,13 +145,12 @@ bot.on "guildMemberAdd", (member) ->
   
   welcome = "welcomedm"
   menu = getMenu welcome
-  menumsg = await sendMenu menu, member.user
+  menumsg = await sendDmMenu menu, member.user
   unless menumsg then return # no need to send an error msg
   
   # Add new entry in the database
   await User.create {
     id: member.user.id
-    menuState: "#{menumsg.id}:#{welcome}"
     userType: 0
   }
   
@@ -183,40 +182,7 @@ bot.on "message", (msg) ->
   dbUser = await getdbUser msg.author
   unless dbUser then return
   
-  # Remember from SorBOT 2:
-  # - If no email, we try to register the email
-  # - If email and code, we verify the code
-  # - If email but no code, the user is verified
-  if dbUser.email is null # Email verification stuff
-    await gmailer.verifyEmail dbUser, msg.author, msg.content, emailCH
-  else if dbUser.code # Code verification stuff
-    if msg.content == dbUser.code
-      dbUser.code = null
-      member = await GUILDS.MAIN.members.fetch msg.author.id
-      member.roles.set [SERVERS.main.roles.membre, SERVERS.main.roles.indecis]
-      
-      await msg.channel.send {
-        embed:
-          title: "Vous êtes vérifié.e"
-          description:
-            """
-            Vous avez désormais le rôle @Membre sur le serveur.
-            N'oubliez pas de choisir vos rôles dans le salon #rôles.
-            Tant que vous n'aurez pas choisi votre rôle d'année d'études,
-            vous aurez aussi le rôle @Indécis.
-            """
-          color: 0x32ff64
-          footer: FOOTER
-      }
-    else
-      await msg.channel.send {
-        embed:
-          title: "Code invalide"
-          description: "**Erreur :** Le code n'est pas le bon. Réessayez."
-          color: 0xff3232
-          footer: FOOTER
-      }
-  else
+  unless handleVerification gmailer, dbUser, msg
     # More stuff is gonna go here probably,
     # like user commands to request your
     # decrypted data from the database

@@ -23,8 +23,6 @@ module.exports = (connection) ->
       type: STRING 6
     federatedServers:
       type: ARRAY BIGINT
-    menuState:
-      type: STRING
   }, {
     validate:
       validateEmail: () ->
