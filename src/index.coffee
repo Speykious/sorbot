@@ -152,6 +152,7 @@ bot.on "guildMemberAdd", (member) ->
   await User.create {
     id: member.user.id
     menuState: "#{menumsg.id}:#{welcome}"
+    userType: 0
   }
   
   logf LOG.DATABASE, "User #{formatUser member.user} added"
@@ -164,48 +165,6 @@ bot.on "guildMemberRemove", (member) ->
   # Yeeting dbUser out when someone leaves
   await dbUser.destroy()
   logf LOG.DATABASE, "User #{formatUser member.user} removed"
-
-
-
-# The messageReactionAdd event is only used when handling the menus
-bot.on "messageReactionAdd", (reaction, user) ->
-  # I don't care about myself lol
-  if user.bot then return
-  
-  # We don't care about messages that don't come from dms
-  if reaction.message.channel.type isnt "dm" then return
-  
-  dbUser = await getdbUser user
-  unless dbUser then return
-  menuState = dbUser.menuState
-  
-  # Get the menu's message id
-  menuMsgid = menuState.slice 0, 18
-  if reaction.message.id isnt menuMsgid then return
-  
-  try # Get to the linked page and edit the message accordingly
-    mpath = menuState.slice 19
-    
-    pdir = mpath.split("/")
-    pdir.pop()
-    pdir = pdir.join("/") + "/"
-    if pdir is "/" then pdir = ""
-    
-    menu = getMenu mpath
-    
-    reactiontojis = Object.keys menu.reactions
-    reactiontoji = reactiontojis.find (e) -> e == reaction._emoji.name
-    unless reactiontoji then return
-    
-    linked = join pdir + menu.reactions[reactiontoji]
-    lkmenu = getMenu linked
-    menumsg = await sendMenu lkmenu, user, reaction.message.id
-    unless menumsg then return
-    
-    dbUser.menuState = "#{menumsg.id}:#{linked}"
-    await dbUser.save()
-  catch err
-    logf LOG.MESSAGES, (formatCrisis "Menu Existential", err)
 
 
 
@@ -234,9 +193,9 @@ bot.on "message", (msg) ->
     if msg.content == dbUser.code
       dbUser.code = null
       member = await GUILDS.MAIN.members.fetch msg.author.id
-      member.roles.add [SERVERS.main.roles.membre, SERVERS.main.roles.indecis]
+      member.roles.set [SERVERS.main.roles.membre, SERVERS.main.roles.indecis]
       
-      await member.user.send {
+      await msg.channel.send {
         embed:
           title: "Vous êtes vérifié.e"
           description:
@@ -261,7 +220,7 @@ bot.on "message", (msg) ->
     # More stuff is gonna go here probably,
     # like user commands to request your
     # decrypted data from the database
-    msg.author.send "Vous êtes vérifié(e), vous n'avez plus rien à craindre. *(more options coming soon™)*"
+    msg.channel.send "Vous êtes vérifié(e), vous n'avez plus rien à craindre. *(more options coming soon™)*"
 
 
 bot.login process.env.SORBOT_TOKEN
