@@ -1,4 +1,5 @@
-{ GUILDS, SERVERS, FOOTER } = require "../constants.coffee"
+{ GUILDS, SERVERS, FOOTER } = require "../constants"
+{ logf, LOG, formatUser }   = require "../logging"
 
 handleVerification = (gmailer, dbUser, msg) ->
   # Remember from SorBOT 2:
@@ -27,6 +28,7 @@ handleVerification = (gmailer, dbUser, msg) ->
           color: 0x32ff64
           footer: FOOTER
       }
+      logf LOG.MODERATION, "User #{formatUser member.user} has been verified"
     else
       await msg.channel.send {
         embed:
@@ -35,7 +37,9 @@ handleVerification = (gmailer, dbUser, msg) ->
           color: 0xff3232
           footer: FOOTER
       }
-  else return yes
-  return no
+  
+  # The return value represents whether verification has been handled
+  else return no 
+  return yes
 
 module.exports = handleVerification
