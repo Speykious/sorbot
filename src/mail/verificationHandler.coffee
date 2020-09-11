@@ -39,7 +39,7 @@ handleVerification = (gmailer, dbUser, msg) ->
       }
   
   # The return value represents whether verification has been handled
-  else return no 
+  else return no
   return yes
 
 module.exports = handleVerification
