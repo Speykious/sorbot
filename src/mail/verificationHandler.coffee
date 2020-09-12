@@ -28,6 +28,7 @@ handleVerification = (gmailer, dbUser, msg) ->
           color: 0x32ff64
           footer: FOOTER
       }
+      
       logf LOG.MODERATION, "User #{formatUser member.user} has been verified"
     else
       await msg.channel.send {
