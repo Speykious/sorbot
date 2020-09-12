@@ -22,6 +22,7 @@ loading.step "Loading generic utils..."
 loading.step "Loading gmailer and email crisis handler..."
 GMailer                                 = require "./mail/gmailer"
 EmailCrisisHandler                      = require "./mail/crisisHandler"
+handleVerification                      = require "./mail/verificationHandler"
 
 loading.step "Loading frontend functions..."
 syscall                                 = require "./frontend/syscall"
@@ -182,7 +183,7 @@ bot.on "message", (msg) ->
   dbUser = await getdbUser msg.author
   unless dbUser then return
   
-  unless handleVerification gmailer, dbUser, msg
+  unless handleVerification gmailer, emailCH, dbUser, msg
     # More stuff is gonna go here probably,
     # like user commands to request your
     # decrypted data from the database

@@ -1,7 +1,7 @@
 { GUILDS, SERVERS, FOOTER } = require "../constants"
 { logf, LOG, formatUser }   = require "../logging"
 
-handleVerification = (gmailer, dbUser, msg) ->
+handleVerification = (gmailer, emailCH, dbUser, msg) ->
   # Remember from SorBOT 2:
   # - If no email, we try to register the email
   # - If email and code, we verify the code
