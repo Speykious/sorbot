@@ -25,7 +25,7 @@ module.exports = (connection) ->
       type: ARRAY BIGINT
   }, {
     validate:
-      validateEmail: () ->
+      validateEmail: ->
         unless @email isnt null or
             @userType & (USER_TYPES.FORMER | USER_TYPES.GUEST) or
             not @userType
@@ -34,6 +34,7 @@ module.exports = (connection) ->
         
         if (@email.split '@')[1] in DOMAINS.studentDomains   then @userType |= USER_TYPES.STUDENT
         if (@email.split '@')[1] in DOMAINS.professorDomains then @userType |= USER_TYPES.PROFESSOR
+        console.log "@userType:", (@userType.toString 2)
         
         unless (@email.split '@')[1] in DOMAINS.studentDomains or
                (@email.split '@')[1] in DOMAINS.professorDomains
