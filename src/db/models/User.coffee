@@ -11,6 +11,8 @@ module.exports = (connection) ->
       set: (value) -> @setDataValue 'id', encryptid value
     userType:
       type: SMALLINT
+    reactor:
+      type: BIGINT
     email:
       type: STRING
       unique: yes
@@ -24,6 +26,7 @@ module.exports = (connection) ->
             throw new Error "Ceci n'est pas une adresse mail de Sorbonne Jussieu."
       set: (value) ->
         @setDataValue 'email', value
+        unless value then return
         
         domain = (value.split '@')[1]
         userType = @getDataValue 'userType'

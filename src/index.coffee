@@ -144,8 +144,7 @@ bot.on "guildMemberAdd", (member) ->
   logf LOG.MODERATION, "Adding user #{formatUser member.user}"
   await member.roles.add SERVERS.main.roles.non_verifie
   
-  welcome = "welcomedm"
-  page = getPage welcome
+  page = getPage "welcomedm"
   pagemsg = await sendDmPage page, member.user
   unless pagemsg then return # no need to send an error msg
   
@@ -165,7 +164,8 @@ bot.on "guildMemberRemove", (member) ->
   # Yeeting dbUser out when someone leaves
   await dbUser.destroy()
   logf LOG.DATABASE, "User #{formatUser member.user} removed"
-
+  
+  # Hey, bring back the random leaving messages!
 
 
 bot.on "message", (msg) ->
@@ -191,3 +191,30 @@ bot.on "message", (msg) ->
 
 
 bot.login process.env.SORBOT_TOKEN
+
+bot.on "messageReactionAdd", (reaction, user) ->
+  # I still don't care about myself lol
+  if user.bot then return
+  
+  dbUser = await getdbUser user
+  unless dbUser then return
+
+  unless reaction.message.id is dbUser.reactor then return
+
+  switch reaction.emoji.name
+    when "⏪"
+      dbUser.code = null
+      dbUser.email = null
+      await dbUser.save()
+      await user.send {
+        embed:
+          title: "Adresse mail effacée"
+          description: "Vous pouvez désormais renseigner une nouvelle adresse mail."
+          color: 0x32ff64
+          footer: FOOTER
+      }
+    when "🔁"
+      gmailer.verifyEmail dbUser, user, dbUser.email, emailCH
+    else return
+
+  setTimeout (-> reaction.message.delete()), 3000

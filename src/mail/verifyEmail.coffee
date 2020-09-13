@@ -62,7 +62,6 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
     
     return
   
-  # Send mail here
   await sendEmail @gmail, {
     from: "SorBOT 3 <bot.sorbonne.jussieu@gmail.com>"
     to: email
@@ -82,6 +81,23 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
       color: 0x32ff64
       footer: FOOTER
   }
+  
+  # Introducing: Back to the Reactions, 2020
+  reactor = await user.dmChannel.send {
+    embed:
+      title: "Un problème ?"
+      description:
+        """
+        ⏪ - Changer votre adresse mail
+        🔁 - Renvoyer un nouveau code de confirmation
+        """
+      color: 0x32ffff
+      footer: FOOTER
+  }
+  # Change, or send email again
+  ["⏪", "🔁"].map (e) -> reactor.react e
+  dbUser.reactor = reactor.id
+  dbUser.save()
 
   crisisHandler.request()
 
