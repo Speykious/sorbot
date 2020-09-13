@@ -52,7 +52,7 @@ gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.ya
 # - guild          {Guild}   - The main discord guild to handle the crisis with
 # - gmailer        {GMailer} - The gmailer to read the email threads with
 # - embedUEC       {Embed}   - The embed error report for Unread Existential Crisis
-# - embedUSC       {Embed}   = The embed error report for Unread Sorbonne Crisis
+# - embedUSC       {Embed}   - The embed error report for Unread Sorbonne Crisis
 emailCH = new EmailCrisisHandler {
   gmailer
 
@@ -190,8 +190,6 @@ bot.on "message", (msg) ->
     msg.channel.send "Vous êtes vérifié(e), vous n'avez plus rien à craindre. *(more options coming soon™)*"
 
 
-bot.login process.env.SORBOT_TOKEN
-
 bot.on "messageReactionAdd", (reaction, user) ->
   # I still don't care about myself lol
   if user.bot then return
@@ -218,3 +216,7 @@ bot.on "messageReactionAdd", (reaction, user) ->
     else return
 
   setTimeout (-> reaction.message.delete()), 3000
+
+
+
+bot.login process.env.SORBOT_TOKEN
