@@ -1,4 +1,4 @@
-{ GUILDS, SERVERS, FOOTER } = require "../constants"
+{ GUILDS, SERVERS, FOOTER, USER_TYPES } = require "../constants"
 { logf, LOG, formatUser }   = require "../logging"
 
 handleVerification = (gmailer, emailCH, dbUser, user, content) ->
@@ -13,7 +13,13 @@ handleVerification = (gmailer, emailCH, dbUser, user, content) ->
       dbUser.code = null
       dbUser.save()
       member = await GUILDS.MAIN.members.fetch user.id
-      member.roles.set [SERVERS.main.roles.membre, SERVERS.main.roles.indecis]
+      
+      smr = SERVERS.main.roles
+      await member.roles.set [smr.membre, smr.indecis]
+      ut = dbUser.userType
+      if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
+      if ut & USER_TYPES.GUEST     then await member.roles.add smr.squatteur
+      if ut & USER_TYPES.FORMER    then await member.roles.add smr.ancien
       
       await user.send {
         embed:

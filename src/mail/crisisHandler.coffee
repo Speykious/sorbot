@@ -41,7 +41,7 @@ class EmailCrisisHandler
   # - embedUEC       {(thread) -> Embed} - The embed error report for Unread Existential Crisis
   # - embedUSC       {(thread) -> Embed} - The embed error report for Unread Sorbonne Crisis
   constructor: (options) ->
-    @slowT = options.slowT or if process.env.LOCAL then 15 else 300
+    @slowT = options.slowT or if process.env.LOCAL then 300 else 300
     @fastT = options.fastT or 5
     
     @maxThreadsSlow = options.maxThreadsSlow or options.maxThreads or 20
