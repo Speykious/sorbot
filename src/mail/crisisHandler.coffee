@@ -3,6 +3,7 @@
 { decryptid }                = require "../encryption"
 { logf, LOG, colmat,
   formatCrisis, formatUser } = require "../logging"
+handleVerification           = require "./mail/verificationHandler"
 
 ###
 The idea here:
@@ -73,11 +74,11 @@ class EmailCrisisHandler
   handleThread: (th, g_embed) ->
     # first message: what has been sent
     # second message: delivery failure notice
-    embed = g_embed th
+    { embed } = g_embed th
     
     try
       # Since emails are necessarily unique, that '[0]' hardcode is safe
-      user = (await User.findAll {
+      dbUser = (await User.findAll {
         where:
           email: th[0].to
         rejectOnEmpty: yes
@@ -91,9 +92,35 @@ class EmailCrisisHandler
       logf LOG.DATABASE, (formatCrisis "Query", "User for email {#ff8032-fg}#{th[0].to}{/} has not been found")
       return
     
-    member = await @guild.members.fetch decryptid user.id
+    member = await @guild.members.fetch decryptid dbUser.id
     logf LOG.MESSAGES, "Sending error report to user #{formatUser member.user} ({#32aa80-fg}'#{embed.title}'{/})"
-    await member.user.send embed
+    await member.user.send { embed }
+  
+  handleMV: (th, g_embed) ->
+    try
+      # Since emails are necessarily unique, that '[0]' hardcode is safe
+      dbUser = (await User.findAll {
+        where:
+          email: th[0].to
+        rejectOnEmpty: yes
+      })[0]
+      
+    catch err
+      unless err instanceof EmptyResultError
+        logf LOG.WTF, "What the fuck just happened? <_<\n#{colmat err}"
+      
+      # Not logging as it would be redundant with the handleThread method
+      # logf LOG.DATABASE, (formatCrisis "Query", "User for email {#ff8032-fg}#{th[0].to}{/} has not been found")
+      return
+    
+    member = await @guild.members.fetch decryptid dbUser.id
+    unless th[0].subject.includes member.user.tag
+      logf LOG.EMAIL, (formatCrisis "Email Subject", "User #{formatUser member.user} didn't include their discord tag in the subject of their email")
+      # Log something in Discord here to notify the admins
+      return
+    logf LOG.MESSAGES, "'Manually' verifying user #{formatUser member.user}"
+    # Noice little trick: do as if the user had entered the confirmation code :)
+    handleVerification @gmailer, @, dbUser, member.user, dbUser.code
   
   proc: (maxThreads) ->
     # Existential Crisis
@@ -103,6 +130,10 @@ class EmailCrisisHandler
     # Sorbonne Crisis
     sthreads = await @gmailer.getUSCThreads maxThreads
     sthreads.map ((sth) -> @handleThread sth, @embedUSC).bind @
+
+    # Manual Verification
+    mthreads = await @gmailer.getUMVThreads maxThreads
+    mthreads.map ((mth) -> handleVerification @gmailer, @, )
   
   request: ->
     @requestFast = on

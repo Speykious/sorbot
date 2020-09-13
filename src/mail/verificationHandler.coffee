@@ -1,21 +1,21 @@
 { GUILDS, SERVERS, FOOTER } = require "../constants"
 { logf, LOG, formatUser }   = require "../logging"
 
-handleVerification = (gmailer, emailCH, dbUser, msg) ->
+handleVerification = (gmailer, emailCH, dbUser, user, content) ->
   # Remember from SorBOT 2:
   # - If no email, we try to register the email
   # - If email and code, we verify the code
   # - If email but no code, the user is verified
   if dbUser.email is null # Email verification stuff
-    await gmailer.verifyEmail dbUser, msg.author, msg.content, emailCH
+    await gmailer.verifyEmail dbUser, user, content, emailCH
   else if dbUser.code # Code verification stuff
-    if msg.content == dbUser.code
+    if content == dbUser.code
       dbUser.code = null
       dbUser.save()
-      member = await GUILDS.MAIN.members.fetch msg.author.id
+      member = await GUILDS.MAIN.members.fetch user.id
       member.roles.set [SERVERS.main.roles.membre, SERVERS.main.roles.indecis]
       
-      await msg.channel.send {
+      await user.send {
         embed:
           title: "Vous êtes vérifié.e"
           description:
@@ -31,7 +31,7 @@ handleVerification = (gmailer, emailCH, dbUser, msg) ->
       
       logf LOG.MODERATION, "User #{formatUser member.user} has been verified"
     else
-      await msg.channel.send {
+      await user.send {
         embed:
           title: "Code invalide"
           description: "**Erreur :** Le code n'est pas le bon. Réessayez."

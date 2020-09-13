@@ -87,7 +87,7 @@ emailCH = new EmailCrisisHandler {
         """
         Pour une raison ou une autre, nous n'avons pas réussi à envoyer un mail à l'adresse `#{th[0].to}`.
         **Nous vous invitons donc à envoyer un mail depuis votre adresse universitaire à l'adresse `bot.sorbonne.jussieu@gmail.com`.**
-        Le sujet du mail doit obligatoirement être votre tag discord, à savoir de la forme `pseudo#1234`, sinon il nous sera impossible de vous vérifier.
+        Attention : __Le sujet du mail doit obligatoirement être votre tag discord__, à savoir de la forme `pseudo#1234`, sinon il nous sera impossible de vous vérifier.
         Vous êtes libre d'écrire ce que vous voulez dans le corps du mail.
         """
       fields: [
@@ -183,7 +183,7 @@ bot.on "message", (msg) ->
   dbUser = await getdbUser msg.author
   unless dbUser then return
   
-  unless handleVerification gmailer, emailCH, dbUser, msg
+  unless handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably,
     # like user commands to request your
     # decrypted data from the database
