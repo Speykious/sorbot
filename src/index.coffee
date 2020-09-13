@@ -26,7 +26,7 @@ handleVerification                      = require "./mail/verificationHandler"
 
 loading.step "Loading frontend functions..."
 syscall                                 = require "./frontend/syscall"
-{ mdir, getMenu, sendDmMenu }           = require "./frontend/menu-handler"
+{ mdir, getPage, sendDmPage }           = require "./frontend/page-handler"
 
 loading.step "Loading dbhelpers..."
 { getdbUser }                           = require "./db/dbhelpers"
@@ -145,9 +145,9 @@ bot.on "guildMemberAdd", (member) ->
   await member.roles.add SERVERS.main.roles.non_verifie
   
   welcome = "welcomedm"
-  menu = getMenu welcome
-  menumsg = await sendDmMenu menu, member.user
-  unless menumsg then return # no need to send an error msg
+  page = getPage welcome
+  pagemsg = await sendDmPage page, member.user
+  unless pagemsg then return # no need to send an error msg
   
   # Add new entry in the database
   await User.create {

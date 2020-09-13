@@ -1,24 +1,24 @@
 ###
 
-Embed menu data will be stored as `*.embed.yaml` files
+Embed page data will be stored as `*.embed.yaml` files
 in the path `src/frontend/pages/`.
 
-EmbedMenu:
+Embedpage:
   @embed (MessageEmbed) - The actual formatted message on the page
   @reactions (Reactions) - The reactions for navigation
-  @thread (string) - The channel name where the menu should be if in a text channel
+  @thread (string) - The channel name where the page should be if in a text channel
 
 reactions:
   A key/value pair
   with the @emoji character of the reaction as the key
   and a @path to the page it links to as the value.
 
-A menu event has to have those informations:
+A page event has to have those informations:
 - the id of the discord message
 - the id of the user
 - the emoji of the reaction
 
-The menu state contains:
+The page state contains:
 - the id of the discord message where the embed page is displayed
 - the path to the `.embed.yaml` file corresponding to the page
 
@@ -32,28 +32,28 @@ YAML                                        = require "yaml"
 
 mdir = "resources/pages/"
 
-menuCache = {}
+pageCache = {}
 
-# Gets the menu object from .embed.yaml files
-getMenu = (mpath) ->
-  unless mpath of menuCache
-    menuCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
-    menuCache[mpath].footer = FOOTER
-  return menuCache[mpath]
+# Gets the page object from .embed.yaml files
+getPage = (mpath) ->
+  unless mpath of pageCache
+    pageCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
+    pageCache[mpath].footer = FOOTER
+  return pageCache[mpath]
 
-# Sends the menu as a dm message.
-# - menu: menu object typed according to the embed.schema.json yaml validation file.
+# Sends the page as a dm message.
+# - page: page object typed according to the embed.schema.json yaml validation file.
 # - user: Discord.User
-# - msgid: discord snowflake representing the message id of the menu (optional).
-sendDmMenu = (menu, user, msgid) ->
+# - msgid: discord snowflake representing the message id of the page (optional).
+sendDmPage = (page, user, msgid) ->
   if process.env.LOCAL
     unless (user.id in TESTERS)
       logf LOG.MESSAGES,
-        "Tried to send a menu to non-tester user",
+        "Tried to send a page to non-tester user",
         (formatUser user), "in LOCAL mode {#ff6432-fg}(prevented){/}"
       return null
     
-    logf LOG.MESSAGES, "Sending menu to tester", formatUser user
+    logf LOG.MESSAGES, "Sending page to tester", formatUser user
   
   try
     dmChannel = await user.createDM()
@@ -63,7 +63,7 @@ sendDmMenu = (menu, user, msgid) ->
       await msg.delete()
     
     # We send a new one
-    msg = await dmChannel.send { embed: menu.embed }
+    msg = await dmChannel.send { embed: page.embed }
     return msg
   catch err
     logf LOG.MESSAGES, (formatCrisis "Discord API", err)
@@ -71,19 +71,19 @@ sendDmMenu = (menu, user, msgid) ->
 
 
 
-# Sends the menu as a message on a text channel.
-# - menu: menu object typed according to the embed.schema.json yaml validation file.
+# Sends the page as a message on a text channel.
+# - page: page object typed according to the embed.schema.json yaml validation file.
 # - channel: Discord.TextChannel
-# - msgid: discord snowflake representing the message id of the menu (optional).
-sendMenu = (menu, channel, msgid) ->
+# - msgid: discord snowflake representing the message id of the page (optional).
+sendPage = (page, channel, msgid) ->
   try
     msg = undefined
     if msgid # If we have a msgid, we edit the corresponding message
       msg = await channel.messages.fetch msgid
-      await msg.edit { embed : menu.embed }
+      await msg.edit { embed : page.embed }
     else
       # We send a new one
-      msg = await channel.send { embed: menu.embed }
+      msg = await channel.send { embed: page.embed }
     
     return msg
   catch err
@@ -93,8 +93,8 @@ sendMenu = (menu, channel, msgid) ->
 
 
 module.exports = {
-  getMenu
-  sendDmMenu
-  sendMenu
+  getPage
+  sendDmPage
+  sendPage
   mdir
 }
