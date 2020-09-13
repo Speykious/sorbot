@@ -3,7 +3,7 @@
 { decryptid }                = require "../encryption"
 { logf, LOG, colmat,
   formatCrisis, formatUser } = require "../logging"
-handleVerification           = require "./mail/verificationHandler"
+handleVerification           = require "./verificationHandler"
 
 ###
 The idea here:
@@ -41,7 +41,7 @@ class EmailCrisisHandler
   # - embedUEC       {(thread) -> Embed} - The embed error report for Unread Existential Crisis
   # - embedUSC       {(thread) -> Embed} - The embed error report for Unread Sorbonne Crisis
   constructor: (options) ->
-    @slowT = options.slowT or 300
+    @slowT = options.slowT or if process.env.LOCAL then 15 else 300
     @fastT = options.fastT or 5
     
     @maxThreadsSlow = options.maxThreadsSlow or options.maxThreads or 20
@@ -96,12 +96,14 @@ class EmailCrisisHandler
     logf LOG.MESSAGES, "Sending error report to user #{formatUser member.user} ({#32aa80-fg}'#{embed.title}'{/})"
     await member.user.send { embed }
   
-  handleMV: (th, g_embed) ->
+  handleMV: (th) ->
+    userEmail = th[0].from
+    userEmail = userEmail.slice (userEmail.indexOf("<") + 1), (userEmail.length - 1)
     try
       # Since emails are necessarily unique, that '[0]' hardcode is safe
       dbUser = (await User.findAll {
         where:
-          email: th[0].to
+          email: userEmail
         rejectOnEmpty: yes
       })[0]
       
@@ -109,8 +111,7 @@ class EmailCrisisHandler
       unless err instanceof EmptyResultError
         logf LOG.WTF, "What the fuck just happened? <_<\n#{colmat err}"
       
-      # Not logging as it would be redundant with the handleThread method
-      # logf LOG.DATABASE, (formatCrisis "Query", "User for email {#ff8032-fg}#{th[0].to}{/} has not been found")
+      logf LOG.DATABASE, (formatCrisis "M-Query", "User for email {#ff8032-fg}#{userEmail}{/} has not been found")
       return
     
     member = await @guild.members.fetch decryptid dbUser.id
@@ -133,7 +134,7 @@ class EmailCrisisHandler
 
     # Manual Verification
     mthreads = await @gmailer.getUMVThreads maxThreads
-    mthreads.map ((mth) -> handleVerification @gmailer, @, )
+    mthreads.map ((mth) -> @handleMV mth).bind @
   
   request: ->
     @requestFast = on

@@ -73,7 +73,7 @@ class GMailer
   ###
   getUMVThreads: (maxFetch = 10) ->
     logf LOG.EMAIL, "Reading Manual Verification threads..."
-    return @getThreads "is-unread label:manual-verification", maxFetch
+    return @getThreads "is:unread label:manual-verification", maxFetch
 
   ###
   Get and store new token after prompting for user authorization.
