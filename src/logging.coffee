@@ -36,7 +36,6 @@ truncateStr = (s, maxc = 50) ->
 ## DISCORD HELPERS ##
 #####################
 
-###
 sendError = (channel, errorString, msDelay = 5000) ->
   errorMsg = await channel
     .send errorString
@@ -44,7 +43,6 @@ sendError = (channel, errorString, msDelay = 5000) ->
   logf LOG.MESSAGES, "{bold}Sent error:{/} {#ff6432-fg}#{errorMsg.content}{/}"
   if errorMsg then errorMsg.delete { timeout: msDelay }
   return Promise.resolve errorMsg
-###
 
 module.exports = {
   colmat
@@ -54,5 +52,5 @@ module.exports = {
   formatCrisis
   formatUser
   truncateStr
-  # sendError
+  sendError
 }
