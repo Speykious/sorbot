@@ -47,6 +47,10 @@ verifyUser = (dbUser, member, verifier) ->
 
 
 handleVerification = (gmailer, emailCH, dbUser, user, content) ->
+  # We don't handle verification for users with the guest flag
+  # as they are already verified
+  if dbUser.userType & (USER_TYPES.GUEST | USER_TYPES.FORMER) then return no
+  
   # Remember from SorBOT 2:
   # - If no email, we try to register the email
   # - If email and code, we verify the code
