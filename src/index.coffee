@@ -22,7 +22,7 @@ loading.step "Loading generic utils..."
 loading.step "Loading gmailer and email crisis handler..."
 GMailer                                 = require "./mail/gmailer"
 EmailCrisisHandler                      = require "./mail/crisisHandler"
-handleVerification                      = require "./mail/verificationHandler"
+{ handleVerification }                  = require "./mail/verificationHandler"
 
 loading.step "Loading frontend functions..."
 syscall                                 = require "./frontend/syscall"

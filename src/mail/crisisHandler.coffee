@@ -3,7 +3,7 @@
 { decryptid }                = require "../encryption"
 { logf, LOG, colmat,
   formatCrisis, formatUser } = require "../logging"
-handleVerification           = require "./verificationHandler"
+{ handleVerification }       = require "./verificationHandler"
 
 ###
 The idea here:
