@@ -38,7 +38,7 @@ pageCache = {}
 getPage = (mpath) ->
   unless mpath of pageCache
     pageCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
-    pageCache[mpath].footer = FOOTER
+    pageCache[mpath].embed.footer = FOOTER
   return pageCache[mpath]
 
 # Sends the page as a dm message.
