@@ -219,4 +219,11 @@ bot.on "messageReactionAdd", (reaction, user) ->
 
 
 
+bot.on "guildMemberUpdate", (oldMember, newMember) ->
+  levelRoles = ["licence_1", "licence_2", "licence_3", "master_1", "master_2", "doctorat", "professeur"]
+  if levelRoles.some (lr) -> newMember.roles.cache.has SERVERS.main.roles[lr]
+    newMember.roles.remove SERVERS.main.roles.indecis
+
+
+
 bot.login process.env.SORBOT_TOKEN
