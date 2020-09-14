@@ -193,7 +193,8 @@ bot.on "message", (msg) ->
 bot.on "messageReactionAdd", (reaction, user) ->
   # I still don't care about myself lol
   if user.bot then return
-  
+  # I don't care about anything else apart from DMs
+  if reaction.message.type isnt "dm" then return
   dbUser = await getdbUser user
   unless dbUser then return
 
