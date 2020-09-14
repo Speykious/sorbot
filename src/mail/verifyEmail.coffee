@@ -91,7 +91,7 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
         ⏪ - Changer votre adresse mail
         🔁 - Renvoyer un nouveau code de confirmation
         """
-      color: 0x32ffff
+      color: 0x34d9ff
       footer: FOOTER
   }
   # Change, or send email again
