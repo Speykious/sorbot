@@ -17,7 +17,7 @@ loading.step "Loading generic utils..."
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
 { CROSSMARK, SERVERS,
   GUILDS, TESTERS, FOOTER }             = require "./constants"
-{ encryptid }                           = require "./encryption"
+{ encryptid, decryptid }                = require "./encryption"
 
 loading.step "Loading gmailer and email crisis handler..."
 GMailer                                 = require "./mail/gmailer"
@@ -182,12 +182,28 @@ bot.on "message", (msg) ->
   
   dbUser = await getdbUser msg.author
   unless dbUser then return
-  
-  unless handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
-    # More stuff is gonna go here probably,
+  unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
+    # More stuff is gonna go here probably
     # like user commands to request your
     # decrypted data from the database
-    msg.channel.send "Vous êtes vérifié(e), vous n'avez plus rien à craindre. *(more options coming soon™)*"
+    if /^(get|give)\s+(me\s+)?(my\s+)?(user\s+)?data/i.test msg.content
+      # nssData, standing for Not So Sensible Data
+      nssData = { dbUser.dataValues... }
+      nssData.id = decryptid nssData.id
+      msg.author.send {
+        embed:
+          title: "Vos données sous forme YAML"
+          description:
+            """
+            Voici vos données sous forme d'un objet YAML.
+            ```yaml
+            #{YAML.stringify nssData}```
+            """
+          color: 0x34d9ff
+          footer: FOOTER
+      }
+    else
+      msg.author.send "Vous êtes vérifié(e), vous n'avez plus rien à craindre."
 
 
 bot.on "messageReactionAdd", (reaction, user) ->
