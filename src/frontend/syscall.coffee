@@ -1,6 +1,10 @@
-YAML              = require "yaml"
-{ readf, writef } = require "../helpers"
-{ SERVERS }       = require "../constants"
+YAML                    = require "yaml"
+{ readf, writef }       = require "../helpers"
+{ SERVERS, USER_TYPES } = require "../constants"
+{ sendError }           = require "../logging"
+{ getdbUser }           = require "../db/dbhelpers"
+{ User }                = require "../db/initdb"
+{ verifyUser }          = require "../mail/verificationHandler"
 
 mdir = "resources/pages/"
 pagenames = [
@@ -69,16 +73,19 @@ updateMenus()
 # SAO Alicization SYSTEM CALLS for menu handling
 syscall = (guild, msg, cmd) ->
   unless cmd then cmd = msg.content
-  if cmd.startsWith "SYSTEM CALL:\n"
+  if /^(SYSTEM CALL|SC):\n/.test cmd
     cmds = cmd.split(/\n+/).slice 1
-           .map (cmd) -> "SYSTEM CALL: #{cmd}"
+           .map (cmd) -> "SC: #{cmd}"
     syscalls = (i = 0) ->
       if i >= cmds.length then return
       await syscall guild, msg, cmds[i]
       return syscalls i + 1
     return syscalls()
-  unless cmd.startsWith "SYSTEM CALL: " then return
-  cmd = cmd.slice "SYSTEM CALL: ".length
+  
+  unless cmd.startsWith "SYSTEM CALL: "
+    unless /^SC:\s/.test cmd then return
+    else cmd = cmd.slice "SC: ".length
+  else cmd = cmd.slice "SYSTEM CALL: ".length
 
 
   switch cmd
@@ -121,5 +128,30 @@ syscall = (guild, msg, cmd) ->
               menumsgs[i].id}"
         menumsg.edit { embed: orig }
       await msg.channel.send "`Synchronized all pages.`"
+    
+    else
+      unless cmd.startsWith "VERIFY USER, ID " then return
+      
+      cmd = cmd.slice "VERIFY USER, ID ".length
+      unless /^\d{18}/.test cmd then return
+      userId = cmd.slice 0, 18
+      cmd = cmd.slice 18
+      member = await guild.members.fetch userId
+      dbUser = await getdbUser member.user
+      unless dbUser
+        sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+        return
+      
+      if /^,\s+(\d+\s+)+SHAPE/.test cmd then
+        shapes = cmd.split(/\s+/).slice 1
+        shapes.slice 1, shapes.length - 1 # we don't want 'SHAPE' or ',' in here
+        shapes.map (shape) ->
+          unless USER_TYPES[shape]
+            sendError msg.channel, "Unknown Shape `#{shape}` :("
+            return
+          dbUser.userType |= USER_TYPES[shape]
+        dbUser.save()
+      
+      await verifyUser dbUser, member, verifier, msg.author.tag
 
 module.exports = syscall
