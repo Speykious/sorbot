@@ -130,28 +130,65 @@ syscall = (guild, msg, cmd) ->
       await msg.channel.send "`Synchronized all pages.`"
     
     else
-      unless cmd.startsWith "VERIFY USER, ID " then return
+      if cmd.startsWith "VERIFY USER, ID "
+        cmd = cmd.slice "VERIFY USER, ID ".length
+        unless /^\d{18}/.test cmd then return
+        userId = cmd.slice 0, 18
+        cmd    = cmd.slice 18
+        member = await guild.members.fetch userId
+        dbUser = await getdbUser member.user
+        unless dbUser
+          await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+          return
+        
+        if /^,\s+.+SHAPE/.test cmd
+          shapes = cmd.split(/\s+/)
+          shapes = shapes.slice 1, shapes.length - 1 # we don't want 'SHAPE' or ',' in here
+          dbUser.userType = 0
+          await Promise.all shapes.map (shape) ->
+            unless USER_TYPES[shape]
+              await sendError msg.channel, "Unknown Shape `#{shape}` :("
+              return
+            await msg.channel.send "`Giving user shape '#{shape}'...`"
+            dbUser.userType |= USER_TYPES[shape]
+          await dbUser.save()
+        
+        await msg.channel.send "`Verifying user #{member.user.tag}...`"
+        await verifyUser dbUser, member, msg.author.tag
+        await msg.channel.send "`User #{member.user.tag} verified.`"
       
-      cmd = cmd.slice "VERIFY USER, ID ".length
-      unless /^\d{18}/.test cmd then return
-      userId = cmd.slice 0, 18
-      cmd = cmd.slice 18
-      member = await guild.members.fetch userId
-      dbUser = await getdbUser member.user
-      unless dbUser
-        sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
-        return
-      
-      if /^,\s+(\d+\s+)+SHAPE/.test cmd then
-        shapes = cmd.split(/\s+/).slice 1
-        shapes.slice 1, shapes.length - 1 # we don't want 'SHAPE' or ',' in here
-        shapes.map (shape) ->
-          unless USER_TYPES[shape]
-            sendError msg.channel, "Unknown Shape `#{shape}` :("
-            return
-          dbUser.userType |= USER_TYPES[shape]
-        dbUser.save()
-      
-      await verifyUser dbUser, member, verifier, msg.author.tag
+      else if cmd.startsWith "CHANGE USER FIELD, ID "
+        cmd = cmd.slice "CHANGE USER FIELD, ID ".length
+        unless /^\d{18}/.test cmd
+          await sendError msg.channel, "ID key not correct :("
+          return
+        userId = cmd.slice 0, 18
+        cmd    = cmd.slice 18
+        member = await guild.members.fetch userId
+        dbUser = await getdbUser member.user
+        unless dbUser
+          await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+          return
+        
+        unless /^,\sNAME\s/.test cmd
+          await sendError msg.channel, "NAME key missing in the command :("
+          return
+        cmd = cmd.slice ", NAME ".length
+        
+        name = cmd.split(/(\s|,)+/)[0]
+        unless name in ["email", "userType", "code"]
+          await sendError msg.channel, "Unknown or unauthorized user field `#{name}` :("
+          return
+        cmd = cmd.slice name.length
+        
+        unless /^,\sVALUE\s.+/.test cmd
+          await sendError msg.channel, "VALUE key missing in the command :("
+          return
+        
+        value = cmd.slice ", VALUE ".length
+        await msg.channel.send "`Changing field '#{name}' of user '#{member.user.tag}' to '#{value}'...`"
+        dbUser[name] = value
+        await dbUser.save()
+        await msg.channel.send "`Field changed.`"
 
 module.exports = syscall
