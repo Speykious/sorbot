@@ -5,13 +5,18 @@
 # member {GuildMember} - The member to verify
 # verifier {string}    - The discord tag of the one who verified the member
 verifyUser = (dbUser, member, verifier) ->
+  if dbUser.reactor
+    dmChannel = await member.user.createDM()
+    dmChannel.messages.delete dbUser.reactor
+    dbUser.reactor = null
   dbUser.code = null
   dbUser.save()
   
   smr = SERVERS.main.roles
-  await member.roles.set [smr.membre, smr.indecis]
+  await member.roles.set [smr.membre]
   ut = dbUser.userType
   if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
+  if ut & USER_TYPES.STUDENT   then await member.roles.add smr.indecis
   if ut & USER_TYPES.GUEST     then await member.roles.add smr.squatteur
   if ut & USER_TYPES.FORMER    then await member.roles.add smr.ancien
   
