@@ -5,6 +5,7 @@ YAML                    = require "yaml"
 { getdbUser }           = require "../db/dbhelpers"
 { User }                = require "../db/initdb"
 { verifyUser }          = require "../mail/verificationHandler"
+{ getPage }             = require "./page-handler"
 
 mdir = "resources/pages/"
 pagenames = [
@@ -26,8 +27,7 @@ menumsgs = []
 menumsgids = YAML.parse readf "resources/menumsgs.yaml"
 unless menumsgids then menumsgids = []
 
-updateMenus = ->
-  menus = pagenames.map (pagename) -> YAML.parse readf mdir + pagename + ".embed.yaml"
+updateMenus = -> menus = pagenames.map getPage
 
 saveMenus = ->
   menumsgids = menumsgs.map (menumsg) -> ({ ch: menumsg.channel.id, msg: menumsg.id })
