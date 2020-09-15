@@ -1,7 +1,9 @@
 embed:
   title: Qui est SorBOT ?
   description: |
-    SorBOT est un bot programmé par nos soins. Il a pour but de gérer la vérification de tous les nouveaux membres ainsi que d’assurer la sécurité du serveur et des serveurs fédérés.
+    SorBOT est un bot programmé par nos soins. Il a pour but de gérer la vérification de tous les nouveaux membres ainsi que d’assurer la sécurité du serveur principal et des serveurs fédérés.
+    
+    Il est __**open-source**__, et vous pouvez même vous diriger vers le répertoire GitLab pour faire des suggestions de modification de code, d'ajout de nouvelles fonctionnalités ou nous faire part d'une éventuelle faille.
     
     Son code est accessible via le lien suivant:
     ‹ https://gitlab.com/Speykious/sorbot-3 ›
@@ -9,4 +11,4 @@ embed:
   
 thread:
   name: whoarewe
-  topic: Être ou ne pas ếtre communiste ? Tel est la question 🤔
+  topic: Être ou ne pas ếtre communiste ? Telle est la question 🤔

@@ -8,5 +8,5 @@ embed:
   color: 34d9ff
 
 thread:
-  name: no-mail
-  topic: Vous ne recevez pas de mail ?
+  name: pas-de-mail
+  topic: Vous ne recevez pas de mail ?

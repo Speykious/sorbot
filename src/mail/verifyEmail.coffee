@@ -85,7 +85,7 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
   # Introducing: Back to the Reactions, 2020
   reactor = await user.dmChannel.send {
     embed:
-      title: "Un problème ?"
+      title: "Un problème ?"
       description:
         """
         ⏪ - Changer votre adresse mail

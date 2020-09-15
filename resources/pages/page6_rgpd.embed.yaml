@@ -7,7 +7,7 @@ embed:
     à **U**n **L**aboratoire), ainsi que votre ID Discord dès lors que vous
     la renseignez lors du processus de vérification.
   fields:
-    - name: Pourquoi enregistrons-nous ces données ?
+    - name: Pourquoi enregistrons-nous ces données ?
       value: >
         Nous devons faire un duplicata de votre adresse et l'associer à votre
         ID Discord afin d'empêcher l'utilisation d'une même adresse mail U-RUL
@@ -26,7 +26,7 @@ embed:
         sur le serveur.\n
         Si vous n'y agréez pas, vous pouvez quitter le serveur, et il n'en
         restera plus aucune trace.
-    - name: Qu'en est-il de la sécurité ?
+    - name: Qu'en est-il de la sécurité ?
       value: >
         À l'heure actuelle, SorBOT tourne sur une Raspberry Pi 3 (nous projetons
         effectivement de migrer le programme vers une future Raspberry Pi 4
@@ -52,7 +52,7 @@ embed:
         **[l'annuaire UPMC](https://www.annuaire.upmc.fr/)**.
         \n\n
         En d'autres mots, pas d'inquiétude, vos données sont sécurisées au possible !
-    - name: Comment récupérer mes données ?
+    - name: Comment récupérer mes données ?
       value: >
         Vous pouvez récupérer toutes vos données sous format YAML en envoyant un
         message privé à SorBOT : commencez par écrire `give data` et il comprendra.
