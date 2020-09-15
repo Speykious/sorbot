@@ -34,6 +34,8 @@ mdir = "resources/pages/"
 
 pageCache = {}
 
+clearPageCache = -> pageCache = {}
+
 # Gets the page object from .embed.yaml files
 getPage = (mpath) ->
   unless mpath of pageCache
@@ -70,31 +72,9 @@ sendDmPage = (page, user, msgid) ->
     return undefined
 
 
-
-# Sends the page as a message on a text channel.
-# - page: page object typed according to the embed.schema.json yaml validation file.
-# - channel: Discord.TextChannel
-# - msgid: discord snowflake representing the message id of the page (optional).
-sendPage = (page, channel, msgid) ->
-  try
-    msg = undefined
-    if msgid # If we have a msgid, we edit the corresponding message
-      msg = await channel.messages.fetch msgid
-      await msg.edit { embed : page.embed }
-    else
-      # We send a new one
-      msg = await channel.send { embed: page.embed }
-    
-    return msg
-  catch err
-    logf LOG.MESSAGES, (formatCrisis "Discord API", err)
-    return undefined
-
-
-
 module.exports = {
+  mdir
+  clearPageCache
   getPage
   sendDmPage
-  sendPage
-  mdir
 }
