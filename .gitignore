@@ -11,4 +11,5 @@ message.yaml
 test.coffee
 Session.vim
 resources/menumsgs.yaml
+src/.migration.coffee
 *~
