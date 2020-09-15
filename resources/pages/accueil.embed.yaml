@@ -10,22 +10,29 @@ embed:
     📄 __SOMMAIRE__ 📄
     
     **→　[Accéder au serveur]({page0_aas})**
-    
-    **→　[Je suis étudiant]({page1_jse})**
-    **→　[Je suis professeur ou enseignant-chercheur]({page2_jspoec})**
-    **→　[Je suis un membre du personnel de Sorbonne Université]({page3_jsumdpdsu})**
-    **→　[Je suis une personne extérieure]({page4_jsupe})**
-    
-    **→　[Je ne reçois pas de mail]({page5_jnrpdm})**
-    
-    **→　[RGPD]({page6_rgpd})**
-    **→　[Pourquoi enregistrons-nous ces données ?]({page6.1_pencd})**
-    **→　[Qu'en est-il de la sécurité ?]({page6.2_qeidls})**
-    **→　[Comment récupérer mes données ?]({page6.3_crmd})**
-    
-    **→　[Guide d’utilisation de Discord]({page7_gud})**
-    **→　[Qui sommes nous ?]({page8_qsn})**
-    **→　[Qu’est-ce que SorBOT ?]({page9_qqs})**
+  fields:
+    - name: '#whoami'
+      value: |
+        **→　[Je suis étudiant]({page1_jse})**
+        **→　[Je suis professeur ou enseignant-chercheur]({page2_jspoec})**
+        **→　[Je suis un membre du personnel de Sorbonne Université]({page3_jsumdpdsu})**
+        **→　[Je suis une personne extérieure]({page4_jsupe})**
+    - name: '#pas-de-mail'
+      value: |
+        **→　[Je ne reçois pas de mail]({page5_jnrpdm})**
+    - name: '#privacy'
+      value: |
+        **→　[RGPD]({page6_rgpd})**
+        **→　[Pourquoi enregistrons-nous ces données ?]({page6.1_pencd})**
+        **→　[Qu'en est-il de la sécurité ?]({page6.2_qeidls})**
+        **→　[Comment récupérer mes données ?]({page6.3_crmd})**
+    - name: '#guide-discord'
+      value: |
+        **→　[Guide d’utilisation de Discord]({page7_gud})**
+    - name: '#whoarewe'
+      value: |
+        **→　[Qui sommes nous ?]({page8_qsn})**
+        **→　[Qu’est-ce que SorBOT ?]({page9_qqs})**
   color: 34d9ff
 
 thread:

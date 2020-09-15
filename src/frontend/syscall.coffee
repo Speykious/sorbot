@@ -127,11 +127,16 @@ syscall = (guild, msg, cmd) ->
       menumsgs.map (menumsg) ->
         orig = menumsg.embeds[0]
         pagenames.map (pagename, i) ->
-          orig.description = orig.description.replace "{#{pagename}}",
-            "https://discordapp.com/channels/#{
-              menumsgs[i].guild.id}/#{
-              menumsgs[i].channel.id}/#{
-              menumsgs[i].id}"
+          replaceLink = (o, value) ->
+            o[value] = o[value].replace "{#{pagename}}",
+              "https://discordapp.com/channels/#{
+                menumsgs[i].guild.id}/#{
+                menumsgs[i].channel.id}/#{
+                menumsgs[i].id}"
+          
+          replaceLink orig, "description"
+          unless orig.fields then return
+          orig.fields.map (_, i) -> replaceLink orig.fields[i], "value"
         menumsg.edit { embed: orig }
       await msg.channel.send "`Synchronized all pages.`"
     
