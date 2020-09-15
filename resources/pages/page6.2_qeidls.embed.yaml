@@ -1,0 +1,18 @@
+embed:
+  title: Qu'en est-il de la sécurité ?
+  description: |
+    À l'heure actuelle, SorBOT tourne sur une Raspberry Pi 3 (nous projetons effectivement de migrer le programme vers une future Raspberry Pi 4 lorsque notre porte-feuille nous en donnera l'occasion).
+    
+    Celle-ci est aussi sécurisée que possible : elle n'est pas directement connectée à internet, mais par le biais d'un router NAT standard. Ainsi, très peu de ports sont ouverts, ce qui rend les tentatives de pénétration considérablement plus difficiles. Nous avons aussi désactivé le login vers root par SSH, ce qui bloquera toute tentative d'authentification par le compte administrateur root.
+    
+    De plus, puisque nous utilisons une base de données PostgreSQL, au cas où il y aurait une once de faille de sécurité dans le code de l'engine ou dans celui de la bibliothèque Sequelize pour Node.js, nous avons crypté votre ID Discord pour qu'il soit toujours illisible même après une injection SQL réussie - sans oublier que Sequelize échappe les chaînes de caractères pour les éviter au préalable.
+    
+    Enfin, il serait déjà très étonnant que quiconque s'intéresse à l'association entre votre compte Discord et votre adresse mail Sorbonne Université, qui nous le rappelons, est publiquement accessible depuis **[l'annuaire UPMC](https://www.annuaire.upmc.fr/)**.
+    
+    En d'autres mots, pas d'inquiétude, vos données sont sécurisées au possible !
+  
+  color: 34d9ff
+
+thread:
+  name: privacy
+  topic: Nous possédons vos données 👀

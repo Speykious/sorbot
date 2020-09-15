@@ -1,0 +1,14 @@
+embed:
+  title: Pourquoi enregistrons-nous ces données ?
+  description: |
+    Nous devons faire un duplicata de votre adresse et l'associer à votre ID Discord afin d'empêcher l'utilisation d'une même adresse mail U-RUL par plusieurs comptes Discord, nous assurant plus efficacement, par ce biais, de l'appartenance de l'individu à l'UPMC. Ainsi, nous garantissons l’exclusivité du contenu du serveur aux étudiants et aux enseignants rattachés à l’université, et les utilisateurs venant avec l'intention de perturber le serveur au moyen de trolling ou de spam (incidents ayant eu lieu par le passé) sont bien plus facilement filtrés.
+
+    Vos données sont stockées tant que vous restez sur le serveur __**Sorbonne Jussieu**__ : en effet, elles sont automatiquement effacées de la base de données dès lors que vous quittez le serveur.
+    Ainsi, nous considérerons que vous agréez au stockage de votre adresse mail U-RUL et à son association à votre ID Discord tant que vous restez sur le serveur.
+    Si vous n'y agréez pas, vous pouvez quitter le serveur, et il n'en restera plus aucune trace.
+  
+  color: 34d9ff
+
+thread:
+  name: privacy
+  topic: Nous possédons vos données 👀

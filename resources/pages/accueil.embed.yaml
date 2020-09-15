@@ -4,21 +4,28 @@ embed:
     Nous vous souhaitons la bienvenue sur le serveur **Sorbonne Jussieu** ! 
     
     Ce serveur est un espace prévu pour assurer un lien entre les différents étudiants de Jussieu. Vous y trouverez des salons pour toutes les thématiques enseignées à Jussieu et tous les niveaux.
-
-    Ce serveur n’est cependant pas tout publique, pour y accéder il vous faudra suivre quelques instructions. Rendez vous dans la rubrique « Accéder au serveur » du sommaire en cliquant sur la réaction ci dessous.
-
+    
+    Ce serveur n’est cependant pas tout publique, pour y accéder il vous faudra suivre quelques instructions. Rendez-vous dans la rubrique « Accéder au serveur » du sommaire en cliquant sur la réaction ci dessous.
+    
     📄 __SOMMAIRE__ 📄
     
-    `[0]` **~ [Accéder au serveur]({page0_aas})**
-    `[1]` **~ [Je suis étudiant]({page1_jse})**
-    `[2]` **~ [Je suis professeur ou enseignant-chercheur]({page2_jspoec})**
-    `[3]` **~ [Je suis un membre du personnel de Sorbonne Université]({page3_jsumdpdsu})**
-    `[4]` **~ [Je suis une personne extérieure]({page4_jsupe})**
-    `[5]` **~ [Je ne reçois pas de mail]({page5_jnrpdm})**
-    `[6]` **~ [RGPD]({page6_rgpd})**
-    `[7]` **~ [Guide d’utilisation de Discord]({page7_gud})**
-    `[8]` **~ [Qui sommes nous ?]({page8_qsn})**
-    `[9]` **~ [Qu’est-ce que SorBOT ?]({page9_qqs})**
+    **~>　[Accéder au serveur]({page0_aas})**
+    
+    **~>　[Je suis étudiant]({page1_jse})**
+    **~>　[Je suis professeur ou enseignant-chercheur]({page2_jspoec})**
+    **~>　[Je suis un membre du personnel de Sorbonne Université]({page3_jsumdpdsu})**
+    **~>　[Je suis une personne extérieure]({page4_jsupe})**
+    
+    **~>　[Je ne reçois pas de mail]({page5_jnrpdm})**
+    
+    **~>　[RGPD]({page6_rgpd})**
+    **~>　[Pourquoi enregistrons-nous ces données ?]({page6.1_pencd})**
+    **~>　[Qu'en est-il de la sécurité ?]({page6.2_qeidls})**
+    **~>　[Comment récupérer mes données ?]({page6.3_crmd})**
+    
+    **~>　[Guide d’utilisation de Discord]({page7_gud})**
+    **~>　[Qui sommes nous ?]({page8_qsn})**
+    **~>　[Qu’est-ce que SorBOT ?]({page9_qqs})**
   color: 34d9ff
 
 thread:

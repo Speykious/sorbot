@@ -1,63 +1,7 @@
 embed:
   title: RGPD
   description: |
-    SorBOT a été reprogrammé afin de répondre plus explicitement au **RGPD**
-    (**R**èglement **G**énéral de la **P**rotection des **D**onnées). Nous
-    stockons votre adresse mail **U-RUL** (**U**niversitaire ou **R**attachée
-    à **U**n **L**aboratoire), ainsi que votre ID Discord dès lors que vous
-    la renseignez lors du processus de vérification.
-  fields:
-    - name: Pourquoi enregistrons-nous ces données ?
-      value: >
-        Nous devons faire un duplicata de votre adresse et l'associer à votre
-        ID Discord afin d'empêcher l'utilisation d'une même adresse mail U-RUL
-        par plusieurs comptes Discord, nous assurant plus efficacement, par
-        ce biais, de l'appartenance de l'individu à l'UPMC. Ainsi, nous
-        garantissons l’exclusivité du contenu du serveur aux étudiants et aux
-        enseignants rattachés à l’université, et les utilisateurs venant avec
-        l'intention de perturber le serveur au moyen de trolling ou de spam
-        (incidents ayant eu lieu par le passé) sont bien plus facilement filtrés.
-        \n\n
-        Vos données sont stockées tant que vous restez sur le serveur __**Sorbonne Jussieu**__ :
-        en effet, elles sont automatiquement effacées de la base de données dès lors
-        que vous quittez le serveur.\n
-        Ainsi, nous considérerons que vous agréez au stockage de votre adresse
-        mail U-RUL et à son association à votre ID Discord tant que vous restez
-        sur le serveur.\n
-        Si vous n'y agréez pas, vous pouvez quitter le serveur, et il n'en
-        restera plus aucune trace.
-    - name: Qu'en est-il de la sécurité ?
-      value: >
-        À l'heure actuelle, SorBOT tourne sur une Raspberry Pi 3 (nous projetons
-        effectivement de migrer le programme vers une future Raspberry Pi 4
-        lorsque notre porte-feuille nous en donnera l'occasion).
-        \n\n
-        Celle-ci est aussi sécurisée que possible : elle n'est pas directement
-        connectée à internet, mais par le biais d'un router NAT standard. Ainsi,
-        très peu de ports sont ouverts, ce qui rend les tentatives de pénétration
-        considérablement plus difficiles.\n
-        Nous avons aussi désactivé le login vers root par SSH, ce qui bloquera
-        toute tentative d'authentification par le compte administrateur root.
-        \n\n
-        De plus, puisque nous utilisons une base de données PostgreSQL, au cas
-        où il y aurait une once de faille de sécurité dans le code de l'engine
-        ou dans celui de la bibliothèque Sequelize pour Node.js, nous avons
-        crypté votre ID Discord pour qu'il soit toujours illisible même après
-        une injection SQL réussie - sans oublier que Sequelize échappe les
-        chaînes de caractères pour les éviter au préalable.
-        \n\n
-        Enfin, il serait déjà très étonnant que quiconque s'intéresse à
-        l'association entre votre compte Discord et votre adresse mail Sorbonne
-        Université, qui nous le rappelons, est publiquement accessible depuis
-        **[l'annuaire UPMC](https://www.annuaire.upmc.fr/)**.
-        \n\n
-        En d'autres mots, pas d'inquiétude, vos données sont sécurisées au possible !
-    - name: Comment récupérer mes données ?
-      value: >
-        Vous pouvez récupérer toutes vos données sous format YAML en envoyant un
-        message privé à SorBOT : commencez par écrire `give data` et il comprendra.
-        (Oui vous pouvez l'insulter après, on verra rien)
-        
+    SorBOT a été reprogrammé afin de répondre plus explicitement au **RGPD** (**R**èglement **G**énéral de la **P**rotection des **D**onnées). Nous stockons votre adresse mail **U-RUL** (**U**niversitaire ou **R**attachée à **U**n **L**aboratoire), ainsi que votre ID Discord dès lors que vous la renseignez lors du processus de vérification.
   color: 34d9ff
   
 thread:
