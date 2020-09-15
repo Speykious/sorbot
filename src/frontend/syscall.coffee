@@ -73,6 +73,7 @@ updateMenus()
 # SAO Alicization SYSTEM CALLS for menu handling
 syscall = (guild, msg, cmd) ->
   unless cmd then cmd = msg.content
+  cmd = cmd.toUpperCase()
   if /^(SYSTEM CALL|SC):\n/.test cmd
     cmds = cmd.split(/\n+/).slice 1
            .map (cmd) -> "SC: #{cmd}"
@@ -176,9 +177,12 @@ syscall = (guild, msg, cmd) ->
         cmd = cmd.slice ", NAME ".length
         
         name = cmd.split(/(\s|,)+/)[0]
-        unless name in ["email", "userType", "code"]
+        fields = ["email", "userType", "code"]
+        ni = fields.map((field) -> field.toUpperCase()).indexOf name
+        if ni is -1
           await sendError msg.channel, "Unknown or unauthorized user field `#{name}` :("
           return
+        name = fields[ni]
         cmd = cmd.slice name.length
         
         unless /^,\sVALUE\s.+/.test cmd
