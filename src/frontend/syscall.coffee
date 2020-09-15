@@ -47,7 +47,6 @@ generatePages = (menus, guild, parentId) ->
     if menumsgids[i]
       unless channelCache[menu.thread.name]
         channelCache[menu.thread.name] = guild.channels.resolve menumsgids[i].ch
-        console.log channelCache
       unless menumsgs[i]
         menumsgs[i] = await channelCache[menu.thread.name].messages.fetch menumsgids[i].msg
     
