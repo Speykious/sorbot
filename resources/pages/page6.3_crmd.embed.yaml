@@ -1,7 +1,7 @@
 embed:
   title: Comment récupérer mes données ?
   description: |
-    Vous pouvez récupérer toutes vos données sous format YAML en envoyant un message privé à SorBOT : commencez par écrire `give data` et il comprendra.
+    Vous pouvez récupérer toutes vos données sous format YAML en envoyant un message privé à <@!688517881763201221> : commencez par écrire `give data` et il comprendra.
     (Oui vous pouvez l'insulter après, on verra rien)
   
   color: 34d9ff

@@ -1,7 +1,7 @@
 embed:
   title: RGPD
   description: |
-    SorBOT a été reprogrammé afin de répondre plus explicitement au **RGPD** (**R**èglement **G**énéral de la **P**rotection des **D**onnées). Nous stockons votre adresse mail **U-RUL** (**U**niversitaire ou **R**attachée à **U**n **L**aboratoire), ainsi que votre ID Discord dès lors que vous la renseignez lors du processus de vérification.
+    <@!688517881763201221> a été reprogrammé afin de répondre plus explicitement au **RGPD** (**R**èglement **G**énéral de la **P**rotection des **D**onnées). Nous stockons votre adresse mail **U-RUL** (**U**niversitaire ou **R**attachée à **U**n **L**aboratoire), ainsi que votre ID Discord dès lors que vous la renseignez lors du processus de vérification.
   color: 34d9ff
   
 thread:

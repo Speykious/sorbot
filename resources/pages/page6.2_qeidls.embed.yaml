@@ -1,7 +1,7 @@
 embed:
   title: Qu'en est-il de la sécurité ?
   description: |
-    À l'heure actuelle, SorBOT tourne sur une Raspberry Pi 3 (nous projetons effectivement de migrer le programme vers une future Raspberry Pi 4 lorsque notre porte-feuille nous en donnera l'occasion).
+    À l'heure actuelle, <@!688517881763201221> tourne sur une Raspberry Pi 3 (nous projetons effectivement de migrer le programme vers une future Raspberry Pi 4 lorsque notre porte-feuille nous en donnera l'occasion).
     
     Celle-ci est aussi sécurisée que possible : elle n'est pas directement connectée à internet, mais par le biais d'un router NAT standard. Ainsi, très peu de ports sont ouverts, ce qui rend les tentatives de pénétration considérablement plus difficiles. Nous avons aussi désactivé le login vers root par SSH, ce qui bloquera toute tentative d'authentification par le compte administrateur root.
     

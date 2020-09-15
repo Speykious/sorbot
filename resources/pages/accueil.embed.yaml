@@ -32,7 +32,7 @@ embed:
     - name: '#whoarewe'
       value: |
         **→　[Qui sommes nous ?]({page8_qsn})**
-        **→　[Qu’est-ce que SorBOT ?]({page9_qqs})**
+        **→　[Qu’est-ce que <@!688517881763201221> ?]({page9_qqs})**
   color: 34d9ff
 
 thread:
