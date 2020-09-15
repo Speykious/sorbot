@@ -1,11 +1,11 @@
-YAML                    = require "yaml"
-{ readf, writef }       = require "../helpers"
-{ SERVERS, USER_TYPES } = require "../constants"
-{ sendError }           = require "../logging"
-{ getdbUser }           = require "../db/dbhelpers"
-{ User }                = require "../db/initdb"
-{ verifyUser }          = require "../mail/verificationHandler"
-{ getPage }             = require "./page-handler"
+YAML                        = require "yaml"
+{ readf, writef }           = require "../helpers"
+{ SERVERS, USER_TYPES }     = require "../constants"
+{ sendError }               = require "../logging"
+{ getdbUser }               = require "../db/dbhelpers"
+{ User }                    = require "../db/initdb"
+{ verifyUser }              = require "../mail/verificationHandler"
+{ getPage, clearPageCache } = require "./page-handler"
 
 mdir = "resources/pages/"
 pagenames = [
@@ -17,6 +17,9 @@ pagenames = [
   "page4_jsupe"
   "page5_jnrpdm"
   "page6_rgpd"
+  "page6.1_pencd"
+  "page6.2_qeidls"
+  "page6.3_crmd"
   "page7_gud"
   "page8_qsn"
   "page9_qqs"
@@ -27,7 +30,9 @@ menumsgs = []
 menumsgids = YAML.parse readf "resources/menumsgs.yaml"
 unless menumsgids then menumsgids = []
 
-updateMenus = -> menus = pagenames.map getPage
+updateMenus = ->
+  clearPageCache()
+  menus = pagenames.map getPage
 
 saveMenus = ->
   menumsgids = menumsgs.map (menumsg) -> ({ ch: menumsg.channel.id, msg: menumsg.id })
@@ -41,7 +46,8 @@ generatePages = (menus, guild, parentId) ->
     menu = menus[i]
     if menumsgids[i]
       unless channelCache[menu.thread.name]
-        channelCache[menu.thread.name] = guild.channels.cache.get menumsgids[i].ch
+        channelCache[menu.thread.name] = guild.channels.resolve menumsgids[i].ch
+        console.log channelCache
       unless menumsgs[i]
         menumsgs[i] = await channelCache[menu.thread.name].messages.fetch menumsgids[i].msg
     

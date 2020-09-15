@@ -34,7 +34,7 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
           footer: FOOTER
       }
       
-      chbot = GUILDS.MAIN.channels.cache.get "672514494903222311"
+      chbot = GUILDS.MAIN.channels.resolve "672514494903222311"
       await chbot.send {
         embed:
           title: "UNIQUE CONSTRAINT WARNING"

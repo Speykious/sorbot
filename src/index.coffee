@@ -118,7 +118,7 @@ bot.on "ready", ->
   # Using the tea kanji instead of the emoji
   # because it doesn't render well with blessed :(
   logf LOG.INIT, "{bold}{#ae6753-fg}Ready to sip. 茶{/}"
-  # bot.channels.cache.get "672498488646434841"
+  # bot.channels.resolve "672498488646434841"
   # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
   
   loading.step "Authorizing the gmailer..."
