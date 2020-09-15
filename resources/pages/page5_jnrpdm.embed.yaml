@@ -2,9 +2,14 @@ embed:
   title: Je ne reçois pas de mail
   description: |
     Veillez à vous assurer de la validité de votre adresse.
+    
+    Nous vous rappelons que votre adresse doit appartenir à Sorbonne Université.
+    
+    **→ [Domaines valides pour les étudiants]({page1_jse})**
+    **→ [Domaines valides pour les professeurs]({page2_jspoec})**
+    
     Si le problème persiste, merci de vous diriger vers le salon <#689276559236005923>.
 
-    [[S]](https://www.youtube.com/) ~ Revenir au sommaire
   color: 34d9ff
 
 thread:
