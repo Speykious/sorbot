@@ -209,13 +209,15 @@ bot.on "message", (msg) ->
 bot.on "messageReactionAdd", (reaction, user) ->
   # I still don't care about myself lol
   if user.bot then return
+  
+  if reaction.partial then await reaction.fetch()
   # I don't care about anything else apart from DMs
-  if reaction.message.type isnt "dm" then return
+  if reaction.message.channel.type isnt "dm" then return
   dbUser = await getdbUser user
   unless dbUser then return
-
+  
   unless reaction.message.id is dbUser.reactor then return
-
+  
   switch reaction.emoji.name
     when "⏪"
       dbUser.code = null
