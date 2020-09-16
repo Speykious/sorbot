@@ -1,7 +1,9 @@
 embed:
   title: Bienvenue !
   description: |
-    RTFM (more description coming soon(tm))
+    Bienvenue sur le serveur __**Sorbonne Jussieu**__ ! Je suis le bot du serveur qui s'occupe notamment de la vérification des nouveaux arrivants.
+    
+    Vous trouverez toutes les informations sur le processus de vérification dans le salon [#sommaire]({accueil}).
   color: 34d9ff
   
 reactions:
