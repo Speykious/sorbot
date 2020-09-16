@@ -47,7 +47,8 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
       return
     
     messages = valerr.errors.map((e) -> e.message).reverse()
-    logf LOG.EMAIL, (formatCrisis "Mail Validation", messages[0])
+    logf LOG.EMAIL, (formatCrisis "Email Validation",
+      "For user #{formatUser user}: `#{messages[0]}`")
     
     await user.dmChannel.send {
       embed:

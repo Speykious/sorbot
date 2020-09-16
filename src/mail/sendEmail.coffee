@@ -1,4 +1,5 @@
 { logf, LOG } = require "../logging"
+YAML          = require "yaml"
 
 # Sends an email using a request object.
 #
@@ -44,7 +45,7 @@ sendEmail = (gmail, request) ->
       raw: encodedMessage
   }
   
-  logf LOG.EMAIL, "Sent email:", res.data
+  logf LOG.EMAIL, "Sent email:```yaml\n#{YAML.stringify res.data}```"
   return res.data
 
 module.exports = sendEmail

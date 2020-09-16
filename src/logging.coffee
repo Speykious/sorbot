@@ -11,6 +11,7 @@ logf = ((chid, args...) ->
     return await logChannelCache[chid].send args[0]
   return await logChannelCache[chid].send(format args...)
 ).bind botCache
+
 LOG =
   INIT:       SERVERS.logs[lc].init       # For every kind of initialization
   EMAIL:      SERVERS.logs[lc].email      # For email related requests & errors
