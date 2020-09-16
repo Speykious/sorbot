@@ -113,7 +113,7 @@ bot.on "ready", ->
   await bot.user.setPresence {
     activity:
       type: "PLAYING"
-      name: "with your data 👀"
+      name: if process.env.LOCAL then "Coucou humain 👀" else "with your data 👀"
       url: "https://gitlab.com/Speykious/sorbot-3"
   }
   
