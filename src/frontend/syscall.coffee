@@ -1,11 +1,11 @@
-YAML                        = require "yaml"
-{ readf, writef }           = require "../helpers"
-{ SERVERS, USER_TYPES }     = require "../constants"
-{ sendError }               = require "../logging"
-{ getdbUser }               = require "../db/dbhelpers"
-{ User }                    = require "../db/initdb"
-{ verifyUser }              = require "../mail/verificationHandler"
-{ getPage, clearPageCache } = require "./page-handler"
+YAML                            = require "yaml"
+{ readf, writef }               = require "../helpers"
+{ SERVERS, USER_TYPES, FOOTER } = require "../constants"
+{ sendError }                   = require "../logging"
+{ getdbUser }                   = require "../db/dbhelpers"
+{ User }                        = require "../db/initdb"
+{ verifyUser }                  = require "../mail/verificationHandler"
+{ getPage, clearPageCache }     = require "./page-handler"
 
 mdir = "resources/pages/"
 pagenames = [
@@ -204,5 +204,34 @@ syscall = (guild, msg, cmd) ->
         dbUser[name] = value
         await dbUser.save()
         await msg.channel.send "`Field changed.`"
+      else if cmd.startsWith "GET USER, ID "
+        userId = cmd.slice "GET USER, ID ".length
+        unless /^\d{18}$/.test userId
+          await sendError msg.channel, "ID key not correct :("
+          return
+        try
+          member = await guild.members.fetch userId
+        catch e
+          await sendError msg.channel, "Unknown member `#{userId}` :(\n\nError: ```\n#{e}```"
+          return
+        dbUser = await getdbUser member.user
+        unless dbUser
+          await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+          return
+        
+        nssData = { dbUser.dataValues... }
+        await msg.channel.send {
+          embed:
+            title: "#{member.user.tag}'s database row"
+            description:
+              """
+              **#{member.user.tag}**'s database row in YAML form
+              ```yaml
+              #{YAML.stringify nssData}```
+              """
+            color: 0x34d9ff
+            footer: FOOTER
+        }
+
 
 module.exports = syscall
