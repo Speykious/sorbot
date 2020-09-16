@@ -7,6 +7,8 @@ lc = if process.env.LOCAL then "local_channels" else "channels"
 logf = ((chid, args...) ->
   unless @bot then return console.log "Warning: trying to log without @bot being ready"
   unless logChannelCache[chid] then logChannelCache[chid] = await @bot.channels.fetch chid
+  if args.length is 1 and args[0].embed
+    return await logChannelCache[chid].send args[0]
   return await logChannelCache[chid].send(format args...)
 ).bind botCache
 LOG =
