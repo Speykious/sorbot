@@ -123,6 +123,7 @@ bot.on "ready", ->
     embed:
       title: "Ready to sip. 茶 ☕"
       description: "Let's play with some ***DATA*** <a:eyeshake:691797273147080714>"
+      color: 0x34d9ff
       footer: FOOTER
   }
   # bot.channels.resolve "672498488646434841"
