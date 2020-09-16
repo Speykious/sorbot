@@ -21,4 +21,7 @@ rsync -rah --progress resources ../sorbot-min/
 rsync -ah --progress credentials.yaml token.yaml ../sorbot-min/
 rsync -ah --progress bundle.env ../sorbot-min/.env
 
+echo -e "  ${bred}Removing$c    the ${u}bin/lib/$c folder"
+rm -rf ../sorbot-min/bin/lib/
+
 echo -e "  ${bgrn}Success.$c"
