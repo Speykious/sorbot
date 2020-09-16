@@ -119,7 +119,12 @@ bot.on "ready", ->
   
   # Using the tea kanji instead of the emoji
   # because it doesn't render well with blessed :(
-  logf LOG.INIT, "Ready to sip. 茶☕"
+  logf LOG.INIT, {
+    embed:
+      title: "Ready to sip. 茶 ☕"
+      description: "Let's play with some ***DATA*** <a:eyeshake:691797273147080714>"
+      footer: FOOTER
+  }
   # bot.channels.resolve "672498488646434841"
   # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
   
