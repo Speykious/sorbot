@@ -13,7 +13,8 @@ verifyUser = (dbUser, member, verifier) ->
   dbUser.save()
   
   smr = SERVERS.main.roles
-  await member.roles.set [smr.membre]
+  await member.roles.remove [smr.non_verifie]
+  await member.roles.add [smr.membre]
   ut = dbUser.userType
   if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
   if ut & USER_TYPES.STUDENT   then await member.roles.add smr.indecis
@@ -30,9 +31,9 @@ verifyUser = (dbUser, member, verifier) ->
       description:
         """
         Vous avez désormais le rôle @Membre sur le serveur.
-        N'oubliez pas de choisir vos rôles dans le salon #rôles.
+        N'oubliez pas de choisir vos rôles dans le salon [#rôles](https://discordapp.com/channels/672479260899803147/672503031325261851/672543140430872625).
         Tant que vous n'aurez pas choisi votre rôle d'année d'études,
-        vous aurez aussi le rôle @Indécis (sauf si vous avez le rôle Professeur, Ancien ou Squatteur).
+        vous aurez aussi le rôle @Indécis (sauf si vous avez le rôle @Professeur, @Ancien ou @Squatteur).
         """
       fields: [{
         name: "Verified #{adverb} by"
