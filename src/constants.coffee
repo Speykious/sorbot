@@ -16,6 +16,8 @@ TESTERS = [
 
 DOMAINS = YAML.parse readf "resources/domains.yaml"
 SERVERS = YAML.parse readf "resources/servers.yaml"
+BYEBYES = readf("resources/byebye.md").split "\n"
+BYEBYES.pop() # Somehow the last element is an empty line
 GUILDS = {}
 FOOTER =
   iconURL: "https://i.imgur.com/e3K2oaW.png"
@@ -34,6 +36,7 @@ module.exports = {
   DOMAINS
   SERVERS
   USER_TYPES
+  BYEBYES
   GUILDS
   FOOTER
 }

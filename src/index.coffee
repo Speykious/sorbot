@@ -15,7 +15,7 @@ loading.step "Loading discord.js..."
 loading.step "Loading generic utils..."
 { relative, delay, readf }              = require "./helpers"
 { logf, LOG, formatCrisis, formatUser } = require "./logging"
-{ CROSSMARK, SERVERS,
+{ CROSSMARK, SERVERS, BYEBYES,
   GUILDS, TESTERS, FOOTER }             = require "./constants"
 { encryptid, decryptid }                = require "./encryption"
 
@@ -166,6 +166,11 @@ bot.on "guildMemberRemove", (member) ->
   logf LOG.DATABASE, "User #{formatUser member.user} removed"
   
   # Hey, bring back the random leaving messages!
+  bye = BYEBYES[Math.floor(Math.random() * BYEBYES.length - 1e-6)]
+  bye = bye.replace "{name}", member.displayName
+  
+  auRevoir = await bot.channels.fetch '672502429836640267'
+  await auRevoir.send bye
 
 
 bot.on "message", (msg) ->
