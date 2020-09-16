@@ -14,7 +14,7 @@ loading.step "Loading discord.js..."
 
 loading.step "Loading generic utils..."
 { relative, delay, readf }    = require "./helpers"
-{ logf, LOG, formatCrisis,*
+{ logf, LOG, formatCrisis,
   formatUser, botCache }      = require "./logging"
 { CROSSMARK, SERVERS, BYEBYES,
   GUILDS, TESTERS, FOOTER }   = require "./constants"
@@ -109,6 +109,7 @@ loading.step "Preparing the cup of coffee..."
 # logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 
 bot.on "ready", ->
+  botCache.bot = bot
   await bot.user.setPresence {
     activity:
       type: "PLAYING"
@@ -127,6 +128,7 @@ bot.on "ready", ->
   
   loading.step "Fetching main guild..."
   GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
+  GUILDS.LOGS = await bot.guilds.fetch SERVERS.logs.id
   
   loading.step "Bot started successfully."
   setTimeout ( ->
@@ -136,7 +138,6 @@ bot.on "ready", ->
     emailCH.activate()
   ), 100
 
-  botCache.bot = bot
 
 
 bot.on "guildMemberAdd", (member) ->
