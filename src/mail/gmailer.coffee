@@ -56,7 +56,7 @@ class GMailer
   @param {number} maxFetch - The maximum number of messages to query.
   ###
   getUECThreads: (maxFetch = 10) ->
-    logf LOG.EMAIL, "Reading Existential Crisis threads..."
+    # logf LOG.EMAIL, "Reading Existential Crisis threads..."
     return @getThreads "is:unread label:existential-crisis", maxFetch
 
   ###
@@ -64,7 +64,7 @@ class GMailer
   @param {number} maxFetch - The maximum number of messages to query.
   ###
   getUSCThreads: (maxFetch = 10) ->
-    logf LOG.EMAIL, "Reading Sorbonne Crisis threads..."
+    # logf LOG.EMAIL, "Reading Sorbonne Crisis threads..."
     return @getThreads "is:unread label:sorbonne-crisis", maxFetch
   
   ###
@@ -72,7 +72,7 @@ class GMailer
   @param {number} maxFetch - The maximum number of messages to query.
   ###
   getUMVThreads: (maxFetch = 10) ->
-    logf LOG.EMAIL, "Reading Manual Verification threads..."
+    # logf LOG.EMAIL, "Reading Manual Verification threads..."
     return @getThreads "is:unread label:manual-verification", maxFetch
 
   ###

@@ -24,8 +24,6 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
 
   catch valerr
     if valerr instanceof UniqueConstraintError
-      logf LOG.EMAIL, (formatCrisis "Mail Duplication", valerr.original.detail)
-      
       await user.dmChannel.send {
         embed:
           title: "Erreur de Validation"
@@ -34,8 +32,7 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
           footer: FOOTER
       }
       
-      chbot = GUILDS.MAIN.channels.resolve "672514494903222311"
-      await chbot.send {
+      logf LOG.WARNING, {
         embed:
           title: "UNIQUE CONSTRAINT WARNING"
           description: "User <@!#{user.id}> (__#{user.id}__) tried to use an email address which is already used!"
