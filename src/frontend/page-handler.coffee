@@ -52,7 +52,7 @@ sendDmPage = (page, user, msgid) ->
     unless (user.id in TESTERS)
       logf LOG.MESSAGES,
         "Tried to send a page to non-tester user",
-        (formatUser user), "in LOCAL mode {#ff6432-fg}(prevented){/}"
+        (formatUser user), "**in LOCAL mode** (prevented)"
       return null
     
     logf LOG.MESSAGES, "Sending page to tester", formatUser user

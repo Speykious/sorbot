@@ -16,7 +16,7 @@ getThreads = (query, maxFetch = 10) ->
   
   listt = await gmail.users.threads.list { userId: "me", q: query, maxResults: maxFetch }
   unless listt.data.threads
-    logf LOG.EMAIL, "{#ffee64-fg}#{CROSSMARK} No threads to query :/{/}"
+    # logf LOG.EMAIL, "{#ffee64-fg}#{CROSSMARK} No threads to query :/{/}"
     return []
   
   threads = await Promise.all listt.data.threads.map (thread) ->
@@ -38,7 +38,7 @@ getThreads = (query, maxFetch = 10) ->
       headers.map (header) -> heds[header.name.toLowerCase()] = header.value
       return heds
 
-  logf LOG.EMAIL, "{#32ff64-fg}{bold}#{CHECKMARK} #{threads.length}{/bold} Threads successfully read{/}"
+  # logf LOG.EMAIL, "{#32ff64-fg}{bold}#{CHECKMARK} #{threads.length}{/bold} Threads successfully read{/}"
   return threads
 
 module.exports = getThreads

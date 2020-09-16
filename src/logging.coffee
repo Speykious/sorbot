@@ -1,51 +1,42 @@
-{ appendFileSync }    = require "fs"
-{ formatWithOptions } = require "util"
-{ relative }          = require "./helpers"
-{ CROSSMARK }         = require "./constants"
+{ CROSSMARK, SERVERS } = require "./constants"
+{ format }             = require "util"
 
-colmat = (args...) -> formatWithOptions { colors: true }, "", args...
-
-logf = (path, args...) -> appendFileSync path, (colmat args...) + "\n"
-
-aslog = if process.env.LOCAL
-then (name) -> relative "logs/#{name}.log"
-else (name) -> "/var/log/sorbot-3/#{name}.log"
-
+botCache = {}
+logChannelCache = {}
+lc = if process.env.LOCAL then "local_channels" else "channels"
+logf = ((chid, args...) ->
+  unless @bot then return console.log "Warning: trying to log without @bot being ready"
+  unless logChannelCache[chid] then logChannelCache[chid] = await @bot.channels.fetch chid
+  return await logChannelCache[chid].send(format args...)
+).bind botCache
 LOG =
-  INIT:       aslog "init"       # For every kind of initialization
-  EMAIL:      aslog "mail"       # For email related requests & errors
-  DATABASE:   aslog "database"   # For database related requests & errors
-  MESSAGES:   aslog "messages"   # For discord message requests & errors
-  MODERATION: aslog "moderation" # For discord administration info
-  WTF:        aslog "wtf"        # For whatever other weird shit happens
+  INIT:       SERVERS.logs[lc].init       # For every kind of initialization
+  EMAIL:      SERVERS.logs[lc].email      # For email related requests & errors
+  DATABASE:   SERVERS.logs[lc].database   # For database related requests & errors
+  MESSAGES:   SERVERS.logs[lc].messages   # For discord message requests & errors
+  MODERATION: SERVERS.logs[lc].moderation # For discord administration info
+  WTF:        SERVERS.logs[lc].wtf        # For whatever other weird shit happens
 
 # Actually don't praise currying in coffeescript
-# Note: the formatting syntax used is only useful for `blessed`
 formatCrisis = (crisis, crisisMsg) ->
-  colmat "{#ff6432-fg}[#{crisis} Crisis] {bold}#{CROSSMARK}{/}", crisisMsg
+  format "**[#{crisis} Crisis] #{CROSSMARK}**", crisisMsg
 
-formatUser = (user) ->
-  "{bold}#{user.tag}{/} ({#8c9eff-fg}#{user.id}{/})"
-
-# Truncates a string. Make maxc > 3 to be sure it works.
-truncateStr = (s, maxc = 50) ->
-  if s.length <= maxc then s
-  else "#{s.slice 0, maxc - 3}..."
+formatUser = (user) -> "**__#{user.tag}__** (#{user.id})"
 
 #####################
 ## DISCORD HELPERS ##
 #####################
 
-sendError = (channel, errorString, msDelay = 5000) ->
+# This is only used for admin commands
+sendError = (channel, errorString, msDelay = 0) ->
   errorMsg = await channel
     .send errorString
     .catch (err) -> logf LOG.MESSAGES, (formatCrisis "Message", err)
-  logf LOG.MESSAGES, "{bold}Sent error:{/} {#ff6432-fg}#{errorMsg.content}{/}"
-  if errorMsg then errorMsg.delete { timeout: msDelay }
+  if errorMsg and msDelay then errorMsg.delete { timeout: msDelay }
   return Promise.resolve errorMsg
 
 module.exports = {
-  colmat
+  botCache
   logf
   LOG
 

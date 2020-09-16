@@ -10,29 +10,27 @@ genFederatedMetadata = require "./models/FederatedMetadata"
 
 pe = process.env
 
-logf LOG.DATABASE, "{#ff8032-fg}Creating{/} connection..."
+# logf LOG.DATABASE, "{#ff8032-fg}Creating{/} connection..."
 loading.step "Initializing database - Creating connection..."
 uri = if pe.LOCAL
 then "postgres://#{pe.DB_USER}:#{pe.DB_PASS}@localhost:5432/sorbot-dev"
 else "postgres://sorbot:#{pe.DB_PASS}@localhost:5432/sorbot"
 connection = new Sequelize uri, {
-  logging: (msgs...) -> ### logf LOG.DATABASE, (msgs.map (msg) ->
-    truncateStr format msg
-  )... ###
+  logging: -> # literally yeet loggings into oblivion
 }
 
-logf LOG.DATABASE, "{#ff8032-fg}Defining{/} models..."
+# logf LOG.DATABASE, "{#ff8032-fg}Defining{/} models..."
 loading.step "Initializing database - Defining models..."
 User              = genUser              connection
 FederatedMetadata = genFederatedMetadata connection
 
-logf LOG.DATABASE, "{#ff8032-fg}Syncing{/} connection..."
+# logf LOG.DATABASE, "{#ff8032-fg}Syncing{/} connection..."
 loading.step "Initializing database - Syncing connection..."
 connection.sync()
   .then ->
-    logf LOG.DATABASE, "{#32ff64-fg}{bold}#{CHECKMARK}{/bold} Dank database connection established{/}"
+    # logf LOG.DATABASE, "{#32ff64-fg}{bold}#{CHECKMARK}{/bold} Dank database connection established{/}"
     loading.step "Dank database connection established"
-  .catch (err) -> logf LOG.DATABASE, "{#ff6432-fg}{bold}#{CROSSMARK}{/bold} Haha yesn't:{/} #{err}"
+  .catch (err) -> console.log "\x1b[1m\x1b[31m#{CROSSMARK}\x1b[22m Haha yesn't:\x1b[0m #{err}"
 
 
 module.exports = {

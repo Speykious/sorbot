@@ -89,11 +89,11 @@ class EmailCrisisHandler
         logf LOG.WTF, "What the fuck just happened? <_<\n#{colmat err}"
         return
       
-      logf LOG.DATABASE, (formatCrisis "Query", "User for email {#ff8032-fg}#{th[0].to}{/} has not been found")
+      logf LOG.DATABASE, (formatCrisis "Query", "User for email `#{th[0].to}` has not been found")
       return
     
     member = await @guild.members.fetch decryptid dbUser.id
-    logf LOG.MESSAGES, "Sending error report to user #{formatUser member.user} ({#32aa80-fg}'#{embed.title}'{/})"
+    logf LOG.MESSAGES, "Sending error report to user #{formatUser member.user} (__'#{embed.title}'__)"
     await member.user.send { embed }
   
   handleMV: (th) ->
@@ -111,7 +111,7 @@ class EmailCrisisHandler
       unless err instanceof EmptyResultError
         logf LOG.WTF, "What the fuck just happened? <_<\n#{colmat err}"
       
-      logf LOG.DATABASE, (formatCrisis "M-Query", "User for email {#ff8032-fg}#{userEmail}{/} has not been found")
+      logf LOG.DATABASE, (formatCrisis "M-Query", "User for email `#{userEmail}` has not been found")
       return
     
     member = await @guild.members.fetch decryptid dbUser.id

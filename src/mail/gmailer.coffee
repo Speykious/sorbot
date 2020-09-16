@@ -27,7 +27,7 @@ class GMailer
       @oAuth2Client = new google.auth.OAuth2 client_id, client_secret, redirect_uris[0]
       @gmail = google.gmail { version: "v1", auth: @oAuth2Client }
     catch err
-      logf LOG.INIT, (formatCrisis "Loading", "({underline}credentials.yaml{/underline}) #{err}")
+      logf LOG.INIT, (formatCrisis "Loading", "(__credentials.yaml__) #{err}")
   
   ###
   Create an OAuth2 client with the given credentials.
@@ -38,11 +38,11 @@ class GMailer
     
     try # Check if we have previously stored a token.
       @oAuth2Client.setCredentials YAML.parse readf tokenfile
-      logf LOG.INIT, "{#32ff64-fg}#{CHECKMARK} Authorized gmail access{/}"
+      logf LOG.INIT, "**#{CHECKMARK}** Authorized gmail access"
       @authorized = yes # I like boolean homonyms <w<
     catch err
       logf LOG.INIT, (formatCrisis "Credentials",
-        "The Gmail token is missing! You need to go to {bold}SorBOT's stdin{/bold} to create a new one.")
+        "The Gmail token is missing! You need to go to **SorBOT's stdin** to create a new one.")
       await @getNewToken tokenfile
   
   getThreads: (query, maxFetch = 10) ->
@@ -106,7 +106,7 @@ class GMailer
           try
             writef tokenfile, (YAML.stringify token)
             console.log (bold "Token stored to"), (underline relative tokenfile)
-            logf LOG.INIT, "{bold}Token stored to{/} {underline}#{relative tokenfile}{/}"
+            logf LOG.INIT, "**Token stored to `#{relative tokenfile}`**"
             resolve token
           catch err
             console.error err

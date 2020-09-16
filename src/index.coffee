@@ -6,32 +6,33 @@ require "dotenv-flow"
 .config()
 
 loading.step "Loading nodejs dependencies..."
-{ join }                                = require "path"
-YAML                                    = require "yaml"
+{ join }                      = require "path"
+YAML                          = require "yaml"
 
 loading.step "Loading discord.js..."
-{ Client }                              = require "discord.js"
+{ Client }                    = require "discord.js"
 
 loading.step "Loading generic utils..."
-{ relative, delay, readf }              = require "./helpers"
-{ logf, LOG, formatCrisis, formatUser } = require "./logging"
+{ relative, delay, readf }    = require "./helpers"
+{ logf, LOG, formatCrisis,*
+  formatUser, botCache }      = require "./logging"
 { CROSSMARK, SERVERS, BYEBYES,
-  GUILDS, TESTERS, FOOTER }             = require "./constants"
-{ encryptid, decryptid }                = require "./encryption"
+  GUILDS, TESTERS, FOOTER }   = require "./constants"
+{ encryptid, decryptid }      = require "./encryption"
 
 loading.step "Loading gmailer and email crisis handler..."
-GMailer                                 = require "./mail/gmailer"
-EmailCrisisHandler                      = require "./mail/crisisHandler"
-{ handleVerification }                  = require "./mail/verificationHandler"
+GMailer                       = require "./mail/gmailer"
+EmailCrisisHandler            = require "./mail/crisisHandler"
+{ handleVerification }        = require "./mail/verificationHandler"
 
 loading.step "Loading frontend functions..."
-syscall                                 = require "./frontend/syscall"
-{ mdir, getPage, sendDmPage }           = require "./frontend/page-handler"
+syscall                       = require "./frontend/syscall"
+{ mdir, getPage, sendDmPage } = require "./frontend/page-handler"
 
 loading.step "Loading dbhelpers..."
-{ getdbUser }                           = require "./db/dbhelpers"
+{ getdbUser }                 = require "./db/dbhelpers"
 loading.step "Initializing database..."
-{ User }                                = require "./db/initdb"
+{ User }                      = require "./db/initdb"
 
 
 loading.step "Instantiating Discord client..."
@@ -105,7 +106,7 @@ emailCH = new EmailCrisisHandler {
 }
 
 loading.step "Preparing the cup of coffee..."
-logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
+# logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 
 bot.on "ready", ->
   await bot.user.setPresence {
@@ -117,7 +118,7 @@ bot.on "ready", ->
   
   # Using the tea kanji instead of the emoji
   # because it doesn't render well with blessed :(
-  logf LOG.INIT, "{bold}{#ae6753-fg}Ready to sip. 茶{/}"
+  logf LOG.INIT, "Ready to sip. 茶☕"
   # bot.channels.resolve "672498488646434841"
   # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
   
@@ -134,6 +135,8 @@ bot.on "ready", ->
     emailCH.gmailer = gmailer
     emailCH.activate()
   ), 100
+
+  botCache.bot = bot
 
 
 bot.on "guildMemberAdd", (member) ->
@@ -165,12 +168,12 @@ bot.on "guildMemberRemove", (member) ->
   await dbUser.destroy()
   logf LOG.DATABASE, "User #{formatUser member.user} removed"
   
-  # Hey, bring back the random leaving messages!
-  bye = BYEBYES[Math.floor(Math.random() * BYEBYES.length - 1e-6)]
-  bye = bye.replace "{name}", member.displayName
-  
-  auRevoir = await bot.channels.fetch '672502429836640267'
-  await auRevoir.send bye
+  unless process.env.LOCAL
+    bye = BYEBYES[Math.floor(Math.random() * BYEBYES.length - 1e-6)]
+    bye = bye.replace "{name}", member.displayName
+    
+    auRevoir = await bot.channels.fetch '672502429836640267'
+    await auRevoir.send bye
 
 
 bot.on "message", (msg) ->
