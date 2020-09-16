@@ -8,10 +8,9 @@
     "start": "coffee src/index.coffee",
     "build": "coffee -bcmo client src",
     "run-js": "node .",
-    "erase-logs": "env LOCAL=YEET coffee erase-logs.coffee",
     "c-all": "yarn build && yarn run-js",
-    "all": "yarn erase-logs && clear && yarn c-all",
-    "dev": "yarn erase-logs && clear && yarn start"
+    "all": "clear && yarn c-all",
+    "dev": "clear && yarn start"
   },
   "files": [
     "client/**/*"
