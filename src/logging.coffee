@@ -16,6 +16,7 @@ LOG =
   MESSAGES:   SERVERS.logs[lc].messages   # For discord message requests & errors
   MODERATION: SERVERS.logs[lc].moderation # For discord administration info
   WTF:        SERVERS.logs[lc].wtf        # For whatever other weird shit happens
+  WARNING:    SERVERS.logs[lc].warning    # For now, only for UNIQUE CONSTRAINT WARNINGS
 
 # Actually don't praise currying in coffeescript
 formatCrisis = (crisis, crisisMsg) ->
@@ -42,6 +43,5 @@ module.exports = {
 
   formatCrisis
   formatUser
-  truncateStr
   sendError
 }
