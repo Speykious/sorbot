@@ -42,3 +42,20 @@ Nous sommes en GUERRE ! Et {name} est parti.e combattre !
 {name} est sûrement parti.e après avoir lu nos conditions d'utilisation. 😅
 {name} a ragequit du serveur.
 {name} n'a pas assez dormi.
+{name} a developpé une violente allergie à la lecture.
+{name} a chopé le lecturonavirus.
+{name} has fallen into the river of Lego City™.
+Press <:press_f:756240848978706583> in the chat for {name}.
+{name} a trouvé des meilleurs croissants ailleurs.
+{name} est parti.e chercher les pains au chocolat à 10 centimes.
+{name} a opté pour "chocolatine" et s'est jeté d'un ravin.
+{name} a mis le lait avant les céréales.
+{name} s'est fait.e abdiquer par une soucoupe volante.
+{name} s'est fait.e aspirer par les serveurs mail de Sorbonne Lettres.
+{name} a dit *Coucou* au bot <a:eyeshake:691797273147080714>
+{name} préfère Zoom.
+{name} has been yeeted into oblivion.
+Haha {name} go *brrr*
+{name} est un.e apôtre de la Sorcière de l'Envie.
+{name} is just running in the 90s.
+Michael Jackson a transformé {name} en lune démoniaque.
