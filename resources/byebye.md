@@ -8,7 +8,7 @@ Bon débarras, {name} est enfin parti.e
 Non... {name}... Ne pars pas... ! :(
 {name} a arrêté de prier pour la *yeet* curve. Sacrilège.
 Finalement, {name} n'aime pas notre magnifique serveur.
-Qu'avez-vous donc fait à {name} pour qu'il s'éjecte du serveur comme ça ?
+Qu'avez-vous donc fait à {name} pour qu'il/elle s'éjecte du serveur comme ça ?
 {name} n'a malheureusement pas passé le vibe check...
 Suite à la mort du Respect, {name} a décidé de le rejoindre.
 Bonjour. Vous êtes sur la messagerie de {name}. Veuillez laisser un message après le signal sonore.
@@ -59,3 +59,4 @@ Haha {name} go *brrr*
 {name} est un.e apôtre de la Sorcière de l'Envie.
 {name} is just running in the 90s.
 Michael Jackson a transformé {name} en lune démoniaque.
+{name} has chosen death.
