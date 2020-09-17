@@ -60,3 +60,5 @@ Haha {name} go *brrr*
 {name} is just running in the 90s.
 Michael Jackson a transformé {name} en lune démoniaque.
 {name} has chosen death.
+{name} laughed in non-cereal-eating gang.
+(╯°□°）╯︵ ┻{name}┻
