@@ -29,7 +29,7 @@ module.exports = (connection) ->
         unless value then return
         
         domain = (value.split '@')[1]
-        userType = @getDataValue 'userType'
+        userType = 0
         if domain in DOMAINS.studentDomains   then userType |= USER_TYPES.STUDENT
         if domain in DOMAINS.professorDomains then userType |= USER_TYPES.PROFESSOR
         @setDataValue 'userType', userType
