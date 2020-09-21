@@ -188,7 +188,7 @@ syscall = (guild, msg, cmd) ->
         
         name = cmd.split(/(\s|,)+/)[0]
         fields = ["email", "userType", "code"]
-        ni = fields.map((field) -> field.toUpperCase()).indexOf name
+        ni = fields.indexOf name
         if ni is -1
           await sendError msg.channel, "Unknown or unauthorized user field `#{name}` :("
           return
@@ -240,6 +240,8 @@ syscall = (guild, msg, cmd) ->
           catch e
             await sendError msg.channel, "Unknown member `#{userId}` :(\n\nError: ```\n#{e}```"
             return
+
+        else return
         
         nssData = { dbUser.dataValues... }
         await msg.channel.send {
