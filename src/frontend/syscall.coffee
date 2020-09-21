@@ -6,6 +6,7 @@ YAML                            = require "yaml"
 { User }                        = require "../db/initdb"
 { verifyUser }                  = require "../mail/verificationHandler"
 { getPage, clearPageCache }     = require "./page-handler"
+{ decryptid }                   = require "../encryption"
 
 mdir = "resources/pages/"
 pagenames = [
@@ -78,8 +79,7 @@ updateMenus()
 # SAO Alicization SYSTEM CALLS for menu handling
 syscall = (guild, msg, cmd) ->
   unless cmd then cmd = msg.content
-  cmd = cmd.toUpperCase()
-  if /^(SYSTEM CALL|SC):\n/.test cmd
+  if /^(SYSTEM CALL|SC):\n/i.test cmd
     cmds = cmd.split(/\n+/).slice 1
            .map (cmd) -> "SC: #{cmd}"
     syscalls = (i = 0) ->
@@ -89,7 +89,7 @@ syscall = (guild, msg, cmd) ->
     return syscalls()
   
   unless cmd.startsWith "SYSTEM CALL: "
-    unless /^SC:\s/.test cmd then return
+    unless /^SC:\s/i.test cmd then return
     else cmd = cmd.slice "SC: ".length
   else cmd = cmd.slice "SYSTEM CALL: ".length
 
@@ -141,7 +141,7 @@ syscall = (guild, msg, cmd) ->
       await msg.channel.send "`Synchronized all pages.`"
     
     else
-      if cmd.startsWith "VERIFY USER, ID "
+      if /^VERIFY USER, ID\s/i.test cmd
         cmd = cmd.slice "VERIFY USER, ID ".length
         unless /^\d{18}/.test cmd then return
         userId = cmd.slice 0, 18
@@ -152,7 +152,7 @@ syscall = (guild, msg, cmd) ->
           await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
           return
         
-        if /^,\s+.+SHAPE/.test cmd
+        if /^,\s+.+SHAPE/i.test cmd
           shapes = cmd.split(/\s+/)
           shapes = shapes.slice 1, shapes.length - 1 # we don't want 'SHAPE' or ',' in here
           dbUser.userType = 0
@@ -168,7 +168,7 @@ syscall = (guild, msg, cmd) ->
         await verifyUser dbUser, member, msg.author.tag
         await msg.channel.send "`User #{member.user.tag} verified.`"
       
-      else if cmd.startsWith "CHANGE USER FIELD, ID "
+      else if /^CHANGE USER FIELD, ID\s/i.test cmd
         cmd = cmd.slice "CHANGE USER FIELD, ID ".length
         unless /^\d{18}/.test cmd
           await sendError msg.channel, "ID key not correct :("
@@ -181,7 +181,7 @@ syscall = (guild, msg, cmd) ->
           await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
           return
         
-        unless /^,\sNAME\s/.test cmd
+        unless /^,\sNAME\s/i.test cmd
           await sendError msg.channel, "NAME key missing in the command :("
           return
         cmd = cmd.slice ", NAME ".length
@@ -195,7 +195,7 @@ syscall = (guild, msg, cmd) ->
         name = fields[ni]
         cmd = cmd.slice name.length
         
-        unless /^,\sVALUE\s.+/.test cmd
+        unless /^,\sVALUE\s.+/i.test cmd
           await sendError msg.channel, "VALUE key missing in the command :("
           return
         
@@ -204,20 +204,42 @@ syscall = (guild, msg, cmd) ->
         dbUser[name] = value
         await dbUser.save()
         await msg.channel.send "`Field changed.`"
-      else if cmd.startsWith "GET USER, ID "
-        userId = cmd.slice "GET USER, ID ".length
-        unless /^\d{18}$/.test userId
-          await sendError msg.channel, "ID key not correct :("
-          return
-        try
-          member = await guild.members.fetch userId
-        catch e
-          await sendError msg.channel, "Unknown member `#{userId}` :(\n\nError: ```\n#{e}```"
-          return
-        dbUser = await getdbUser member.user
-        unless dbUser
-          await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
-          return
+        
+      else if /^GET USER,\s/i.test cmd
+        cmd = cmd.slice "GET USER, ".length
+        dbUser = undefined
+        
+        if /^ID\s/i.test cmd
+          userId = cmd.slice "ID ".length
+          unless /^\d{18}$/.test userId
+            await sendError msg.channel, "ID key not correct :("
+            return
+          try
+            member = await guild.members.fetch userId
+          catch e
+            await sendError msg.channel, "Unknown member `#{userId}` :(\n\nError: ```\n#{e}```"
+            return
+          dbUser = await getdbUser member.user
+          unless dbUser
+            await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+            return
+        
+        else if /^EMAIL\s/i.test cmd
+          email = cmd.slice "EMAIL ".length
+          try
+            dbUser = (await User.findAll {
+              where: { email }
+              rejectOnEmpty: yes
+            })[0]
+          catch e
+            await sendError msg.channel, "User not found for email `#{email}`. By any means, are you sure that's an email address? Because I didn't check :thinking:"
+            return
+          userId = decryptid dbUser.id
+          try
+            member = await guild.members.fetch userId
+          catch e
+            await sendError msg.channel, "Unknown member `#{userId}` :(\n\nError: ```\n#{e}```"
+            return
         
         nssData = { dbUser.dataValues... }
         await msg.channel.send {
@@ -232,6 +254,8 @@ syscall = (guild, msg, cmd) ->
             color: 0x34d9ff
             footer: FOOTER
         }
+
+
 
 
 module.exports = syscall
