@@ -22,16 +22,13 @@ getThreads = (query, maxFetch = 10) ->
   threads = await Promise.all listt.data.threads.map (thread) ->
     thred = await gmail.users.threads.get { userId: "me", id: thread.id }
     
-
+    manver = /label:manual-verification/.test query
     # Tell gmail that we've read the thread
     gmail.users.threads.modify {
       userId: "me"
       id: thread.id
-      addLabelIds:
-        if /label:manual-verification/.test query
-        then ["manual-verification-handled"]
-        else []
-      removeLabelIds: ["UNREAD"]
+      addLabelIds:    if manver then ["manual-verification-handled"]   else []
+      removeLabelIds: if manver then ["manual-verification", "UNREAD"] else ["UNREAD"]
     }
 
     return thred.data.messages.map (message) ->
