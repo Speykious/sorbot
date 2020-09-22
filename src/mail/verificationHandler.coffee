@@ -1,5 +1,6 @@
 { GUILDS, SERVERS, FOOTER, USER_TYPES } = require "../constants"
 { logf, LOG, formatUser }               = require "../logging"
+sendReactor                             = require "../frontend/sendReactor"
 
 # dbUser {User}        - The user to verify in the database
 # member {GuildMember} - The member to verify
@@ -63,13 +64,28 @@ handleVerification = (gmailer, emailCH, dbUser, user, content) ->
       member = GUILDS.MAIN.member user # Oh waow didn't know I could do that
       await verifyUser dbUser, member
     else
-      await user.send {
-        embed:
-          title: "Code invalide"
-          description: "**Erreur :** Le code n'est pas le bon. Réessayez."
-          color: 0xff3232
-          footer: FOOTER
-      }
+      if dbUser.reactor
+        await user.send {
+          embed:
+            title: "Code invalide"
+            description: "**Erreur :** Le code n'est pas le bon. Réessayez."
+            color: 0xff3232
+            footer: FOOTER
+        }
+      else
+        await user.send {
+          embed:
+            title: "Code invalide"
+            description:
+              """
+              **Erreur :** Le code n'est pas le bon.
+              Il semblerait que vous n'ayez pas de menu reactor.
+              Nous vous en envoyons un de suite !
+              """
+            color: 0xff3232
+            footer: FOOTER
+        }
+        await sendReactor user, dbUser
   
   # The return value represents whether verification has been handled
   else return no
