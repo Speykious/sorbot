@@ -29,7 +29,7 @@ getThreads = (query, maxFetch = 10) ->
       id: thread.id
       addLabelIds:
         if /label:manual-verification/.test query
-        then ["manual-verification-verified"]
+        then ["manual-verification-handled"]
         else []
       removeLabelIds: ["UNREAD"]
     }
