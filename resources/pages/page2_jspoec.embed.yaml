@@ -2,16 +2,25 @@ embed:
   title: Je suis professeur ou enseignant-chercheur
   description: |
     Les noms de domaines acceptés pour la vérification des mails professeurs sont :
-
-    → **「upmc.fr」**
-    → **「sorbonne-universite.fr」**
-    → **「lip6.fr」**
-    → **「lpsm.fr」**
-    → **「isir.fr」**
-    → **「inserm.fr」**
-    → **「ipgp.fr」**
+    
+    → **「cea.fr」**
+    → **「clipper.ens.psl.eu」**
+    → **「curie.fr」**
+    → **「espci.fr」**
     → **「imj-prg.fr」**
+    → **「inria.fr」**
+    → **「inserm.fr」**
     → **「insp.jussieu.fr」**
+    → **「ipgp.fr」**
+    → **「isir.fr」**
+    → **「isir.upmc.fr」**
+    → **「lip6.fr」**
+    → **「lkb.ens.fr」**
+    → **「lpsm.fr」**
+    → **「paris-sorbonne.fr」**
+    → **「phys.ens.fr」**
+    → **「sorbonne-universite.fr」**
+    → **「upmc.fr」**
 
     Dans le cas où vous n’ayez accès à aucune adresse avec ces noms de domaines, merci de bien vouloir vous diriger vers le salon <#689276559236005923> pour clarifier votre situation.
   color: 34d9ff

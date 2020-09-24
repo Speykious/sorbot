@@ -4,21 +4,21 @@ studentDomains:
 
 # r/technicallythetruth
 professorDomains:
-  - upmc.fr
-  - sorbonne-universite.fr
-  - lip6.fr
-  - lpsm.fr
+  - cea.fr
+  - clipper.ens.psl.eu
+  - curie.fr
+  - espci.fr
+  - imj-prg.fr
+  - inria.fr
+  - inserm.fr
+  - insp.jussieu.fr
+  - ipgp.fr
   - isir.fr
   - isir.upmc.fr
-  - inserm.fr
-  - ipgp.fr
-  - imj-prg.fr
-  - insp.jussieu.fr
-  - clipper.ens.psl.eu
+  - lip6.fr
+  - lkb.ens.fr
+  - lpsm.fr
   - paris-sorbonne.fr
   - phys.ens.fr
-  - lkb.ens.fr
-  - espci.fr
-  - curie.fr
-  - inria.fr
-  - cea.fr
+  - sorbonne-universite.fr
+  - upmc.fr
