@@ -14,7 +14,8 @@ sendReactor = (user, dbUser) ->
       footer: FOOTER
   }
   # Change, or send email again
-  ["⏪", "🔁"].map (e) -> reactor.react e
+  await Promise.all ["⏪", "🔁"].map (e) -> reactor.react e
+  
   dbUser.reactor = reactor.id
   dbUser.save()
 

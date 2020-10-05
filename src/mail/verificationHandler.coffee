@@ -14,8 +14,8 @@ verifyUser = (dbUser, member, verifier) ->
   dbUser.save()
   
   smr = SERVERS.main.roles
-  await member.roles.remove [smr.non_verifie]
   await member.roles.add [smr.membre]
+  await member.roles.remove [smr.non_verifie]
   ut = dbUser.userType
   if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
   if ut & USER_TYPES.STUDENT   then await member.roles.add smr.indecis
