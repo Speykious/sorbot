@@ -192,20 +192,23 @@ bot.on "message", (msg) ->
   # I don't care about myself lol
   if msg.author.bot then return
   
+  # Note: this member comes exclusively from the main guild
+  member = GUILDS.MAIN.member msg.author # This method still surprises me :v
+  unless member
+    return logf LOG.MODERATION, "Error: User #{formatUser msg.author} is not on the main server"
+  
   # We STILL don't care about messages that don't come from dms
   # Although we will care a bit later when introducing admin commands
   if msg.channel.type isnt "dm"
-    unless msg.author.id in TESTERS then return
+    unless msg.author.id in TESTERS or
+      member.roles.cache.has SERVERS.main.roles.admin
+    then return
     
     syscall GUILDS.MAIN, msg
     return
   
   dbUser = await getdbUser msg.author
-  unless dbUser
-    member = GUILDS.MAIN.member msg.author # This still surprises me :v
-    unless member
-      return logf LOG.MODERATION, "Error: User #{formatUser msg.author} is not on the server"
-    dbUser = await addNewMember member
+  unless dbUser then dbUser = await addNewMember member
 
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably
