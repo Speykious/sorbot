@@ -62,3 +62,5 @@ Michael Jackson a transformé {name} en lune démoniaque.
 {name} has chosen death.
 {name} laughed in non-cereal-eating gang.
 (╯°□°）╯︵ ┻{name}┻
+{name} was not The Impostor. <:amongus_red:760997864209252385>
+{name} est venu.e sur le campus la mauvaise semaine.
