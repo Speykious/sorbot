@@ -1,7 +1,7 @@
 node_modules
 client
 dist
-logs
+sorbot-min
 *.env
 yarn-error.log
 yarn.lock
