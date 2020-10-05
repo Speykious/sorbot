@@ -144,11 +144,8 @@ bot.on "ready", ->
     emailCH.activate()
   ), 100
 
-
-
-bot.on "guildMemberAdd", (member) ->
-  # For now we only care about the main server.
-  # Federated server autoverification coming soon™
+# Adds a new member to the main server
+addNewMember = (member) ->
   if member.guild.id isnt GUILDS.MAIN.id then return
   
   logf LOG.MODERATION, "Adding user #{formatUser member.user}"
@@ -159,13 +156,21 @@ bot.on "guildMemberAdd", (member) ->
   unless pagemsg then return # no need to send an error msg
   
   # Add new entry in the database
-  await User.create {
+  dbUser = await User.create {
     id: member.user.id
     userType: 0
   }
   
   logf LOG.DATABASE, "User #{formatUser member.user} added"
+  return dbUser
+  
 
+bot.on "guildMemberAdd", (member) ->
+  # For now we only care about the main server.
+  # Federated server autoverification coming soon™
+  if member.guild.id isnt GUILDS.MAIN.id then return
+  
+  await addNewMember member
 
 bot.on "guildMemberRemove", (member) ->
   logf LOG.MODERATION, "Removing user #{formatUser member.user}"
@@ -196,7 +201,12 @@ bot.on "message", (msg) ->
     return
   
   dbUser = await getdbUser msg.author
-  unless dbUser then return
+  unless dbUser
+    member = GUILDS.MAIN.member msg.author # This still surprises me :v
+    unless member
+      return logf LOG.MODERATION, "Error: User #{formatUser msg.author} is not on the server"
+    dbUser = await addNewMember member
+
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably
     # like user commands to request your
