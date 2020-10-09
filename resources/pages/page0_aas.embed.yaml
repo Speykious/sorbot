@@ -1,9 +1,9 @@
 embed:
   title: Accéder au serveur
   description: |
-    Pour accéder au serveur il vous faudra transmettre **une adresse mail prouvant votre appartenance à Sorbonne Université**.
+    Pour accéder au serveur il vous faudra transmettre **une adresse mail prouvant votre appartenance à Sorbonne Université** (domaines valides donnés [ICI]({page1_jse}) et [ICI]({page2_jspoec})).
     
-    Vous devez indiquer votre adresse mail en message privé à <@!688517881763201221>. Vous recevrez sous quelques minutes un mail contenant un code. Pensez à regarder vos spams.
+    Vous devez indiquer votre adresse mail en message privé à <@!688517881763201221>. Vous recevrez sous quelques minutes un mail depuis l'adresse `bot.sorbonne.jussieu@gmail.com` contenant un code de confirmation. Pensez à regarder vos spams.
 
     Une fois ce code récupéré, vous devez l’envoyer en message privé à <@!688517881763201221> (toujours). Vous aurez par la suite accès à l’intégralité du serveur.
     
