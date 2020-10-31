@@ -38,7 +38,7 @@ loading.step "Initializing database..."
 loading.step "Instantiating Discord client..."
 bot = new Client {
   disableMentions: "everyone"
-  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+  partials: ["MESSAGE", "CHANNEL", "REACTION"]
   restTimeOffset: 100
 }
 
@@ -193,7 +193,7 @@ bot.on "message", (msg) ->
   if msg.author.bot then return
   
   # Note: this member comes exclusively from the main guild
-  member = GUILDS.MAIN.member msg.author # This method still surprises me :v
+  member = await GUILDS.MAIN.members.fetch msg.author
   unless member
     return logf LOG.MODERATION, "Error: User #{formatUser msg.author} is not on the main server"
   

@@ -61,7 +61,8 @@ handleVerification = (gmailer, emailCH, dbUser, user, content) ->
     await gmailer.verifyEmail dbUser, user, content, emailCH
   else if dbUser.code # Code verification stuff
     if content == dbUser.code
-      member = GUILDS.MAIN.member user # Oh waow didn't know I could do that
+      # `GUILDS.MAIN.member` "Oh waow didn't know I could do that"
+      member = await GUILDS.MAIN.members.fetch user
       await verifyUser dbUser, member
     else
       if dbUser.reactor
