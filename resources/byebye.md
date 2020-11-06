@@ -66,3 +66,4 @@ Michael Jackson a transformé {name} en lune démoniaque.
 {name} est venu.e sur le campus la mauvaise semaine.
 {name} s'est fait assassiné par la Team Premier Degré.
 {name} vient d'imploser devant tant de liberté d'expression.
+{name} n'était pas Charlie.
