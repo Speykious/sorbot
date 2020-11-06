@@ -65,3 +65,4 @@ Michael Jackson a transformé {name} en lune démoniaque.
 {name} was not The Impostor. <:amongus_red:760997864209252385>
 {name} est venu.e sur le campus la mauvaise semaine.
 {name} s'est fait assassiné par la Team Premier Degré.
+{name} vient d'imploser devant tant de liberté d'expression.
