@@ -14,3 +14,7 @@ Padoru a voulu offrir des cadeaux à {name}, qui n'était pas d'accord. <:padoru
 {name} voulait se lancer dans la saga Fate. Nous sommes arrivés trop tard. <:padoru:783330635539415110>
 {name} a chanté "PADORU PADORUUU" avec les bonnes notes. Quelle indignité. <:padoru:783330635539415110>
 {name} était une personne de culture. Cette culture n'était pas compatible. <:padoru:783330635539415110>
+{name} a été infecté.e par Padoru avant le Covid-19. <:padoru:783330635539415110>
+{name} a vu Padoru et d'est enfui.e. <:padoru:783330635539415110>
+Chantez Padoru pour notre camarade {name}. <:padoru:783330635539415110>
+{name} escaped from the degenerate weebs on this server. <:padoru:783330635539415110>
