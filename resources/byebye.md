@@ -68,3 +68,19 @@ Michael Jackson a transformé {name} en lune démoniaque.
 {name} vient d'imploser devant tant de liberté d'expression.
 {name} n'était pas Charlie.
 Il semblerait que {name} n'ait ***vraiment*** pas aimé notre interface. ::)
+Le Respect ne s'était pas suicidé. En fait, il avait été assassiné par {name} <.<
+{name} a clos la discussion bien trop tôt.
+{name} a décrété : `mdr g pa lu`.
+{name} a tenté une injection SQL.
+{name} a choke sur de la glace.
+{name} a discuté sur le mauvais salon.
+Au moins, {name} a toujours accès aux cours.
+{name} a reçu trop d'attention des admins.
+{name} s'est fait.e contaminé.e par un linuxien.
+{name} ne sais pas conjugué ses verbe.
+{name} était trop intelligent pour ce serveur.
+{name} aime les saucisses.
+La merge request "{name}" n'a pas été validée.
+{name} s'est désintégré.e après une segfault.
+{name} s'est fait.e avaler par Electron en même temps que sa RAM.
+{name} a tenté de créer un drama dans <#672499219814154251>.
