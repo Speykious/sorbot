@@ -11,8 +11,9 @@
     "c-all": "yarn build && yarn run-js",
     "all": "clear && yarn c-all",
     "dev": "clear && yarn start",
-    "sync-resources": "rsync -Pra resources/ sorberrypi:~/sorbot-min/resources/",
-    "sync-bundle": "echo 'Nope, this command is disabled for now.' && test && sh bundle.sh && rsync -Pra --progress ../sorbot-min/ sorberrypi:~/sorbot-min/"
+    "sync-resources": "rsync -Pa resources/ sorberrypi:~/sorbot-min/resources/",
+    "bundle": "sh bundle.sh",
+    "sync-bundle": "rsync -Pa --progress ./sorbot-min/ sorberrypi:~/sorbot-min/"
   },
   "files": [
     "client/**/*"
