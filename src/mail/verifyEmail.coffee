@@ -21,7 +21,7 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
     dbUser.email = email
     dbUser.code = generateCode 6
     await dbUser.save()
-    logf LOG.EMAIL, "Email `#{email}` (code `#{dbUser.code}`) saved for user", formatUser user
+    logf LOG.EMAIL, "Email (with code `#{dbUser.code}`) saved for user", formatUser user
 
   catch valerr
     if valerr instanceof UniqueConstraintError
