@@ -16,7 +16,7 @@ verifyUser = (dbUser, member, verifier) ->
   smr = SERVERS.main.roles
   await member.roles.add [smr.membre]
   await member.roles.remove [smr.non_verifie]
-  ut = dbUser.userType
+  ut = dbUser.type
   if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
   if ut & USER_TYPES.STUDENT   then await member.roles.add smr.indecis
   if ut & USER_TYPES.GUEST     then await member.roles.add smr.squatteur
@@ -51,7 +51,7 @@ verifyUser = (dbUser, member, verifier) ->
 handleVerification = (gmailer, emailCH, dbUser, user, content) ->
   # We don't handle verification for users with the guest flag
   # as they are already verified
-  if dbUser.userType & (USER_TYPES.GUEST | USER_TYPES.FORMER) then return no
+  if dbUser.type & (USER_TYPES.GUEST | USER_TYPES.FORMER) then return no
   
   # Remember from SorBOT 2:
   # - If no email, we try to register the email

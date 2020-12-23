@@ -155,13 +155,13 @@ syscall = (guild, msg, cmd) ->
         if /^,\s+.+SHAPE/i.test cmd
           shapes = cmd.split(/\s+/)
           shapes = shapes.slice 1, shapes.length - 1 # we don't want 'SHAPE' or ',' in here
-          dbUser.userType = 0
+          dbUser.type = 0
           await Promise.all shapes.map (shape) ->
             unless USER_TYPES[shape]
               await sendError msg.channel, "Unknown Shape `#{shape}` :("
               return
             await msg.channel.send "`Giving user shape '#{shape}'...`"
-            dbUser.userType |= USER_TYPES[shape]
+            dbUser.type |= USER_TYPES[shape]
           await dbUser.save()
         
         await msg.channel.send "`Verifying user #{member.user.tag}...`"
@@ -187,7 +187,7 @@ syscall = (guild, msg, cmd) ->
         cmd = cmd.slice ", NAME ".length
         
         name = cmd.split(/(\s|,)+/)[0]
-        fields = ["email", "userType", "code"]
+        fields = ["email", "type", "code"]
         ni = fields.indexOf name
         if ni is -1
           await sendError msg.channel, "Unknown or unauthorized user field `#{name}` :("

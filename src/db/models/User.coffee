@@ -8,8 +8,8 @@ module.exports = (connection) ->
     id:
       type: STRING 44
       primaryKey: yes
-      set: (value) -> @setDataValue 'id', encryptid value
-    userType:
+      set: (value) -> @setDataValue "id", encryptid value
+    type:
       type: SMALLINT
     reactor:
       type: BIGINT
@@ -25,17 +25,17 @@ module.exports = (connection) ->
                  domain in DOMAINS.professorDomains
             throw new Error "Ceci n'est pas une adresse mail de Sorbonne Jussieu."
       set: (value) ->
-        @setDataValue 'email', value
+        @setDataValue "email", value
         unless value then return
         
         domain = (value.split '@')[1]
-        userType = 0
-        if domain in DOMAINS.studentDomains   then userType |= USER_TYPES.STUDENT
-        if domain in DOMAINS.professorDomains then userType |= USER_TYPES.PROFESSOR
-        @setDataValue 'userType', userType
+        type = 0
+        if domain in DOMAINS.studentDomains   then type |= USER_TYPES.STUDENT
+        if domain in DOMAINS.professorDomains then type |= USER_TYPES.PROFESSOR
+        @setDataValue "type", type
     code:
       type: STRING 6
-    federatedServers:
-      type: ARRAY BIGINT
+    servers:
+      type: SMALLINT
   }
 

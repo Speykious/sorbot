@@ -158,7 +158,7 @@ addNewMember = (member) ->
   # Add new entry in the database
   dbUser = await User.create {
     id: member.user.id
-    userType: 0
+    type: 0
   }
   
   logf LOG.DATABASE, "User #{formatUser member.user} added"
