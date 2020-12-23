@@ -106,7 +106,6 @@ emailCH = new EmailCrisisHandler {
 }
 
 loading.step "Preparing the cup of coffee..."
-# logf LOG.INIT, "{#ae6753-fg}Preparing the cup of coffee...{/}"
 
 bot.on "ready", ->
   botCache.bot = bot
@@ -117,8 +116,6 @@ bot.on "ready", ->
       url: "https://gitlab.com/Speykious/sorbot-3"
   }
   
-  # Using the tea kanji instead of the emoji
-  # because it doesn't render well with blessed :(
   logf LOG.INIT, {
     embed:
       title: "Ready to sip. 茶 ☕"
@@ -126,8 +123,6 @@ bot.on "ready", ->
       color: 0x34d9ff
       footer: FOOTER
   }
-  # bot.channels.resolve "672498488646434841"
-  # .send "**GO BACK TO WORK, I NEED TO GET DONE** <@&672480366266810398>"
   
   loading.step "Authorizing the gmailer..."
   await gmailer.authorize "token.yaml"

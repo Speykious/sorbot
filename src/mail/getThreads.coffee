@@ -1,5 +1,5 @@
 { CROSSMARK, CHECKMARK } = require "../constants"
-{ logf, LOG }            = require "../logging"
+{ LOG }            = require "../logging"
 { forEach }              = require "../helpers"
 { formatWithOptions }    = require "util"
 
@@ -15,9 +15,7 @@ getThreads = (query, maxFetch = 10) ->
   gmail = @gmail
   
   listt = await gmail.users.threads.list { userId: "me", q: query, maxResults: maxFetch }
-  unless listt.data.threads
-    # logf LOG.EMAIL, "{#ffee64-fg}#{CROSSMARK} No threads to query :/{/}"
-    return []
+  unless listt.data.threads then return []
   
   threads = await Promise.all listt.data.threads.map (thread) ->
     thred = await gmail.users.threads.get { userId: "me", id: thread.id }
@@ -39,7 +37,6 @@ getThreads = (query, maxFetch = 10) ->
       headers.map (header) -> heds[header.name.toLowerCase()] = header.value
       return heds
 
-  # logf LOG.EMAIL, "{#32ff64-fg}{bold}#{CHECKMARK} #{threads.length}{/bold} Threads successfully read{/}"
   return threads
 
 module.exports = getThreads

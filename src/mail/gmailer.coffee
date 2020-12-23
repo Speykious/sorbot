@@ -55,25 +55,19 @@ class GMailer
   Lists the unread existential crisis messages.
   @param {number} maxFetch - The maximum number of messages to query.
   ###
-  getUECThreads: (maxFetch = 10) ->
-    # logf LOG.EMAIL, "Reading Existential Crisis threads..."
-    return @getThreads "is:unread label:existential-crisis", maxFetch
+  getUECThreads: (maxFetch = 10) -> @getThreads "is:unread label:existential-crisis", maxFetch
 
   ###
   Lists the unread sorbonne crisis messages.
   @param {number} maxFetch - The maximum number of messages to query.
   ###
-  getUSCThreads: (maxFetch = 10) ->
-    # logf LOG.EMAIL, "Reading Sorbonne Crisis threads..."
-    return @getThreads "is:unread label:sorbonne-crisis", maxFetch
+  getUSCThreads: (maxFetch = 10) -> @getThreads "is:unread label:sorbonne-crisis", maxFetch
   
   ###
   Lists the unread manual verification messages.
   @param {number} maxFetch - The maximum number of messages to query.
   ###
-  getUMVThreads: (maxFetch = 10) ->
-    # logf LOG.EMAIL, "Reading Manual Verification threads..."
-    return @getThreads "is:unread label:manual-verification", maxFetch
+  getUMVThreads: (maxFetch = 10) -> @getThreads "is:unread label:manual-verification", maxFetch
 
   ###
   Get and store new token after prompting for user authorization.
