@@ -1,13 +1,11 @@
 { DataTypes }     = require "sequelize"
-{ encryptid }     = require "../../encryption"
-{ ARRAY, BIGINT } = DataTypes
+{ BIGINT } = DataTypes
 
 module.exports = (connection) ->
   connection.define "FederatedMetadata", {
     id:
-      type: STRING 44
+      type: BIGINT
       primaryKey: yes
-      set: (value) -> @setDataValue "id", encryptid value
     unverified:
       type: BIGINT
     member:
