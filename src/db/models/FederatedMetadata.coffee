@@ -12,4 +12,8 @@ module.exports = (connection) ->
       type: BIGINT
     member:
       type: BIGINT
+    professor:
+      type: BIGINT
+    former:
+      type: BIGINT
   }
