@@ -162,7 +162,7 @@ addNewMember = (member) ->
 
 bot.on "guildMemberAdd", (member) ->
   # For now we only care about the main server.
-  # Federated server autoverification coming soon™
+  # Shared auth coming soon(er)™
   if member.guild.id isnt GUILDS.MAIN.id then return
   
   await addNewMember member
