@@ -1,6 +1,6 @@
 {
   "name": "sorbot-3",
-  "version": "3.0.0-rc3",
+  "version": "3.0.0-rc4",
   "description": "SorBOT 3, La toute nouvelle version de SorBOT, le bot Discord du serveur Sorbonne Jussieu !",
   "main": "client/index.js",
   "scripts": {
