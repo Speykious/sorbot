@@ -68,6 +68,10 @@ sendDmPage = (page, user, msgid) ->
     msg = await dmChannel.send { embed: page.embed }
     return msg
   catch err
+    if /Cannot send messages to this user/.test err
+      logf LOG.MESSAGES, (formatCrisis "Message sending",
+        "Cannot send DM page to user #{formatUser user}, they probably deactivated their private messages")
+      return undefined
     logf LOG.MESSAGES, (formatCrisis "Discord API", err)
     return undefined
 
