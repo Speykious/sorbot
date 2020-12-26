@@ -78,6 +78,22 @@ generatePages = (menus, guild, parentId) ->
 updateMenus()
 
 syscallData =
+  help:
+    description: "Shows you how to use commands."
+    args:
+      with:
+        position: "end"
+        type: "word"
+    exec: (args) -> (guild, msg) ->
+      wth = args.with or "everything"
+      switch wth
+        when "everything"
+          sdes = Object.entries syscallData
+          await msg.channel.send sdes.map(([name, { description }]) -> "`#{name}` ─ #{description}").join("\n")
+        else
+          { description, args } = syscallData[wth]
+          await msg.channel.send "`#{wth}` ─ #{description}\n```yaml\n# Arguments\n#{YAML.stringify args}\n```"
+
   generate:
     description: "Generates Welcome-SAS pages."
     args:
