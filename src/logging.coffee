@@ -9,6 +9,7 @@ logf = ((chid, args...) ->
   unless logChannelCache[chid] then logChannelCache[chid] = await @bot.channels.fetch chid
   if args.length is 1 and args[0].embed
     return await logChannelCache[chid].send args[0]
+  args = args.map (arg) -> if arg.length > 2000 then "#{arg[...1997]}..." else arg
   return await logChannelCache[chid].send(format args...)
 ).bind botCache
 
@@ -33,9 +34,10 @@ formatUser = (user) -> "**__#{user.tag}__** (#{user.id})"
 
 # This is only used for admin commands
 sendError = (channel, errorString, msDelay = 0) ->
-  errorMsg = await channel
-    .send errorString
-    .catch (err) -> logf LOG.MESSAGES, (formatCrisis "Message", err)
+  try
+    errorMsg = await channel.send errorString
+  catch err
+    logf LOG.MESSAGES, (formatCrisis "Message", err)
   if errorMsg and msDelay then errorMsg.delete { timeout: msDelay }
   return Promise.resolve errorMsg
 
