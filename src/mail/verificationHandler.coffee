@@ -17,8 +17,8 @@ verifyUser = (dbUser, member, verifier) ->
   await member.roles.add [smr.membre]
   await member.roles.remove [smr.non_verifie]
   ut = dbUser.type
-  if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
   if ut & USER_TYPES.STUDENT   then await member.roles.add smr.indecis
+  if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
   if ut & USER_TYPES.GUEST     then await member.roles.add smr.squatteur
   if ut & USER_TYPES.FORMER    then await member.roles.add smr.ancien
   
