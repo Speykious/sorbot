@@ -161,6 +161,10 @@ addNewMember = (member) ->
   
 
 bot.on "guildMemberAdd", (member) ->
+  # I don't care about bots lol
+  if member.user.bot
+    logf LOG.MODERATION, "Bot #{formatUser member.user} just arrived"
+    return
   # For now we only care about the main server.
   # Shared auth coming soon(er)™
   if member.guild.id isnt GUILDS.MAIN.id then return
@@ -168,6 +172,10 @@ bot.on "guildMemberAdd", (member) ->
   await addNewMember member
 
 bot.on "guildMemberRemove", (member) ->
+  # I don't care about bots lol
+  if member.user.bot
+    logf LOG.MODERATION, "Bot #{formatUser member.user} just left"
+    return
   logf LOG.MODERATION, "Removing user #{formatUser member.user}"
   dbUser = await getdbUser member.user
   unless dbUser then return
