@@ -7,6 +7,7 @@ YAML                            = require "yaml"
 { verifyUser }                  = require "../mail/verificationHandler"
 { getPage, clearPageCache }     = require "./page-handler"
 { decryptid }                   = require "../encryption"
+{ Syscall, SacredArts }         = require "shisutemu-kooru"
 
 mdir = "resources/pages/"
 pagenames = [
@@ -76,32 +77,27 @@ generatePages = (menus, guild, parentId) ->
 
 updateMenus()
 
-# SAO Alicization SYSTEM CALLS for menu handling
-syscall = (guild, msg, cmd) ->
-  unless cmd then cmd = msg.content
-  if /^(SYSTEM CALL|SC):\n/i.test cmd
-    cmds = cmd.split(/\n+/).slice 1
-           .map (cmd) -> "SC: #{cmd}"
-    syscalls = (i = 0) ->
-      if i >= cmds.length then return
-      await syscall guild, msg, cmds[i]
-      return syscalls i + 1
-    return syscalls()
-  
-  unless cmd.startsWith "SYSTEM CALL: "
-    unless /^SC:\s/i.test cmd then return
-    else cmd = cmd.slice "SC: ".length
-  else cmd = cmd.slice "SYSTEM CALL: ".length
-
-
-  switch cmd
-
-    when "GENERATE ALL PAGE ELEMENT"
+syscallData =
+  generate:
+    description: "Generates Welcome-SAS pages."
+    args:
+      element:
+        position: "end"
+        type: "word"
+        enum: ["pages", "all-pages", "page", "all-page"]
+    exec: ({ element }) -> (guild, msg) ->
       await msg.channel.send "`Generating pages...`"
       await generatePages menus, guild, "751750178058534912"
       await msg.channel.send "`All pages generated.`"
 
-    when "YEET ALL PAGE ELEMENT"
+  yeet:
+    description: "Yeets Welcome-SAS pages."
+    args:
+      element:
+        position: "end"
+        type: "word"
+        enum: ["pages", "all-pages", "page", "all-page"]
+    exec: ({ element }) -> (guild, msg) ->
       await msg.channel.send "`Yeeting all pages...`"
       # Before yeeting the channels, we need to remove our menumsgs
       # from our data structures properly
@@ -116,14 +112,32 @@ syscall = (guild, msg, cmd) ->
         delete channelCache[k]
       saveMenus()
       await msg.channel.send "`All pages yeeted.`"
-
-    when "UPDATE ALL PAGE ELEMENT"
+  
+  update:
+    description: "Updates memory-internal Welcome-SAS pages."
+    args:
+      element:
+        position: "end"
+        type: "word"
+        enum: ["pages", "all-pages", "page", "all-page"]
+    exec: ({ element }) -> (guild, msg) ->
       await msg.channel.send "`Updating all memory-internal pages...`"
       updateMenus()
       await msg.channel.send "`All memory-internal pages updated.`"
-
-    when "SYNC ALL PAGE ELEMENT, LINK SHAPE"
-      await msg.channel.send "`Synchronizing all pages (shape: link)...`"
+  
+  sync:
+    description: "Syncs Welcome-SAS pages, specifically links."
+    args:
+      element:
+        position: "end"
+        type: "word"
+        enum: ["pages", "all-pages", "page", "all-page"]
+      shape:
+        position: "end"
+        type: "word"
+        enum: ["link"]
+    exec: ({ element, shape }) -> (guild, msg) ->
+      await msg.channel.send "`Synchronizing all pages (shape: #{shape})...`"
       menumsgs.map (menumsg) ->
         orig = menumsg.embeds[0]
         pagenames.map (pagename, i) ->
@@ -139,80 +153,94 @@ syscall = (guild, msg, cmd) ->
           orig.fields.map (_, i) -> replaceLink orig.fields[i], "value"
         menumsg.edit { embed: orig }
       await msg.channel.send "`Synchronized all pages.`"
-    
-    else
-      if /^VERIFY USER, ID\s/i.test cmd
-        cmd = cmd.slice "VERIFY USER, ID ".length
-        unless /^\d{18}/.test cmd then return
-        userId = cmd.slice 0, 18
-        cmd    = cmd.slice 18
-        member = await guild.members.fetch userId
-        dbUser = await getdbUser member.user
-        unless dbUser
-          await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
-          return
-        
-        if /^,\s+.+SHAPE/i.test cmd
-          shapes = cmd.split(/\s+/)
-          shapes = shapes.slice 1, shapes.length - 1 # we don't want 'SHAPE' or ',' in here
-          dbUser.type = 0
-          await Promise.all shapes.map (shape) ->
-            unless USER_TYPES[shape]
-              await sendError msg.channel, "Unknown Shape `#{shape}` :("
-              return
-            await msg.channel.send "`Giving user shape '#{shape}'...`"
-            dbUser.type |= USER_TYPES[shape]
-          await dbUser.save()
-        
-        await msg.channel.send "`Verifying user #{member.user.tag}...`"
-        await verifyUser dbUser, member, msg.author.tag
-        await msg.channel.send "`User #{member.user.tag} verified.`"
+
+  "verify-user":
+    description: "Verifies a user."
+    args:
+      id:
+        position: "start"
+        type: "snowflake"
+      shape:
+        position: "end"
+        type: "wordlist"
+        enum: ["student", "professor", "guest", "former"]
+    exec: ({ id, shape }) -> (guild, msg) ->
+      unless id
+        await sendError msg.channel, "id is undefined"
+        return
+      member = await guild.members.fetch id
+      dbUser = await getdbUser member.user
+      unless dbUser
+        await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+        return
       
-      else if /^CHANGE USER FIELD, ID\s/i.test cmd
-        cmd = cmd.slice "CHANGE USER FIELD, ID ".length
-        unless /^\d{18}/.test cmd
-          await sendError msg.channel, "ID key not correct :("
+      dbUser.type = 0
+      ## Putting a default shape, exploiting my own bug lmao
+      unless shape then shape = ["student"]
+      await Promise.all shape.map (sh) ->
+        sh = sh.toUpperCase()
+        unless USER_TYPES[sh]
+          await sendError msg.channel, "Unknown Shape `#{sh}` :("
           return
-        userId = cmd.slice 0, 18
-        cmd    = cmd.slice 18
-        member = await guild.members.fetch userId
-        dbUser = await getdbUser member.user
-        unless dbUser
-          await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
-          return
-        
-        unless /^,\sNAME\s/i.test cmd
-          await sendError msg.channel, "NAME key missing in the command :("
-          return
-        cmd = cmd.slice ", NAME ".length
-        
-        name = cmd.split(/(\s|,)+/)[0]
-        fields = ["email", "type", "code"]
-        ni = fields.indexOf name
-        if ni is -1
-          await sendError msg.channel, "Unknown or unauthorized user field `#{name}` :("
-          return
-        name = fields[ni]
-        cmd = cmd.slice name.length
-        
-        unless /^,\sVALUE\s.+/i.test cmd
-          await sendError msg.channel, "VALUE key missing in the command :("
-          return
-        
-        value = cmd.slice ", VALUE ".length
-        await msg.channel.send "`Changing field '#{name}' of user '#{member.user.tag}' to '#{value}'...`"
-        dbUser[name] = value
-        await dbUser.save()
-        await msg.channel.send "`Field changed.`"
-        
-      else if /^GET USER,\s/i.test cmd
-        cmd = cmd.slice "GET USER, ".length
-        dbUser = undefined
-        
-        if /^ID\s/i.test cmd
-          userId = cmd.slice "ID ".length
-          unless /^\d{18}$/.test userId
-            await sendError msg.channel, "ID key not correct :("
+        await msg.channel.send "`Giving user shape '#{sh}'...`"
+        dbUser.type |= USER_TYPES[sh]
+      await dbUser.save()
+
+      await msg.channel.send "`Verifying user #{member.user.tag}...`"
+      await verifyUser dbUser, member, msg.author.tag
+      await msg.channel.send "`User #{member.user.tag} verified.`"
+
+  change:
+    description: "Changes a field in the user database. Note: the field argument is just for command decoration :)"
+    args:
+      field:
+        position: "end"
+        type: "word"
+        enum: ["user"]
+      id:
+        position: "start"
+        type: "snowflake"
+      key:
+        position: "start"
+        type: "word"
+      value:
+        position: "start"
+        type: "word"
+    exec: ({ id, key, value }) -> (guild, msg) ->
+      member = await guild.members.fetch userId
+      dbUser = await getdbUser member.user
+      unless dbUser
+        await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+        return
+
+      fields = ["email", "type", "code"]
+      ni = fields.indexOf name
+      if ni is -1
+        await sendError msg.channel, "Unknown or unauthorized user field `#{name}` :("
+        return
+      name = fields[ni]
+
+      await msg.channel.send "`Changing field '#{name}' of user '#{member.user.tag}' to '#{value}'...`"
+      dbUser[name] = value
+      await dbUser.save()
+      await msg.channel.send "`Field changed.`"
+  
+  "get-user":
+    description: "Fetches user data from the user database."
+    args:
+      with:
+        position: "start"
+        type: "wordlist"
+    exec: (args) -> (guild, msg) ->
+      if args.with.length isnt 2
+        await sendError msg.channel, "Expected 2 words, got #{args.with.length}"
+        return
+      field = args.with[0]
+      switch field
+        when "id"
+          userId = args.with[1]
+          unless /^\d{17,18}$/.test userId
+            await sendError msg.channel, "Expected second word to be a snowflake, got '#{userId}'"
             return
           try
             member = await guild.members.fetch userId
@@ -223,9 +251,8 @@ syscall = (guild, msg, cmd) ->
           unless dbUser
             await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
             return
-        
-        else if /^EMAIL\s/i.test cmd
-          email = cmd.slice "EMAIL ".length
+        when "email"
+          email = args.with[1]
           try
             dbUser = (await User.findAll {
               where: { email }
@@ -240,24 +267,37 @@ syscall = (guild, msg, cmd) ->
           catch e
             await sendError msg.channel, "Unknown member `#{userId}` :(\n\nError: ```\n#{e}```"
             return
+        else
+          await sendError msg.channel, "Expected first word to be 'id' or 'email', got '#{field}'"
+          return
 
-        else return
-        
-        nssData = { dbUser.dataValues... }
-        await msg.channel.send {
-          embed:
-            title: "#{member.user.tag}'s database row"
-            description:
-              """
-              **#{member.user.tag}**'s database row in YAML form
-              ```yaml
-              #{YAML.stringify nssData}```
-              """
-            color: 0x34d9ff
-            footer: FOOTER
-        }
+      nssData = { dbUser.dataValues... }
+      await msg.channel.send {
+        embed:
+          title: "#{member.user.tag}'s database row"
+          description:
+            """
+            **#{member.user.tag}**'s database row in YAML form
+            ```yaml
+            #{YAML.stringify nssData}```
+            """
+          color: 0x34d9ff
+          footer: FOOTER
+      }
 
+syscalls = Object.entries syscallData
+          .map ([name, { args, exec }]) ->
+            new Syscall { name, args }, exec
 
+sacredArts = new SacredArts syscalls
 
-
-module.exports = syscall
+module.exports = (guild, msg) ->
+  evaluated = sacredArts.eval msg.content
+  unless evaluated then return
+  for { isError, error, result } in evaluated
+    if isError
+      errorMsg = if typeof error is "string" then error
+      else "```yaml\n#{YAML.stringify error}\n```"
+      await sendError msg.channel, errorMsg
+      return
+    await result guild, msg
