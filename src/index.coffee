@@ -14,8 +14,8 @@ loading.step "Loading discord.js..."
 
 loading.step "Loading generic utils..."
 { relative, delay, readf }    = require "./helpers"
-{ logf, LOG, formatCrisis,
-  formatUser, botCache }      = require "./logging"
+{ logf, formatCrisis, formatGuild,
+  LOG, formatUser, botCache } = require "./logging"
 { CROSSMARK, SERVERS, BYEBYES,
   GUILDS, TESTERS, FOOTER }   = require "./constants"
 { encryptid, decryptid }      = require "./encryption"
@@ -139,52 +139,60 @@ bot.on "ready", ->
     emailCH.activate()
   ), 100
 
-# Adds a new member to the main server
-addNewMember = (member) ->
-  if member.guild.id isnt GUILDS.MAIN.id then return
-  
-  logf LOG.MODERATION, "Adding user #{formatUser member.user}"
+# Fetches a member or creates a new one from the database
+touchMember = (member) ->
+  # We have to abstract the roles to add, also based on whether the member is verified or not
   await member.roles.add SERVERS.main.roles.non_verifie
+  
+  dbUser = await getdbUser member.user, "silent"
+  if dbUser
+    # Increment the number of servers the user is in
+    dbUser.servers++
+    await dbUser.save()
+    return dbUser
   
   page = getPage "welcomedm"
   pagemsg = await sendDmPage page, member.user
-  unless pagemsg then return # no need to send an error msg
-  
-  # Add new entry in the database
+  unless pagemsg then return null # no need to send an error msg
   dbUser = await User.create {
     id: member.user.id
     type: 0
+    servers: 1
   }
+  logf LOG.DATABASE, "New user #{formatUser member.user} has been added to the database"
   
-  logf LOG.DATABASE, "User #{formatUser member.user} added"
   return dbUser
-  
+
+bot.on "guildCreate", (guild) ->
+  dbGuild = await FederatedMetadata.create { id: guild.id }
+  logf LOG.DATABASE "New guild #{formatGuild guild} has been added to the database"
 
 bot.on "guildMemberAdd", (member) ->
   # I don't care about bots lol
   if member.user.bot
     logf LOG.MODERATION, "Bot #{formatUser member.user} just arrived"
     return
-  # For now we only care about the main server.
-  # Shared auth coming soon(er)™
-  if member.guild.id isnt GUILDS.MAIN.id then return
   
-  await addNewMember member
+  logf LOG.MODERATION, "User #{formatUser member.user} joined guild #{formatGuild member.guild}"
+  # Shared auth coming soon(er)™
+  await touchMember member
 
 bot.on "guildMemberRemove", (member) ->
   # I don't care about bots lol
   if member.user.bot
-    logf LOG.MODERATION, "Bot #{formatUser member.user} just left"
+    logf LOG.MODERATION, "Bot #{formatUser member.user} left guild #{formatGuild member.guild}"
     return
-  logf LOG.MODERATION, "Removing user #{formatUser member.user}"
+  logf LOG.MODERATION, "User #{formatUser member.user} left guild #{formatGuild member.guild}"
   dbUser = await getdbUser member.user
   unless dbUser then return
-  # Yeeting dbUser out when someone leaves
-  await dbUser.destroy()
+
+  # Yeeting dbUser out when it isn't present in any other server
+  dbUser.servers--
+  await if dbUser.servers then dbUser.save() else dbUser.destroy()
   logf LOG.DATABASE, "User #{formatUser member.user} removed"
-  
+
   unless process.env.LOCAL
-    bye = BYEBYES[Math.floor(Math.random() * BYEBYES.length - 1e-6)]
+    bye = BYEBYES[Math.floor (Math.random() * BYEBYES.length - 1e-6)]
     bye = bye.replace "{name}", member.displayName
     
     auRevoir = await bot.channels.fetch '672502429836640267'
@@ -211,7 +219,7 @@ bot.on "message", (msg) ->
     return
   
   dbUser = await getdbUser msg.author
-  unless dbUser then dbUser = await addNewMember member
+  unless dbUser then dbUser = await touchMember member
 
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably
