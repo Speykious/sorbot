@@ -27,6 +27,7 @@ formatCrisis = (crisis, crisisMsg) ->
   format "**[#{crisis} Crisis] #{CROSSMARK}**", crisisMsg
 
 formatUser = (user) -> "**__#{user.tag}__** (#{user.id})"
+formatGuild = (guild) -> "**#{guild.name}** (#{guild.id})"
 
 #####################
 ## DISCORD HELPERS ##
@@ -48,5 +49,6 @@ module.exports = {
 
   formatCrisis
   formatUser
+  formatGuild
   sendError
 }
