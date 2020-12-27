@@ -2,7 +2,7 @@
 { encryptid }                           = require "../encryption"
 { logf, LOG, formatCrisis, formatUser } = require "../logging"
 
-getdbUser = (user) ->
+getdbUser = (user, mode) ->
   try # Manages the fetching of menuState
     dbUser = await User.findByPk encryptid user.id
     unless dbUser then throw "User #{formatUser user} doesn't exist in our database"
@@ -10,7 +10,7 @@ getdbUser = (user) ->
   catch err
     # In this block we have to tell the user that they are not registered
     # in our database and that they should contact us or something
-    logf LOG.DATABASE, (formatCrisis "Existential", err)
+    unless mode is "silent" then logf LOG.DATABASE, (formatCrisis "Existential", err)
     return undefined
 
 module.exports = {
