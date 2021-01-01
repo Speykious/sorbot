@@ -32,7 +32,6 @@ YAML                                        = require "yaml"
 
 mdir = "resources/pages/"
 
-pageCache = {}
 
 clearPageCache = -> pageCache = {}
 

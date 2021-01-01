@@ -9,28 +9,6 @@ YAML                            = require "yaml"
 { decryptid }                   = require "../encryption"
 { Syscall, SacredArts }         = require "shisutemu-kooru"
 
-mdir = "resources/pages/"
-pagenames = [
-  "accueil"
-  "page0_aas"
-  "page1_jse"
-  "page2_jspoec"
-  "page3_jsumdpdsu"
-  "page4_jsupe"
-  "page5_jnrpdm"
-  "page6_rgpd"
-  "page6.1_pencd"
-  "page6.2_qeidls"
-  "page6.3_crmd"
-  "page7_gud"
-  "page8_qsn"
-  "page9_qqs"
-]
-channelCache = {}
-menus = []
-menumsgs = []
-menumsgids = YAML.parse readf "resources/menumsgs.yaml"
-unless menumsgids then menumsgids = []
 
 updateMenus = ->
   clearPageCache()
@@ -161,8 +139,8 @@ syscallData =
             o[value] = o[value].replace "{#{pagename}}",
               "https://discordapp.com/channels/#{
                 menumsgs[i].guild.id}/#{
-                menumsgs[i].channel.id}/#{
-                menumsgs[i].id}"
+                  menumsgs[i].channel.id}/#{
+                    menumsgs[i].id}"
           
           replaceLink orig, "description"
           unless orig.fields then return
@@ -275,7 +253,7 @@ syscallData =
               rejectOnEmpty: yes
             })[0]
           catch e
-            await sendError msg.channel, "User not found for email `#{email}`. By any means, are you sure that's an email address? Because I didn't check :thinking:"
+            await sendError msg.channel, "User not found for email `#{email}`."
             return
           userId = decryptid dbUser.id
           try
