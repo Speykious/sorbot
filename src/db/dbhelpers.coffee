@@ -1,15 +1,22 @@
-{ User }                                = require "./initdb"
-{ encryptid }                           = require "../encryption"
-{ logf, LOG, formatCrisis, formatUser } = require "../logging"
+{ User, FederatedMetadata }                          = require "./initdb"
+{ encryptid }                                        = require "../encryption"
+{ logf, LOG, formatCrisis, formatUser, formatGuild } = require "../logging"
 
 getdbUser = (user, mode) ->
-  try # Manages the fetching of menuState
+  try
     dbUser = await User.findByPk encryptid user.id
     unless dbUser then throw "User #{formatUser user} doesn't exist in our database"
     return dbUser
   catch err
-    # In this block we have to tell the user that they are not registered
-    # in our database and that they should contact us or something
+    unless mode is "silent" then logf LOG.DATABASE, (formatCrisis "Existential", err)
+    return undefined
+
+getdbGuild = (guild, mode) ->
+  try
+    dbGuild = await FederatedMetadata.findByPk guild.id
+    unless dbGuild then throw "Guild #{formatGuild guild} doesn't exist in our database"
+    return dbGuild
+  catch err
     unless mode is "silent" then logf LOG.DATABASE, (formatCrisis "Existential", err)
     return undefined
 

@@ -30,7 +30,7 @@ syscall                       = require "./frontend/syscall"
 { mdir, getPage, sendDmPage } = require "./frontend/page-handler"
 
 loading.step "Loading dbhelpers..."
-{ getdbUser }                 = require "./db/dbhelpers"
+{ getdbUser, getdbGuild }     = require "./db/dbhelpers"
 loading.step "Initializing database..."
 { User }                      = require "./db/initdb"
 
@@ -167,6 +167,12 @@ bot.on "guildCreate", (guild) ->
   dbGuild = await FederatedMetadata.create { id: guild.id }
   logf LOG.DATABASE "New guild #{formatGuild guild} has been added to the database"
 
+bot.on "guildDelete", (guild) ->
+  dbGuild = await getdbGuild guild
+  unless dbGuild then return
+  await dbGuild.destroy()
+  logf LOG.DATABASE, "Guild #{formatGuild guild} removed"
+
 bot.on "guildMemberAdd", (member) ->
   # I don't care about bots lol
   if member.user.bot
@@ -188,8 +194,12 @@ bot.on "guildMemberRemove", (member) ->
 
   # Yeeting dbUser out when it isn't present in any other server
   dbUser.servers--
-  await if dbUser.servers then dbUser.save() else dbUser.destroy()
-  logf LOG.DATABASE, "User #{formatUser member.user} removed"
+  if dbUser.servers
+    await dbUser.save()
+    logf LOG.DATABASE, "User #{formatUser member.user} removed from guild #{formatGuild member.guild}"
+  else
+    await dbUser.destroy()
+    logf LOG.DATABASE, "User #{formatUser member.user} removed"
 
   unless process.env.LOCAL
     bye = BYEBYES[Math.floor (Math.random() * BYEBYES.length - 1e-6)]
