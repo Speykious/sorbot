@@ -48,7 +48,7 @@ getPage = (mpath) ->
 # - msgid: discord snowflake representing the message id of the page (optional).
 sendDmPage = (page, user, msgid) ->
   if process.env.LOCAL
-    unless (user.id in TESTERS)
+    unless user.id in TESTERS
       logf LOG.MESSAGES,
         "Tried to send a page to non-tester user",
         (formatUser user), "**in LOCAL mode** (prevented)"

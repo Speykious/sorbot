@@ -2,7 +2,7 @@ YAML                            = require "yaml"
 { readf, writef }               = require "../helpers"
 { SERVERS, USER_TYPES, FOOTER } = require "../constants"
 { sendError }                   = require "../logging"
-{ getdbUser }                   = require "../db/dbhelpers"
+{ getdbUser, getdbGuild }       = require "../db/dbhelpers"
 { User }                        = require "../db/initdb"
 { verifyUser }                  = require "../mail/verificationHandler"
 { getPage, clearPageCache }     = require "./page-handler"
@@ -12,9 +12,9 @@ YAML                            = require "yaml"
 
 class RTFM
   # Directory where the page files are stored
-  @dir = "resources/pages/"
+  @dir: "resources/pages/"
   # Names of the pages we care about
-  @names = [
+  @names: [
     "accueil"
     "page0_aas"
     "page1_jse"
@@ -30,16 +30,25 @@ class RTFM
     "page8_qsn"
     "page9_qqs"
   ]
-  # Saved RTFM page messages for each guild
-  @msgIds = YAML.parse readf "resources/pageMsgIds.yaml"
+  @pageCache: {}
   # Collection of all RTFM instances to be able to save RTFM page messages for each guild
-  @RTFMs = []
+  @RTFMs: []
   
   constructor: (@guild) ->
-    @guildMsgIds = RTFM.msgIds[guild.id] or {}
     @channelCache = {}
     
     RTFM.RTFMs.push @
+
+  # Gets the page object from .embed.yaml files
+  @getPage: (pageName) ->
+    unless pageName of @pageCache
+      @pageCache[pageName] = YAML.parse readf mdir + pageName + ".embed.yaml"
+      @pageCache[pageName].embed.footer = FOOTER
+    return @pageCache[pageName]
+
+  clearPageCache: -> @pageCache = {}
+  
+  
 
 
 module.exports = RTFM

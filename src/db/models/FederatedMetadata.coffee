@@ -1,5 +1,7 @@
 { DataTypes } = require "sequelize"
-THICCINT = DataTypes.BIGINT
+{ BIGINT, STRING } = DataTypes
+THICCINT = BIGINT
+THICCSTRING = STRING 512
 
 module.exports = (connection) ->
   connection.define "FederatedMetadata", {
@@ -8,6 +10,8 @@ module.exports = (connection) ->
       primaryKey: yes
     rtfm:
       type: THICCINT
+    rtfms:
+      type: THICCSTRING
     unverified:
       type: THICCINT
     member:

@@ -2,7 +2,7 @@ YAML                            = require "yaml"
 { readf, writef }               = require "../helpers"
 { SERVERS, USER_TYPES, FOOTER } = require "../constants"
 { sendError }                   = require "../logging"
-{ getdbUser }                   = require "../db/dbhelpers"
+{ getdbUser, getdbGuild }       = require "../db/dbhelpers"
 { User }                        = require "../db/initdb"
 { verifyUser }                  = require "../mail/verificationHandler"
 { getPage, clearPageCache }     = require "./page-handler"
@@ -73,19 +73,26 @@ syscallData =
           await msg.channel.send "`#{wth}` ─ #{description}\n```yaml\n# Arguments\n#{YAML.stringify args}\n```"
 
   generate:
-    description: "Generates Welcome-SAS pages."
+    description: "Generates RTFM pages."
     args:
       element:
         position: "end"
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (guild, msg) ->
+      dbGuild = await getdbGuild guild, "silent"
+      unless dbGuild
+        await sendError msg.channel, "Guild is not in the database *(nani)*"
+        return
+      unless dbGuild.rtfm
+        await sendError msg.channel, "Guild's metadata doesn't include an RTFM category"
+        return
       await msg.channel.send "`Generating pages...`"
-      await generatePages menus, guild, "751750178058534912"
+      await generatePages menus, guild, dbGuild.rtfm
       await msg.channel.send "`All pages generated.`"
 
   yeet:
-    description: "Yeets Welcome-SAS pages."
+    description: "Yeets RTFM pages."
     args:
       element:
         position: "end"
@@ -108,7 +115,7 @@ syscallData =
       await msg.channel.send "`All pages yeeted.`"
   
   update:
-    description: "Updates memory-internal Welcome-SAS pages."
+    description: "Updates memory-internal RTFM pages."
     args:
       element:
         position: "end"
@@ -120,7 +127,7 @@ syscallData =
       await msg.channel.send "`All memory-internal pages updated.`"
   
   sync:
-    description: "Syncs Welcome-SAS pages, specifically links."
+    description: "Syncs RTFM pages, specifically links."
     args:
       element:
         position: "end"
