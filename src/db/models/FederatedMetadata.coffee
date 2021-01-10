@@ -1,17 +1,19 @@
-{ DataTypes }     = require "sequelize"
-{ BIGINT } = DataTypes
+{ DataTypes } = require "sequelize"
+THICCINT = DataTypes.BIGINT
 
 module.exports = (connection) ->
   connection.define "FederatedMetadata", {
     id:
-      type: BIGINT
+      type: THICCINT
       primaryKey: yes
+    rtfm:
+      type: THICCINT
     unverified:
-      type: BIGINT
+      type: THICCINT
     member:
-      type: BIGINT
+      type: THICCINT
     professor:
-      type: BIGINT
+      type: THICCINT
     former:
-      type: BIGINT
+      type: THICCINT
   }
