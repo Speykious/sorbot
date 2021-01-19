@@ -22,4 +22,5 @@ getdbGuild = (guild, mode) ->
 
 module.exports = {
   getdbUser
+  getdbGuild
 }
