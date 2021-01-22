@@ -84,3 +84,11 @@ La merge request "{name}" n'a pas été validée.
 {name} s'est désintégré.e après une segfault.
 {name} s'est fait.e avaler par Electron en même temps que sa RAM.
 {name} a tenté de créer un drama dans <#672499219814154251>.
+{name} n'était pas un speedrunner de Java.
+{name} a donné un coup de pied dans un carton de gauche issu du commerce équitable.
+chilledfrogs a désintégré les oreilles de {name} avec son clavier.
+{name} était un fan de My Little Pony.
+{name} s'est fait rekt en 1v1 à Gare du Nord.
+{name} a voulu approcher wiiiiiiiiiiruuuuuuuuu.
+{name} n'a pas trouvé le tag #wholesome.
+{name} didn't give the sauce.
