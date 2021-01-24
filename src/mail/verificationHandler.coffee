@@ -32,9 +32,7 @@ verifyUser = (dbUser, member, verifier) ->
       description:
         """
         Vous avez désormais le rôle @Membre sur le serveur.
-        N'oubliez pas de choisir vos rôles dans le salon [#rôles](https://discordapp.com/channels/672479260899803147/672503031325261851/672543140430872625).
-        Tant que vous n'aurez pas choisi votre rôle d'année d'études,
-        vous aurez aussi le rôle @Indécis (sauf si vous avez le rôle @Professeur, @Ancien ou @Squatteur).
+        N'oubliez pas de choisir vos rôles dans le salon #rôles s'il y en a.
         """
       fields: [{
         name: "Verified #{adverb} by"
