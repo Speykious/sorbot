@@ -113,7 +113,7 @@ bot.on "ready", ->
     activity:
       type: "PLAYING"
       name: if process.env.LOCAL then "Coucou humain 👀" else "with your data 👀"
-      url: "https://gitlab.com/Speykious/sorbot-3"
+      url: "https://gitlab.com/Speykious/sorbot"
   }
   
   logf LOG.INIT, {
@@ -139,8 +139,9 @@ bot.on "ready", ->
     emailCH.activate()
   ), 100
 
-# Fetches a member or creates a new one from the database
+# Fetches a member and increments its servers, or creates a new one from the database
 touchMember = (member) ->
+  logf LOG.MODERATION, "User #{formatUser member.user} joined guild #{formatGuild member.guild}"
   # We have to abstract the roles to add, also based on whether the member is verified or not
   await member.roles.add SERVERS.main.roles.non_verifie
   
@@ -159,13 +160,14 @@ touchMember = (member) ->
     type: 0
     servers: 1
   }
+
   logf LOG.DATABASE, "New user #{formatUser member.user} has been added to the database"
   
   return dbUser
 
 bot.on "guildCreate", (guild) ->
   dbGuild = await FederatedMetadata.create { id: guild.id }
-  logf LOG.DATABASE "New guild #{formatGuild guild} has been added to the database"
+  logf LOG.DATABASE, "New guild #{formatGuild guild} has been added to the database"
 
 bot.on "guildDelete", (guild) ->
   dbGuild = await getdbGuild guild
@@ -179,7 +181,6 @@ bot.on "guildMemberAdd", (member) ->
     logf LOG.MODERATION, "Bot #{formatUser member.user} just arrived"
     return
   
-  logf LOG.MODERATION, "User #{formatUser member.user} joined guild #{formatGuild member.guild}"
   # Shared auth coming soon(er)™
   await touchMember member
 
