@@ -147,8 +147,8 @@ touchMember = (member) ->
   
   dbUser = await getdbUser member.user, "silent"
   if dbUser
-    # Increment the number of servers the user is in
-    dbUser.servers++
+    # Add the current server to the member's database field
+    dbUser.servers.push member.guild.id
     await dbUser.save()
     return dbUser
   
@@ -158,7 +158,7 @@ touchMember = (member) ->
   dbUser = await User.create {
     id: member.user.id
     type: 0
-    servers: 1
+    servers: [member.guild.id]
   }
 
   logf LOG.DATABASE, "New user #{formatUser member.user} has been added to the database"
