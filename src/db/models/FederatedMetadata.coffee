@@ -5,19 +5,19 @@ THICCSTRING = STRING 512
 
 module.exports = (connection) ->
   connection.define "FederatedMetadata", {
-    id:
+    id:         # ID of the server
       type: THICCINT
       primaryKey: yes
-    rtfm:
+    rtfm:       # ID of the RTFM category
       type: THICCINT
-    rtfms:
+    rtfms:      # IDs of channels and messages of the RTFMs in a custom format
       type: THICCSTRING
-    unverified:
+    unverified: # ID of the unverified role
       type: THICCINT
-    member:
+    member:     # ID of the verified role
       type: THICCINT
-    professor:
+    professor:  # ID of the professor role
       type: THICCINT
-    former:
+    former:     # ID of the former role
       type: THICCINT
   }
