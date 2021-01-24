@@ -36,6 +36,6 @@ module.exports = (connection) ->
     code:
       type: STRING 6
     servers:
-      type: SMALLINT
+      type: ARRAY BIGINT
   }
 
