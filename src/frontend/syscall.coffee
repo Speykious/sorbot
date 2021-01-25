@@ -35,15 +35,16 @@ syscallData =
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (guild, msg) ->
-      dbGuild = await getdbGuild guild, "silent"
-      unless dbGuild
-        await sendError msg.channel, "Guild is not in the database *(nani)*"
+      rtfm = RTFM.RTFMs[guild.id]
+      unless rtfm
+        await sendError msg.channel, "Error: There is nothing to generate :("
         return
-      unless dbGuild.rtfm
+        
+      unless rtfm.dbGuild.rtfm
         await sendError msg.channel, "Guild's metadata doesn't include an RTFM category"
         return
       await msg.channel.send "`Generating pages...`"
-      await generatePages menus, guild, dbGuild.rtfm
+      await rtfm.generatePageMsgs()
       await msg.channel.send "`All pages generated.`"
 
   yeet:
@@ -72,7 +73,7 @@ syscallData =
         await ch.delete()
         delete rtfm.channelCache[k]
       
-      saveMenus()
+      rtfm.savePageMsgs()
       await msg.channel.send "`All pages from this guild have been yeeted.`"
   
   update:
