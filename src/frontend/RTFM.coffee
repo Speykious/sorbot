@@ -34,6 +34,8 @@ class RTFM
   ]
   # Cache of page objects
   @pageCache: {}
+  # All RTFM instances
+  @RTFMs: {}
 
   constructor: (@guild) ->
     # Caching the RTFM channels
@@ -44,7 +46,7 @@ class RTFM
     unless @dbGuild
       throw new Error "Trying to construct an RTFM without the guild being in the database"
     
-    RTFM.RTFMs.push @
+    RTFM.RTFMs[@guild.id] = @
 
 
 

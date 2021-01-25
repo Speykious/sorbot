@@ -1,11 +1,12 @@
-YAML                            = require "yaml"
-{ USER_TYPES, FOOTER }          = require "../constants"
-{ sendError }                   = require "../logging"
-{ getdbUser, getdbGuild }       = require "../db/dbhelpers"
-{ User }                        = require "../db/initdb"
-{ verifyUser }                  = require "../mail/verificationHandler"
-{ decryptid }                   = require "../encryption"
-{ Syscall, SacredArts }         = require "shisutemu-kooru"
+YAML                      = require "yaml"
+RTFM                      = require "./RTFM"
+{ USER_TYPES, FOOTER }    = require "../constants"
+{ sendError }             = require "../logging"
+{ getdbUser, getdbGuild } = require "../db/dbhelpers"
+{ User }                  = require "../db/initdb"
+{ verifyUser }            = require "../mail/verificationHandler"
+{ decryptid }             = require "../encryption"
+{ Syscall, SacredArts }   = require "shisutemu-kooru"
 
 
 
@@ -53,20 +54,26 @@ syscallData =
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (guild, msg) ->
+      rtfm = RTFM.RTFMs[guild.id]
+      unless rtfm
+        await sendError msg.channel, "Error: There is nothing to yeet :("
+        return
+      
       await msg.channel.send "`Yeeting all pages...`"
-      # Before yeeting the channels, we need to remove our menumsgs
+      # Before yeeting the channels, we need to remove the RTFM instance's pagemsgs
       # from our data structures properly
-      await for k, ch of channelCache
-        menumsgs = menumsgs.filter (menumsg, i) ->
-          if menumsg.channel.id isnt ch.id
+      await for k, ch of rtfm.channelCache
+        rtfm.pagemsgs = rtfm.pagemsgs.filter (pagemsg, i) ->
+          if pagemsg.channel.id isnt ch.id
             return true
           else
-            delete menumsgids[i]
+            delete pagemsgids[i]
             return false
         await ch.delete()
-        delete channelCache[k]
+        delete rtfm.channelCache[k]
+      
       saveMenus()
-      await msg.channel.send "`All pages yeeted.`"
+      await msg.channel.send "`All pages from this guild have been yeeted.`"
   
   update:
     description: "Updates memory-internal RTFM pages."
@@ -77,7 +84,7 @@ syscallData =
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (guild, msg) ->
       await msg.channel.send "`Updating all memory-internal pages...`"
-      updateMenus()
+      RTFM.updatePageCache()
       await msg.channel.send "`All memory-internal pages updated.`"
   
   sync:
@@ -92,21 +99,30 @@ syscallData =
         type: "word"
         enum: ["link"]
     exec: ({ element, shape }) -> (guild, msg) ->
+      rtfm = RTFM.RTFMs[guild.id]
+      unless rtfm
+        await sendError msg.channel, "Error: There is nothing to synchronize :("
+        return
+      
       await msg.channel.send "`Synchronizing all pages (shape: #{shape})...`"
-      menumsgs.map (menumsg) ->
+      rtfm.pagemsgs.map (menumsg) ->
         orig = menumsg.embeds[0]
         pagenames.map (pagename, i) ->
-          replaceLink = (o, value) ->
-            o[value] = o[value].replace "{#{pagename}}",
-              "https://discordapp.com/channels/#{
-                menumsgs[i].guild.id}/#{
-                  menumsgs[i].channel.id}/#{
-                    menumsgs[i].id}"
+          pagemsg = rtfm.pagemsgs[i]
+          replaceStuff = (o, value) ->
+            o[value] = o[value]
+              .replace "{#{pagename}}",
+                "https://discordapp.com/channels/#{
+                  pagemsg.guild.id}/#{
+                    pagemsg.channel.id}/#{
+                      pagemsg.id}"
+              .replace "{server}", guild.name
           
-          replaceLink orig, "description"
+          replaceStuff orig, "description"
           unless orig.fields then return
-          orig.fields.map (_, i) -> replaceLink orig.fields[i], "value"
+          orig.fields.map (_, i) -> replaceStuff orig.fields[i], "value"
         menumsg.edit { embed: orig }
+
       await msg.channel.send "`Synchronized all pages.`"
 
   "verify-user":
