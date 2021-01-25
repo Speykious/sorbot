@@ -194,8 +194,8 @@ bot.on "guildMemberRemove", (member) ->
   unless dbUser then return
 
   # Yeeting dbUser out when it isn't present in any other server
-  dbUser.servers--
-  if dbUser.servers
+  dbUser.servers = dbUser.servers.filter (servid) -> servid isnt member.guild.id
+  if dbUser.servers.length > 0
     await dbUser.save()
     logf LOG.DATABASE, "User #{formatUser member.user} removed from guild #{formatGuild member.guild}"
   else
