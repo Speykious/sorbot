@@ -20,6 +20,8 @@ module.exports = (connection) ->
       type: THICCINT
     professor:    # ID of the professor role
       type: THICCINT
+    guest:        # ID of the guest role
+      type: THICCINT
     former:       # ID of the former role
       type: THICCINT
   }
