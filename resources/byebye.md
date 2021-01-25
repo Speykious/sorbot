@@ -84,3 +84,4 @@ La merge request "{name}" n'a pas été validée.
 {name} s'est désintégré.e après une segfault.
 {name} s'est fait.e avaler par Electron en même temps que sa RAM.
 {name} a tenté de créer un drama dans <#672499219814154251>.
+{name} n'avait pas assez de puissance intellectuelle. <:puissance_intellectuelle:760926566573801534>
