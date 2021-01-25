@@ -9,6 +9,8 @@ YAML                            = require "yaml"
 { decryptid }                   = require "../encryption"
 { Syscall, SacredArts }         = require "shisutemu-kooru"
 
+
+
 # Class for an RTFM page.
 class RTFM
   # Directory where the page files are stored
@@ -32,7 +34,7 @@ class RTFM
   ]
   # Cache of page objects
   @pageCache: {}
-  
+
   constructor: (@guild) ->
     # Caching the RTFM channels
     @channelCache = {}
@@ -44,6 +46,8 @@ class RTFM
     
     RTFM.RTFMs.push @
 
+
+
   # Gets the page object from .embed.yaml files
   @getPage: (pageName) ->
     unless pageName of @pageCache
@@ -51,14 +55,19 @@ class RTFM
       @pageCache[pageName].embed.footer = FOOTER
     return @pageCache[pageName]
 
+
+
+  # Clears the page cache, aga
   @clearPageCache: -> @pageCache = {}
 
+
+  # Updates the page cache: clear, then get each page by reading the YAML files
   @updatePageCache: ->
     @clearPageCache()
     @names.map @getPage
   
   
-  
+
   # Loads the IDs of the page messages and channels from the database
   loadPageMsgs: ->
     @pagemsgids = @dbGuild.rtfms.split "\n"

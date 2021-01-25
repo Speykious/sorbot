@@ -1,11 +1,9 @@
 YAML                            = require "yaml"
-{ readf, writef }               = require "../helpers"
-{ SERVERS, USER_TYPES, FOOTER } = require "../constants"
+{ USER_TYPES, FOOTER }          = require "../constants"
 { sendError }                   = require "../logging"
 { getdbUser, getdbGuild }       = require "../db/dbhelpers"
 { User }                        = require "../db/initdb"
 { verifyUser }                  = require "../mail/verificationHandler"
-{ getPage, clearPageCache }     = require "./pageHandler"
 { decryptid }                   = require "../encryption"
 { Syscall, SacredArts }         = require "shisutemu-kooru"
 
