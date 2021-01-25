@@ -226,7 +226,7 @@ bot.on "message", (msg) ->
       member.roles.cache.has SERVERS.main.roles.admin
     then return
     
-    syscall GUILDS.MAIN, msg
+    syscall null, msg
     return
   
   dbUser = await getdbUser msg.author

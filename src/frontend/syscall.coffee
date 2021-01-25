@@ -207,7 +207,11 @@ syscallData =
           await dbUser.save()
 
         when "guild"
-          guild = RTFM.RTFMs[id].guild
+          if id
+            guild = RTFM.RTFMs[id].guild
+            unless guild
+              await sendError msg.channel, "Guild with ID `#{id}` not found"
+              return
           dbGuild = await getdbGuild guild, "silent"
           unless dbGuild
             await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in our database :("
@@ -304,4 +308,4 @@ module.exports = (guild, msg) ->
       else "```yaml\n#{YAML.stringify error}\n```"
       await sendError msg.channel, errorMsg
       return
-    await result guild, msg
+    await result(guild or msg.guild, msg)
