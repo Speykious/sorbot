@@ -1,12 +1,12 @@
-YAML                      = require "yaml"
-RTFM                      = require "./RTFM"
-{ USER_TYPES, FOOTER }    = require "../constants"
-{ sendError }             = require "../logging"
-{ getdbUser, getdbGuild } = require "../db/dbhelpers"
-{ User }                  = require "../db/initdb"
-{ verifyUser }            = require "../mail/verificationHandler"
-{ decryptid }             = require "../encryption"
-{ Syscall, SacredArts }   = require "shisutemu-kooru"
+YAML                                   = require "yaml"
+RTFM                                   = require "./RTFM"
+{ USER_TYPES, FOOTER }                 = require "../constants"
+{ sendError, formatUser, formatGuild } = require "../logging"
+{ getdbUser, getdbGuild }              = require "../db/dbhelpers"
+{ User }                               = require "../db/initdb"
+{ verifyUser }                         = require "../mail/verificationHandler"
+{ decryptid }                          = require "../encryption"
+{ Syscall, SacredArts }                = require "shisutemu-kooru"
 
 
 
@@ -22,7 +22,9 @@ syscallData =
       switch wth
         when "everything"
           sdes = Object.entries syscallData
-          await msg.channel.send sdes.map(([name, { description }]) -> "`#{name}` ─ #{description}").join("\n")
+          await msg.channel.send sdes.map(
+            ([name, { description }]) -> "`#{name}` ─ #{description}"
+          ).join "\n"
         else
           { description, args } = syscallData[wth]
           await msg.channel.send "`#{wth}` ─ #{description}\n```yaml\n# Arguments\n#{YAML.stringify args}\n```"
@@ -41,8 +43,16 @@ syscallData =
         return
         
       unless rtfm.dbGuild.rtfm
-        await sendError msg.channel, "Guild's metadata doesn't include an RTFM category"
-        return
+        await msg.channel.send "Creating an RTFM category..."
+        crtfm = await guild.channels.create "RTFM", {
+          type: "category"
+          topic: "READ THE FUCKING MANUAL"
+          reason: "Generating RTFM pages"
+          position: 0
+        }
+        rtfm.dbGuild.rtfm = crtfm.id
+        await rtfm.dbGuild.save()
+      
       await msg.channel.send "`Generating pages...`"
       await rtfm.generatePageMsgs()
       await msg.channel.send "`All pages generated.`"
@@ -168,7 +178,7 @@ syscallData =
       field:
         position: "end"
         type: "word"
-        enum: ["user"]
+        enum: ["user", "guild"]
       id:
         position: "start"
         type: "snowflake"
@@ -177,25 +187,47 @@ syscallData =
         type: "word"
       value:
         position: "start"
-        type: "word"
-    exec: ({ id, key, value }) -> (guild, msg) ->
-      member = await guild.members.fetch userId
-      dbUser = await getdbUser member.user
-      unless dbUser
-        await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
-        return
+        type: "string"
+    exec: ({ field, id, key, value }) -> (guild, msg) ->
+      switch field
+        when "user"
+          member = await guild.members.fetch id
+          dbUser = await getdbUser member.user, "silent"
+          unless dbUser
+            await sendError msg.channel, "User #{formatUser member.user} doesn't exist in the database :("
+            return
 
-      fields = ["email", "type", "code"]
-      ni = fields.indexOf name
-      if ni is -1
-        await sendError msg.channel, "Unknown or unauthorized user field `#{name}` :("
-        return
-      name = fields[ni]
+          fields = ["email", "type", "code"]
+          unless fields.includes key
+            await sendError msg.channel, "Unknown or unauthorized user field `#{key}` :("
+            return
 
-      await msg.channel.send "`Changing field '#{name}' of user '#{member.user.tag}' to '#{value}'...`"
-      dbUser[name] = value
-      await dbUser.save()
+          await msg.channel.send "`Changing field '#{key}' of user #{formatUser member.user} to '#{value}'...`"
+          dbUser[key] = value
+          await dbUser.save()
+
+        when "guild"
+          guild = RTFM.RTFMs[id].guild
+          dbGuild = await getdbGuild guild, "silent"
+          unless dbGuild
+            await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in our database :("
+            return
+          
+          fields = [
+            "rtfm", "description"
+            "unverified", "member", "professor"
+            "guest", "former"
+          ]
+          unless fields.includes key
+            await sendError msg.channel, "Unknown of unauthorized guild field `#{key}` :("
+            return
+
+          await msg.channel.send "`Changing field '#{key}' of guild #{formatGuild guild} to '#{value}'...`"
+          dbUser[key] = value
+          await dbUser.save()
+          
       await msg.channel.send "`Field changed.`"
+          
   
   "get-user":
     description: "Fetches user data from the user database."

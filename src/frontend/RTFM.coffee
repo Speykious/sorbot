@@ -138,7 +138,7 @@ class RTFM
       channeler pages, i + 1
 
     await channeler pages
-    savePageMsgs()
+    @savePageMsgs()
 
 
 module.exports = RTFM
