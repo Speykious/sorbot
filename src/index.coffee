@@ -32,7 +32,7 @@ syscall                       = require "./frontend/syscall"
 loading.step "Loading dbhelpers..."
 { getdbUser, getdbGuild }     = require "./db/dbhelpers"
 loading.step "Initializing database..."
-{ User }                      = require "./db/initdb"
+{ User, FederatedMetadata }   = require "./db/initdb"
 
 
 loading.step "Instantiating Discord client..."
