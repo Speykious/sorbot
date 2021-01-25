@@ -27,7 +27,7 @@ EmailCrisisHandler            = require "./mail/crisisHandler"
 
 loading.step "Loading frontend functions..."
 syscall                       = require "./frontend/syscall"
-{ mdir, getPage, sendDmPage } = require "./frontend/page-handler"
+{ mdir, getPage, sendDmPage } = require "./frontend/pageHandler"
 
 loading.step "Loading dbhelpers..."
 { getdbUser, getdbGuild }     = require "./db/dbhelpers"

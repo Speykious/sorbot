@@ -5,11 +5,11 @@ YAML                            = require "yaml"
 { getdbUser, getdbGuild }       = require "../db/dbhelpers"
 { User }                        = require "../db/initdb"
 { verifyUser }                  = require "../mail/verificationHandler"
-{ getPage, clearPageCache }     = require "./page-handler"
+{ getPage, clearPageCache }     = require "./pageHandler"
 { decryptid }                   = require "../encryption"
 { Syscall, SacredArts }         = require "shisutemu-kooru"
 
-
+# Class for an RTFM page.
 class RTFM
   # Directory where the page files are stored
   @dir: "resources/pages/"
@@ -30,12 +30,14 @@ class RTFM
     "page8_qsn"
     "page9_qqs"
   ]
+  # Cache of page objects
   @pageCache: {}
-  # Collection of all RTFM instances to be able to save RTFM page messages for each guild
-  @RTFMs: []
   
   constructor: (@guild) ->
+    # Caching the RTFM channels
     @channelCache = {}
+    @pagemsgids = []
+    @pagemsgs = []
     
     RTFM.RTFMs.push @
 
@@ -46,8 +48,16 @@ class RTFM
       @pageCache[pageName].embed.footer = FOOTER
     return @pageCache[pageName]
 
-  clearPageCache: -> @pageCache = {}
+  @clearPageCache: -> @pageCache = {}
+
+  @updatePageCache: ->
+    @clearPageCache()
+    @names.map @getPage
   
+  saveMenus = ->
+    # These lines have to be changed.
+    @pagemsgids = @pagemsgs.map (pagemsg) -> ({ ch: pagemsg.channel.id, msg: pagemsg.id })
+    #writef "resources/menumsgs.yaml", YAML.stringify menumsgids
   
 
 

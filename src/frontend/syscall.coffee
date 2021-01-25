@@ -5,15 +5,15 @@ YAML                            = require "yaml"
 { getdbUser, getdbGuild }       = require "../db/dbhelpers"
 { User }                        = require "../db/initdb"
 { verifyUser }                  = require "../mail/verificationHandler"
-{ getPage, clearPageCache }     = require "./page-handler"
+{ getPage, clearPageCache }     = require "./pageHandler"
 { decryptid }                   = require "../encryption"
 { Syscall, SacredArts }         = require "shisutemu-kooru"
 
-
+###
 updateMenus = ->
   clearPageCache()
   menus = pagenames.map getPage
-
+###
 saveMenus = ->
   menumsgids = menumsgs.map (menumsg) -> ({ ch: menumsg.channel.id, msg: menumsg.id })
   writef "resources/menumsgs.yaml", YAML.stringify menumsgids

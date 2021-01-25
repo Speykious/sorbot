@@ -30,18 +30,6 @@ The page state contains:
 { relative, delay, readf, writef, forEach } = require "../helpers"
 YAML                                        = require "yaml"
 
-mdir = "resources/pages/"
-
-
-clearPageCache = -> pageCache = {}
-
-# Gets the page object from .embed.yaml files
-getPage = (mpath) ->
-  unless mpath of pageCache
-    pageCache[mpath] = YAML.parse readf mdir + mpath + ".embed.yaml"
-    pageCache[mpath].embed.footer = FOOTER
-  return pageCache[mpath]
-
 # Sends the page as a dm message.
 # - page: page object typed according to the embed.schema.json yaml validation file.
 # - user: Discord.User
@@ -70,14 +58,12 @@ sendDmPage = (page, user, msgid) ->
     if /Cannot send messages to this user/.test err
       logf LOG.MESSAGES, (formatCrisis "Message sending",
         "Cannot send DM page to user #{formatUser user}, they probably deactivated their private messages")
-      return undefined
-    logf LOG.MESSAGES, (formatCrisis "Discord API", err)
+    else
+      logf LOG.MESSAGES, (formatCrisis "Discord API", err)
+      
     return undefined
 
 
 module.exports = {
-  mdir
-  clearPageCache
-  getPage
   sendDmPage
 }
