@@ -38,6 +38,9 @@ class RTFM
     @channelCache = {}
     @pagemsgids = []
     @pagemsgs = []
+    @dbGuild = getdbGuild @guild
+    unless @dbGuild
+      throw new Error "Trying to construct an RTFM without the guild being in the database"
     
     RTFM.RTFMs.push @
 
@@ -54,11 +57,76 @@ class RTFM
     @clearPageCache()
     @names.map @getPage
   
-  saveMenus = ->
-    # These lines have to be changed.
-    @pagemsgids = @pagemsgs.map (pagemsg) -> ({ ch: pagemsg.channel.id, msg: pagemsg.id })
-    #writef "resources/menumsgs.yaml", YAML.stringify menumsgids
   
+  
+  # Loads the IDs of the page messages and channels from the database
+  loadPageMsgs: ->
+    @pagemsgids = @dbGuild.rtfms.split "\n"
+      .map (line) -> line.split "|"
+      .map ([chid, msgids]) ->
+        msgids.split " "
+        .map (msgid) -> ({ chid, msgid })
+
+
+  
+  # Saves the IDs of the page messages and channels into the database
+  savePageMsgs: ->
+    rtfms = {}
+    for pagemsg in @pagemsgs
+      chid = pagemsg.channel.id
+      unless rtfms[chid] then rtfms[chid] = []
+      rtfms[chid].push pagemsg.id
+
+    @dbGuild.rtfms = Object.entries rtfms
+      .map ([chid, msgids]) -> "#{chid}|#{msgids.join " "}"
+      .join "\n"
+    
+    console.log @dbGuild.rtfms
+    @dbGuild.save()
+  
+  
+  
+  # Generates the embed pages in their corresponding threads
+  generatePageMsgs: ->
+    guild = @guild
+    categoryId = @dbGuild.rtfm
+    channelCache = @channelCache
+    pages = Object.values RTFM.pageCache
+    pagemsgids = @pagemsgids
+    pagemsgs = @pagemsgs
+
+    channeler = (pages, i = 0) ->
+      if i >= pages.length then return
+
+      page = pages[i]
+      if pagemsgids[i]
+        unless channelCache[page.thread.name]
+          channelCache[page.thread.name] = guild.channels.resolve pagemsgids[i].chid
+        unless pagemsgs[i]
+          pagemsgs[i] = await channelCache[page.thread.name].messages.fetch pagemsgids[i].msgid
+      
+      unless channelCache[page.thread.name]
+        channelCache[page.thread.name] =
+          await guild.channels.create page.thread.name, {
+            topic: page.thread.topic
+            parent: categoryId
+          }
+      
+      # And here we witness the weirdest condition logic
+      # ever seen in the entire history of programming
+      # in its natural habitat
+      unless pagemsgs[i]
+        pagemsgs[i] = await channelCache[page.thread.name].send { embed: page.embed }
+      else if pagemsgs[i].client.user.id is pagemsgs[i].author.id
+        await pagemsgs[i].edit { embed: page.embed }
+      else
+        await pagemsgs[i].delete()
+        pagemsgs[i] = await channelCache[page.thread.name].send { embed: page.embed }
+
+      channeler pages, i + 1
+
+    await channeler pages
+    savePageMsgs()
 
 
 module.exports = RTFM

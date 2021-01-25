@@ -9,51 +9,7 @@ YAML                            = require "yaml"
 { decryptid }                   = require "../encryption"
 { Syscall, SacredArts }         = require "shisutemu-kooru"
 
-###
-updateMenus = ->
-  clearPageCache()
-  menus = pagenames.map getPage
-###
-saveMenus = ->
-  menumsgids = menumsgs.map (menumsg) -> ({ ch: menumsg.channel.id, msg: menumsg.id })
-  writef "resources/menumsgs.yaml", YAML.stringify menumsgids
 
-# Generates the embed pages in their corresponding threads
-generatePages = (menus, guild, parentId) ->
-  channeler = (menus, i = 0) ->
-    if i >= menus.length then return
-
-    menu = menus[i]
-    if menumsgids[i]
-      unless channelCache[menu.thread.name]
-        channelCache[menu.thread.name] = guild.channels.resolve menumsgids[i].ch
-      unless menumsgs[i]
-        menumsgs[i] = await channelCache[menu.thread.name].messages.fetch menumsgids[i].msg
-    
-    unless channelCache[menu.thread.name]
-      channelCache[menu.thread.name] =
-        await guild.channels.create menu.thread.name, {
-          topic: menu.thread.topic
-          parent: parentId
-        }
-    
-    # And here we witness the weirdest condition logic
-    # ever seen in the entire history of programming
-    # in its natural habitat
-    unless menumsgs[i]
-      menumsgs[i] = await channelCache[menu.thread.name].send { embed: menu.embed }
-    else if menumsgs[i].client.user.id is menumsgs[i].author.id
-      await menumsgs[i].edit { embed: menu.embed }
-    else
-      await menumsgs[i].delete()
-      menumsgs[i] = await channelCache[menu.thread.name].send { embed: menu.embed }
-
-    channeler menus, i + 1
-
-  await channeler menus
-  saveMenus()
-
-updateMenus()
 
 syscallData =
   help:
