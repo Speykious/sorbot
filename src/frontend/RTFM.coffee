@@ -52,21 +52,22 @@ class RTFM
 
   # Gets the page object from .embed.yaml files
   @getPage: (pageName) ->
-    unless pageName of @pageCache
-      @pageCache[pageName] = YAML.parse readf mdir + pageName + ".embed.yaml"
-      @pageCache[pageName].embed.footer = FOOTER
-    return @pageCache[pageName]
+    unless pageName of RTFM.pageCache
+      RTFM.pageCache[pageName] = YAML.parse readf "#{RTFM.dir}#{pageName}.embed.yaml"
+      RTFM.pageCache[pageName].embed.footer = FOOTER
+    return RTFM.pageCache[pageName]
 
 
 
   # Clears the page cache, aga
-  @clearPageCache: -> @pageCache = {}
+  @clearPageCache: -> RTFM.pageCache = {}
+
 
 
   # Updates the page cache: clear, then get each page by reading the YAML files
   @updatePageCache: ->
-    @clearPageCache()
-    @names.map @getPage
+    RTFM.clearPageCache()
+    RTFM.names.map RTFM.getPage
   
   
 
