@@ -10,9 +10,9 @@ CROSSMARK = "✗"
 TESTERS = [
   "358960666238910465" # Speykious
   "654002031538864151" # Spey's Role Manager
-# "128848040889942016" # chilledfrogs
+  "128848040889942016" # chilledfrogs
   "419624396710477834" # Toast
-  "194549333226422272" # Théo B.
+  "690223603001983037" # Ereshkigall
 ]
 
 DOMAINS = YAML.parse readf "resources/domains.yaml"
