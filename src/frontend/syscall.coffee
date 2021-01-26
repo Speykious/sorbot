@@ -119,22 +119,22 @@ syscallData =
       for pagemsg in rtfm.pagemsgs
         orig = pagemsg.embeds[0]
         RTFM.names.map (pagename, i) ->
-          pagemsg = rtfm.pagemsgs[i]
+          pageref = rtfm.pagemsgs[i]
           replaceStuff = (o, value) ->
             o[value] = o[value]
               .replace "{#{pagename}}",
                 "https://discordapp.com/channels/#{
-                  pagemsg.guild.id}/#{
-                    pagemsg.channel.id}/#{
-                      pagemsg.id}"
+                  pageref.guild.id}/#{
+                    pageref.channel.id}/#{
+                      pageref.id}"
               .replace "{server}", guild.name
+              .replace "{description}", rtfm.dbGuild.description
           
           replaceStuff orig, "description"
           unless orig.fields then return
           orig.fields.map (_, i) -> replaceStuff orig.fields[i], "value"
         
-        console.log "pagemsg:", pagemsg
-        await pagemsg.edit { embed: orig }
+        await pagemsg.edit null, orig
 
       await msg.channel.send "`Synchronized all pages.`"
 
