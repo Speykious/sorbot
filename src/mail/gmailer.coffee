@@ -17,7 +17,7 @@ class GMailer
   PS: type GMailScopes = "labels" | "send" | "readonly" | "compose" | "insert"
                        | "modify" | "metadata" | "settings.basic" | "settings.sharing"
   ###
-  constructor: (scopes, credfile) ->
+  constructor: (scopes, credfile, @loadingBar) ->
     @scopes = scopes.map (scope) -> "https://www.googleapis.com/auth/gmail.#{scope}"
     @authorized = no # Tells us if the GMailer has been authorized to interact with gmail
 
@@ -79,6 +79,7 @@ class GMailer
       scope: @scopes
     }
     me = @
+    me.loadingBar.stopDisplaying()
     console.log (blue "Authorize this app by visiting this url:"), authUrl
     rl = readline.createInterface {
       input: process.stdin,
@@ -100,6 +101,7 @@ class GMailer
           try
             writef tokenfile, (YAML.stringify token)
             console.log (bold "Token stored to"), (underline relative tokenfile)
+            me.loadingBar.startDisplaying()
             logf LOG.INIT, "**Token stored to `#{relative tokenfile}`**"
             resolve token
           catch err

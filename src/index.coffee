@@ -44,7 +44,7 @@ bot = new Client {
 }
 
 loading.step "Instantiating new GMailer and EmailCrisisHandler..."
-gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.yaml"
+gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.yaml", loading
 
 # - slowT          {number}  - period for the slow read mode, in seconds
 # - fastT          {number}  - period for the fast read mode, in seconds
@@ -125,12 +125,12 @@ bot.on "ready", ->
       footer: FOOTER
   }
   
-  loading.step "Authorizing the gmailer..."
-  await gmailer.authorize "token.yaml"
-  
   loading.step "Fetching main guild..."
   GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
   GUILDS.LOGS = await bot.guilds.fetch SERVERS.logs.id
+  
+  loading.step "Authorizing the gmailer..."
+  await gmailer.authorize "token.yaml"
   
   loading.step "Bot started successfully."
   setTimeout ( ->
