@@ -37,11 +37,8 @@ syscallData =
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (guild, msg) ->
-      rtfm = RTFM.RTFMs[guild.id]
-      unless rtfm
-        await sendError msg.channel, "Error: There is nothing to generate :("
-        return
-        
+      rtfm = await RTFM.fetch guild.client, guild.id
+      console.log rtfm
       unless rtfm.dbGuild.rtfm
         await msg.channel.send "Creating an RTFM category..."
         crtfm = await guild.channels.create "RTFM", {
@@ -65,10 +62,7 @@ syscallData =
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (guild, msg) ->
-      rtfm = RTFM.RTFMs[guild.id]
-      unless rtfm
-        await sendError msg.channel, "Error: There is nothing to yeet :("
-        return
+      rtfm = await RTFM.fetch guild.client, guild.id
       
       await msg.channel.send "`Yeeting all pages...`"
       # Before yeeting the channels, we need to remove the RTFM instance's pagemsgs
@@ -78,7 +72,7 @@ syscallData =
           if pagemsg.channel.id isnt ch.id
             return true
           else
-            delete pagemsgids[i]
+            delete rtfm.pagemsgids[i]
             return false
         await ch.delete()
         delete rtfm.channelCache[k]
@@ -116,9 +110,9 @@ syscallData =
         return
       
       await msg.channel.send "`Synchronizing all pages (shape: #{shape})...`"
-      rtfm.pagemsgs.map (menumsg) ->
-        orig = menumsg.embeds[0]
-        pagenames.map (pagename, i) ->
+      rtfm.pagemsgs.map (pagemsg) ->
+        orig = pagemsg.embeds[0]
+        rtfm.names.map (pagename, i) ->
           pagemsg = rtfm.pagemsgs[i]
           replaceStuff = (o, value) ->
             o[value] = o[value]
@@ -132,7 +126,7 @@ syscallData =
           replaceStuff orig, "description"
           unless orig.fields then return
           orig.fields.map (_, i) -> replaceStuff orig.fields[i], "value"
-        menumsg.edit { embed: orig }
+        pagemsg.edit { embed: orig }
 
       await msg.channel.send "`Synchronized all pages.`"
 
@@ -202,7 +196,7 @@ syscallData =
             await sendError msg.channel, "Unknown or unauthorized user field `#{key}` :("
             return
 
-          await msg.channel.send "`Changing field '#{key}' of user #{formatUser member.user} to '#{value}'...`"
+          await msg.channel.send "Changing field `#{key}` of user #{formatUser member.user} to `#{value}`..."
           dbUser[key] = value
           await dbUser.save()
 
@@ -226,9 +220,9 @@ syscallData =
             await sendError msg.channel, "Unknown of unauthorized guild field `#{key}` :("
             return
 
-          await msg.channel.send "`Changing field '#{key}' of guild #{formatGuild guild} to '#{value}'...`"
-          dbUser[key] = value
-          await dbUser.save()
+          await msg.channel.send "Changing field `#{key}` of guild #{formatGuild guild} to `#{value}`..."
+          dbGuild[key] = value
+          await dbGuild.save()
           
       await msg.channel.send "`Field changed.`"
           

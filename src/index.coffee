@@ -28,6 +28,7 @@ EmailCrisisHandler            = require "./mail/crisisHandler"
 loading.step "Loading frontend functions..."
 syscall                       = require "./frontend/syscall"
 { mdir, getPage, sendDmPage } = require "./frontend/pageHandler"
+RTFM                          = require "./frontend/RTFM"
 
 loading.step "Loading dbhelpers..."
 { getdbUser, getdbGuild }     = require "./db/dbhelpers"
@@ -167,6 +168,7 @@ touchMember = (member) ->
 
 bot.on "guildCreate", (guild) ->
   dbGuild = await FederatedMetadata.create { id: guild.id }
+  new RTFM guild
   logf LOG.DATABASE, "New guild #{formatGuild guild} has been added to the database"
 
 bot.on "guildDelete", (guild) ->

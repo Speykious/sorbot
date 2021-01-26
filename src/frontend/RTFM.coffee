@@ -42,11 +42,20 @@ class RTFM
     @channelCache = {}
     @pagemsgids = []
     @pagemsgs = []
-    @dbGuild = getdbGuild @guild
-    unless @dbGuild
-      throw new Error "Trying to construct an RTFM without the guild being in the database"
-    
+    @dbGuild = null
+
     RTFM.RTFMs[@guild.id] = @
+
+
+
+  # Fetches an RTFM instance
+  @fetch: (bot, id) ->
+    rtfm = RTFM.RTFMs[id]
+    unless rtfm
+      rtfm = new RTFM (await bot.guilds.fetch id)
+      await rtfm.cachedbGuild()
+      rtfm.loadPageMsgs()
+    return rtfm
 
 
 
@@ -71,13 +80,20 @@ class RTFM
   
   
 
+  # Caches the guild database line
+  cachedbGuild: -> @dbGuild = await getdbGuild @guild
+
+
+
   # Loads the IDs of the page messages and channels from the database
   loadPageMsgs: ->
+    unless @dbGuild.rtfms then return
     @pagemsgids = @dbGuild.rtfms.split "\n"
       .map (line) -> line.split "|"
       .map ([chid, msgids]) ->
         msgids.split " "
         .map (msgid) -> ({ chid, msgid })
+      .flat()
 
 
   
@@ -93,7 +109,7 @@ class RTFM
       .map ([chid, msgids]) -> "#{chid}|#{msgids.join " "}"
       .join "\n"
     
-    console.log @dbGuild.rtfms
+    if @dbGuild.rtfms.length is 0 then @dbGuild.rtfms = null
     @dbGuild.save()
   
   
@@ -141,4 +157,5 @@ class RTFM
     @savePageMsgs()
 
 
+RTFM.updatePageCache()
 module.exports = RTFM
