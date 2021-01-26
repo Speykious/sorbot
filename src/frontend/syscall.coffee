@@ -28,6 +28,15 @@ syscallData =
         else
           { description, args } = syscallData[wth]
           await msg.channel.send "`#{wth}` ─ #{description}\n```yaml\n# Arguments\n#{YAML.stringify args}\n```"
+  
+  ping:
+    description: "Ping."
+    args: {}
+    exec: (_) -> (guild, msg) ->
+      embed = { description: "Ping." }
+      m = await msg.channel.send { embed }
+      embed.description = "Pong."
+      await m.edit { embed }
 
   generate:
     description: "Generates RTFM pages."
@@ -38,7 +47,7 @@ syscallData =
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (guild, msg) ->
       rtfm = await RTFM.fetch guild.client, guild.id
-      console.log rtfm
+      
       unless rtfm.dbGuild.rtfm
         await msg.channel.send "Creating an RTFM category..."
         crtfm = await guild.channels.create "RTFM", {
@@ -104,15 +113,12 @@ syscallData =
         type: "word"
         enum: ["link"]
     exec: ({ element, shape }) -> (guild, msg) ->
-      rtfm = RTFM.RTFMs[guild.id]
-      unless rtfm
-        await sendError msg.channel, "Error: There is nothing to synchronize :("
-        return
+      rtfm = await RTFM.fetch guild.client, guild.id
       
       await msg.channel.send "`Synchronizing all pages (shape: #{shape})...`"
-      rtfm.pagemsgs.map (pagemsg) ->
+      for pagemsg in rtfm.pagemsgs
         orig = pagemsg.embeds[0]
-        rtfm.names.map (pagename, i) ->
+        RTFM.names.map (pagename, i) ->
           pagemsg = rtfm.pagemsgs[i]
           replaceStuff = (o, value) ->
             o[value] = o[value]
@@ -126,7 +132,9 @@ syscallData =
           replaceStuff orig, "description"
           unless orig.fields then return
           orig.fields.map (_, i) -> replaceStuff orig.fields[i], "value"
-        pagemsg.edit { embed: orig }
+        
+        console.log "pagemsg:", pagemsg
+        await pagemsg.edit { embed: orig }
 
       await msg.channel.send "`Synchronized all pages.`"
 
