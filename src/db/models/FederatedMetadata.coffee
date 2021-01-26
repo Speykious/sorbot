@@ -14,14 +14,6 @@ module.exports = (connection) ->
       type: THICCSTRING
     description:  # Description of the server for the 'accueil' page
       type: THICCSTRING
-    unverified:   # ID of the unverified role
-      type: THICCINT
-    member:       # ID of the verified role
-      type: THICCINT
-    professor:    # ID of the professor role
-      type: THICCINT
-    guest:        # ID of the guest role
-      type: THICCINT
-    former:       # ID of the former role
-      type: THICCINT
+    roles:        # Lines of roleid:roletag associations
+      type: THICCSTRING
   }

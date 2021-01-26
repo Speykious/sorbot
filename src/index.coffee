@@ -157,7 +157,7 @@ touchMember = (member) ->
   unless pagemsg then return null # no need to send an error msg
   dbUser = await User.create {
     id: member.user.id
-    type: 0
+    roletags: []
     servers: [member.guild.id]
   }
 
@@ -225,13 +225,10 @@ bot.on "message", (msg) ->
     syscall null, msg
     return
   
-  # Note: this member comes exclusively from the main guild
-  member = await GUILDS.MAIN.members.fetch msg.author
-  unless member
-    return logf LOG.MODERATION, "Error: User #{formatUser msg.author} is not on the main server"
-  
+  # Note: we'll have to fetch every federated server
+  # to see if the member exists in our discord network
   dbUser = await getdbUser msg.author
-  unless dbUser then dbUser = await touchMember member
+  unless dbUser then return
 
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably

@@ -9,8 +9,8 @@ module.exports = (connection) ->
       type: STRING 44
       primaryKey: yes
       set: (value) -> @setDataValue "id", encryptid value
-    type:
-      type: SMALLINT
+    roletags:
+      type: ARRAY STRING 16
     reactor:
       type: BIGINT
     email:
