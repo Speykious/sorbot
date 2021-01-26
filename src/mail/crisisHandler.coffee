@@ -48,7 +48,7 @@ class EmailCrisisHandler
     @maxThreadsFast = options.maxThreadsFast or options.maxThreads or 5
     @requestFast = off
     
-    @guild   = options.guild
+    @bot   = options.bot
     @gmailer = options.gmailer
 
     @embedUEC = options.embedUEC
@@ -92,9 +92,9 @@ class EmailCrisisHandler
       logf LOG.DATABASE, (formatCrisis "Query", "User for email `#{th[0].to}` has not been found")
       return
     
-    member = await @guild.members.fetch decryptid dbUser.id
-    logf LOG.MESSAGES, "Sending error report to user #{formatUser member.user} (__'#{embed.title}'__)"
-    await member.user.send { embed }
+    user = await @bot.users.fetch decryptid dbUser.id
+    logf LOG.MESSAGES, "Sending error report to user #{formatUser user} (__'#{embed.title}'__)"
+    await user.send { embed }
   
   handleMV: (th) ->
     userEmail = th[0].from

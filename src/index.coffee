@@ -56,6 +56,7 @@ gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.ya
 # - embedUEC       {Embed}   - The embed error report for Unread Existential Crisis
 # - embedUSC       {Embed}   - The embed error report for Unread Sorbonne Crisis
 emailCH = new EmailCrisisHandler {
+  bot
   gmailer
 
   # About those embeds, I'm probably gonna isolate
@@ -125,25 +126,23 @@ bot.on "ready", ->
       footer: FOOTER
   }
   
+  ###
   loading.step "Fetching main guild..."
   GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
   GUILDS.LOGS = await bot.guilds.fetch SERVERS.logs.id
+  ###
   
   loading.step "Authorizing the gmailer..."
   await gmailer.authorize "token.yaml"
   
   loading.step "Bot started successfully."
-  setTimeout ( ->
-    emailCH.guild = GUILDS.MAIN
-    emailCH.gmailer = gmailer
-    emailCH.activate()
-  ), 100
+  setTimeout (-> emailCH.activate()), 100
 
 # Fetches a member and increments its servers, or creates a new one from the database
 touchMember = (member) ->
   logf LOG.MODERATION, "User #{formatUser member.user} joined guild #{formatGuild member.guild}"
   # We have to abstract the roles to add, also based on whether the member is verified or not
-  await member.roles.add SERVERS.main.roles.non_verifie
+  #await member.roles.add SERVERS.main.roles.non_verifie
   
   dbUser = await getdbUser member.user, "silent"
   if dbUser
@@ -215,11 +214,6 @@ bot.on "message", (msg) ->
   # I don't care about myself lol
   if msg.author.bot then return
   
-  # Note: this member comes exclusively from the main guild
-  member = await GUILDS.MAIN.members.fetch msg.author
-  unless member
-    return logf LOG.MODERATION, "Error: User #{formatUser msg.author} is not on the main server"
-  
   # We STILL don't care about messages that don't come from dms
   # Although we will care a bit later when introducing admin commands
   if msg.channel.type isnt "dm"
@@ -229,6 +223,11 @@ bot.on "message", (msg) ->
     
     syscall null, msg
     return
+  
+  # Note: this member comes exclusively from the main guild
+  member = await GUILDS.MAIN.members.fetch msg.author
+  unless member
+    return logf LOG.MODERATION, "Error: User #{formatUser msg.author} is not on the main server"
   
   dbUser = await getdbUser msg.author
   unless dbUser then dbUser = await touchMember member
