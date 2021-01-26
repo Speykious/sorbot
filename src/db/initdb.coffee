@@ -25,7 +25,10 @@ FederatedMetadata = genFederatedMetadata connection
 loading.step "Initializing database - Syncing connection..."
 connection.sync()
   .then -> loading.step "Dank database connection established"
-  .catch (err) -> console.log "\x1b[1m\x1b[31m#{CROSSMARK}\x1b[22m Haha yesn't:\x1b[0m #{err}"
+  .catch (err) ->
+    loading.stopDisplaying()
+    console.log "\x1b[1m\x1b[31m#{CROSSMARK}\x1b[22m Haha yesn't:\x1b[0m #{err}"
+    process.exit 1
 
 
 module.exports = {
