@@ -21,13 +21,15 @@ class LoadingBar
     @anc = "\x1b[39m"
 
     @interval = undefined
+    @displaying = no
     @msg = "loading..."
   
   inc: (n = 1) -> @i += n
   step: (msg, n = 1) ->
     @msg = msg
     @inc n
-  
+    @display()
+
   progress: ->
     p = Math.min 1, @i / @max
     full = Math.floor @cwidth * p
@@ -40,12 +42,16 @@ class LoadingBar
     tr += "%" + c + " - #{@msg}"
     return tr
   
-  clearInterval: -> if @interval then clearInterval @interval
-  startInterval: ->
-    @interval = setInterval (->
-      process.stdout.write "\x1b[2K\r#{@progress()}"
-      if @i >= @max then @clearInterval()
-    ).bind(@), 50
+  display: ->
+    if @displaying then process.stdout.write "\x1b[1A\x1b[2K\r#{@progress()}\n"
+  
+  startDisplaying: ->
+    process.stdout.write "\n"
+    @displaying = yes
+  stopDisplaying: ->
+    @displaying = no
+
+
 
 loading = new LoadingBar 17, "║║", 25, 0x34d9ff
 
