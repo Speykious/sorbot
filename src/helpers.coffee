@@ -15,8 +15,7 @@ writef = (path, data) -> writeFileSync (relative path), data, "utf8"
 
 removeElement = (arr, element) ->
   i = arr.indexOf element
-  if i is -1 then return arr
-  arr.splice i, 1
+  if i isnt -1 then arr.splice i, 1
   return arr
 
 module.exports = {
