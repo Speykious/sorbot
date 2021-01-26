@@ -1,6 +1,6 @@
 loading = require "./loading"
 loading.step "Loading dotenv-flow...", 0
-loading.startInterval()
+loading.startDisplaying()
 
 require "dotenv-flow"
 .config()
@@ -134,7 +134,6 @@ bot.on "ready", ->
   
   loading.step "Bot started successfully."
   setTimeout ( ->
-    console.log ""
     emailCH.guild = GUILDS.MAIN
     emailCH.gmailer = gmailer
     emailCH.activate()
