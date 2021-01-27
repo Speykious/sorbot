@@ -77,13 +77,11 @@ class EmailCrisisHandler
     { embed } = g_embed th
     
     try
-      # Since emails are necessarily unique, that '[0]' hardcode is safe
-      dbUser = (await User.findAll {
+      dbUser = await User.findOne {
         where:
           email: th[0].to
         rejectOnEmpty: yes
-      })[0]
-      
+      }
     catch err
       unless err instanceof EmptyResultError
         logf LOG.WTF, "What the fuck just happened? <_<\n#{colmat err}"
@@ -115,10 +113,10 @@ class EmailCrisisHandler
       return
     
     user = await @bot.users.fetch decryptid dbUser.id
-    unless th[0].subject.includes user.tag
+    unless user.tag in th[0].subject
       logf LOG.EMAIL, (formatCrisis "Email Subject", "User #{formatUser user} didn't include their discord tag in the subject of their email")
-      # Log something in Discord here to notify the admins
       return
+    
     logf LOG.MESSAGES, "'Manually' verifying user #{formatUser user}"
     # Noice little trick: do as if the user had entered the confirmation code :)
     handleVerification @gmailer, @, dbUser, user, dbUser.code
