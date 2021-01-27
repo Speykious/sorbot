@@ -1,18 +1,20 @@
 { GUILDS, SERVERS, FOOTER, USER_TYPES } = require "../constants"
 { logf, LOG, formatUser }               = require "../logging"
+{ updateRoles }                         = require "../roles"
 sendReactor                             = require "../frontend/sendReactor"
 
 # dbUser {User}        - The user to verify in the database
 # member {GuildMember} - The member to verify
 # verifier {string}    - The discord tag of the one who verified the member
-verifyUser = (dbUser, member, verifier) ->
+verifyUser = (dbUser, bot, user, verifier) ->
   if dbUser.reactor
-    dmChannel = await member.user.createDM()
+    dmChannel = await user.createDM()
     dmChannel.messages.delete dbUser.reactor
     dbUser.reactor = null
   dbUser.code = null
   dbUser.save()
-  
+
+  ###
   smr = SERVERS.main.roles
   await member.roles.add [smr.membre]
   await member.roles.remove [smr.non_verifie]
@@ -21,12 +23,16 @@ verifyUser = (dbUser, member, verifier) ->
   if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
   if ut & USER_TYPES.GUEST     then await member.roles.add smr.squatteur
   if ut & USER_TYPES.FORMER    then await member.roles.add smr.ancien
-  
-  unless verifier then verifier = member.client.user.tag
-  adverb = if verifier is member.client.user.tag
+  ###
+
+  # Update roles in every guild the user is in
+  await updateRoles bot, dbUser
+
+  unless verifier then verifier = bot.user.tag
+  adverb = if verifier is bot.user.tag
   then "automatically" else "manually"
   
-  await member.user.send {
+  await user.send {
     embed:
       title: "Vous êtes vérifié.e"
       description:
@@ -42,14 +48,14 @@ verifyUser = (dbUser, member, verifier) ->
       footer: FOOTER
   }
   
-  logf LOG.MODERATION, "User #{formatUser member.user} has been #{adverb} verified by #{verifier}"
+  logf LOG.MODERATION, "User #{formatUser user} has been #{adverb} verified by #{verifier}"
 
 
 
 handleVerification = (gmailer, emailCH, dbUser, user, content) ->
   # We don't handle verification for users with the guest flag
   # as they are already verified
-  if dbUser.type & (USER_TYPES.GUEST | USER_TYPES.FORMER) then return no
+  if dbUser.roletags.includes "guest" then return no
   
   # Remember from SorBOT 2:
   # - If no email, we try to register the email
@@ -58,10 +64,9 @@ handleVerification = (gmailer, emailCH, dbUser, user, content) ->
   if dbUser.email is null # Email verification stuff
     await gmailer.verifyEmail dbUser, user, content, emailCH
   else if dbUser.code # Code verification stuff
-    if content == dbUser.code
+    if content is dbUser.code
       # `GUILDS.MAIN.member` "Oh waow didn't know I could do that"
-      member = await GUILDS.MAIN.members.fetch user
-      await verifyUser dbUser, member
+      await verifyUser dbUser, emailCH.bot, user
     else
       if dbUser.reactor
         await user.send {

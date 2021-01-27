@@ -20,7 +20,17 @@ getdbGuild = (guild, mode) ->
     unless mode is "silent" then logf LOG.DATABASE, (formatCrisis "Existential", err)
     return undefined
 
+parseAssocs = (lines) ->
+  lines.split "\n"
+  .map (line) -> line.split ":"
+
+stringifyAssocs = (assocs) ->
+  assocs.map (assoc) -> assoc.join ":"
+  .join "\n"
+
 module.exports = {
   getdbUser
   getdbGuild
+  parseAssocs
+  stringifyAssocs
 }

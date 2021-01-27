@@ -20,6 +20,7 @@ loading.step "Loading generic utils..."
 { CROSSMARK, SERVERS, BYEBYES,
   GUILDS, TESTERS, FOOTER }   = require "./constants"
 { encryptid, decryptid }      = require "./encryption"
+{ updateMemberRoles }         = require "./roles"
 
 loading.step "Loading gmailer and email crisis handler..."
 GMailer                       = require "./mail/gmailer"
@@ -32,7 +33,8 @@ syscall                       = require "./frontend/syscall"
 RTFM                          = require "./frontend/RTFM"
 
 loading.step "Loading dbhelpers..."
-{ getdbUser, getdbGuild }     = require "./db/dbhelpers"
+{ getdbUser, getdbGuild, parseAssocs,
+  stringifyAssocs }           = require "./db/dbhelpers"
 loading.step "Initializing database..."
 { User, FederatedMetadata }   = require "./db/initdb"
 
@@ -143,25 +145,27 @@ bot.on "ready", ->
 touchMember = (member) ->
   logf LOG.MODERATION, "User #{formatUser member.user} joined guild #{formatGuild member.guild}"
   # We have to abstract the roles to add, also based on whether the member is verified or not
-  #await member.roles.add SERVERS.main.roles.non_verifie
   
   dbUser = await getdbUser member.user, "silent"
   if dbUser
     # Add the current server to the member's database field
-    dbUser.servers.push member.guild.id
-    await dbUser.save()
-    return dbUser
-  
-  page = getPage "welcomedm"
-  pagemsg = await sendDmPage page, member.user
-  unless pagemsg then return null # no need to send an error msg
-  dbUser = await User.create {
-    id: member.user.id
-    roletags: []
-    servers: [member.guild.id]
-  }
+    if dbUser.servers.includes member.guild.id
+      dbUser.servers.push member.guild.id
+      await dbUser.save()
+  else
+    page = getPage "welcomedm"
+    pagemsg = await sendDmPage page, member.user
+    unless pagemsg then return null # no need to send an error msg
+    dbUser = await User.create {
+      id: member.user.id
+      roletags: ["unverified"]
+      servers: [member.guild.id]
+    }
 
-  logf LOG.DATABASE, "New user #{formatUser member.user} has been added to the database"
+    logf LOG.DATABASE, "New user #{formatUser member.user} has been added to the database"
+
+  # Add available roles from the guild
+  updateMemberRoles member, dbUser
   
   return dbUser
 

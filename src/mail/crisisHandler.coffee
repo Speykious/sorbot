@@ -114,14 +114,14 @@ class EmailCrisisHandler
       logf LOG.DATABASE, (formatCrisis "M-Query", "User for email `#{userEmail}` has not been found")
       return
     
-    member = await @guild.members.fetch decryptid dbUser.id
-    unless th[0].subject.includes member.user.tag
-      logf LOG.EMAIL, (formatCrisis "Email Subject", "User #{formatUser member.user} didn't include their discord tag in the subject of their email")
+    user = await @bot.users.fetch decryptid dbUser.id
+    unless th[0].subject.includes user.tag
+      logf LOG.EMAIL, (formatCrisis "Email Subject", "User #{formatUser user} didn't include their discord tag in the subject of their email")
       # Log something in Discord here to notify the admins
       return
-    logf LOG.MESSAGES, "'Manually' verifying user #{formatUser member.user}"
+    logf LOG.MESSAGES, "'Manually' verifying user #{formatUser user}"
     # Noice little trick: do as if the user had entered the confirmation code :)
-    handleVerification @gmailer, @, dbUser, member.user, dbUser.code
+    handleVerification @gmailer, @, dbUser, user, dbUser.code
   
   proc: (maxThreads) ->
     # Existential Crisis
