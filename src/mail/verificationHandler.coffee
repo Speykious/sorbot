@@ -1,5 +1,6 @@
 { GUILDS, SERVERS, FOOTER, USER_TYPES } = require "../constants"
 { logf, LOG, formatUser }               = require "../logging"
+{ addRoletag, removeRoletag }           = require "../db/dbhelpers"
 { updateRoles }                         = require "../roles"
 sendReactor                             = require "../frontend/sendReactor"
 
@@ -12,18 +13,10 @@ verifyUser = (dbUser, bot, user, verifier) ->
     dmChannel.messages.delete dbUser.reactor
     dbUser.reactor = null
   dbUser.code = null
-  dbUser.save()
 
-  ###
-  smr = SERVERS.main.roles
-  await member.roles.add [smr.membre]
-  await member.roles.remove [smr.non_verifie]
-  ut = dbUser.type
-  if ut & USER_TYPES.STUDENT   then await member.roles.add smr.indecis
-  if ut & USER_TYPES.PROFESSOR then await member.roles.add smr.professeur
-  if ut & USER_TYPES.GUEST     then await member.roles.add smr.squatteur
-  if ut & USER_TYPES.FORMER    then await member.roles.add smr.ancien
-  ###
+  addRoletag dbUser, "membre"
+  removeRoletag dbUser, "unverified"
+  dbUser.save()
 
   # Update roles in every guild the user is in
   await updateRoles bot, dbUser

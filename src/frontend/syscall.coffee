@@ -2,7 +2,7 @@ YAML                                   = require "yaml"
 RTFM                                   = require "./RTFM"
 { USER_TYPES, FOOTER }                 = require "../constants"
 { sendError, formatUser, formatGuild } = require "../logging"
-{ getdbUser, getdbGuild }              = require "../db/dbhelpers"
+{ getdbUser, getdbGuild, addRoletag }  = require "../db/dbhelpers"
 { User }                               = require "../db/initdb"
 { verifyUser }                         = require "../mail/verificationHandler"
 { decryptid }                          = require "../encryption"
@@ -147,7 +147,6 @@ syscallData =
       shape:
         position: "end"
         type: "wordlist"
-        enum: ["student", "professor", "guest", "former"]
     exec: ({ id, shape }) -> (guild, msg) ->
       unless id
         await sendError msg.channel, "id is undefined"
@@ -158,16 +157,10 @@ syscallData =
         await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
         return
       
-      dbUser.type = 0
       ## Putting a default shape, exploiting my own bug lmao
       unless shape then shape = ["student"]
-      await Promise.all shape.map (sh) ->
-        sh = sh.toUpperCase()
-        unless USER_TYPES[sh]
-          await sendError msg.channel, "Unknown Shape `#{sh}` :("
-          return
-        await msg.channel.send "`Giving user shape '#{sh}'...`"
-        dbUser.type |= USER_TYPES[sh]
+      await msg.channel.send "`Giving user shape '#{shape.join "+"}'...`"
+      addRoletag dbUser, sh for sh in shape
       await dbUser.save()
 
       await msg.channel.send "`Verifying user #{member.user.tag}...`"
