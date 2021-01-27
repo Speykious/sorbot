@@ -1,27 +1,6 @@
 ###
-
-Embed page data will be stored as `*.embed.yaml` files
-in the path `src/frontend/pages/`.
-
-Embedpage:
-  @embed (MessageEmbed) - The actual formatted message on the page
-  @reactions (Reactions) - The reactions for navigation
-  @thread (string) - The channel name where the page should be if in a text channel
-
-reactions:
-  A key/value pair
-  with the @emoji character of the reaction as the key
-  and a @path to the page it links to as the value.
-
-A page event has to have those informations:
-- the id of the discord message
-- the id of the user
-- the emoji of the reaction
-
-The page state contains:
-- the id of the discord message where the embed page is displayed
-- the path to the `.embed.yaml` file corresponding to the page
-
+Embed page data is stored as `*.embed.yaml` files
+in the path `resources/pages/`.
 ###
 
 
