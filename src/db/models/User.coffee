@@ -29,10 +29,10 @@ module.exports = (connection) ->
         unless value then return
         
         domain = (value.split '@')[1]
-        type = 0
-        if domain in DOMAINS.studentDomains   then type |= USER_TYPES.STUDENT
-        if domain in DOMAINS.professorDomains then type |= USER_TYPES.PROFESSOR
-        @setDataValue "type", type
+        roletags = @getDataValue "roletags"
+        if domain in DOMAINS.studentDomains   then roletags.push "student"
+        if domain in DOMAINS.professorDomains then roletags.push "professor"
+        @setDataValue "roletags", roletags
     code:
       type: STRING 6
     servers:

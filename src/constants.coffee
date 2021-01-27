@@ -24,19 +24,12 @@ FOOTER =
   iconURL: "https://i.imgur.com/e3K2oaW.png"
   text: "SorBOT [v#{version}]"
 
-USER_TYPES =
-  STUDENT:   1 << 0
-  PROFESSOR: 1 << 1
-  GUEST:     1 << 2
-  FORMER:    1 << 3
-
 module.exports = {
   CHECKMARK
   CROSSMARK
   TESTERS
   DOMAINS
   SERVERS
-  USER_TYPES
   BYEBYES
   GUILDS
   FOOTER
