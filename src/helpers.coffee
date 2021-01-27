@@ -18,6 +18,9 @@ removeElement = (arr, element) ->
   if i isnt -1 then arr.splice i, 1
   return arr
 
+setAdd = (set, element) ->
+  unless element in set then set.push element
+
 module.exports = {
   relative
   delay
@@ -25,4 +28,5 @@ module.exports = {
   readf
   writef
   removeElement
+  setAdd
 }
