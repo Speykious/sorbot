@@ -14,6 +14,6 @@ module.exports = (connection) ->
       type: THICCSTRING
     description:  # Description of the server for the 'accueil' page
       type: THICCSTRING
-    roles:        # Lines of roleid:roletag associations
+    roleassocs:   # Lines of roleid:roletag associations
       type: THICCSTRING
   }
