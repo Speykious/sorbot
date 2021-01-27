@@ -227,66 +227,94 @@ syscallData =
           
       await msg.channel.send "`Field changed.`"
           
-  
-  "get-user":
+  get:
     description: "Fetches user data from the user database."
     args:
-      with:
+      row:
+        position: "end"
+        type: "word"
+        enum: ["user", "guild"]
+      id:
         position: "start"
-        type: "wordlist"
-    exec: (args) -> (guild, msg) ->
-      if args.with.length isnt 2
-        await sendError msg.channel, "Expected 2 words, got #{args.with.length}"
-        return
-      field = args.with[0]
-      switch field
-        when "id"
-          userId = args.with[1]
-          unless /^\d{17,18}$/.test userId
-            await sendError msg.channel, "Expected second word to be a snowflake, got '#{userId}'"
+        type: "snowflake"
+      email:
+        position: "start"
+        type: "word"
+    exec: ({ row, id, email }) -> (guild, msg) ->
+      switch row
+        when "user"
+          if id
+            try
+              member = await guild.members.fetch id
+            catch e
+              await sendError msg.channel, "Unknown member `#{id}` :(\n\nError: ```\n#{e}```"
+              return
+            dbUser = await getdbUser member.user
+            unless dbUser
+              await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+              return
+          else if email
+            try
+              dbUser = await User.findOne {
+                where: { email }
+                rejectOnEmpty: yes
+              }
+            catch e
+              await sendError msg.channel, "User not found for email `#{email}`."
+              return
+            id = decryptid dbUser.id
+            try
+              member = await guild.members.fetch id
+            catch e
+              await sendError msg.channel, "Unknown member `#{id}` :(\n\nError: ```\n#{e}```"
+              return
+          
+          # Standing for Not So Sensible Data
+          nssData = { dbUser.dataValues... }
+          await msg.channel.send {
+            embed:
+              title: "#{member.user.tag}'s database row"
+              description:
+                """
+                **#{member.user.tag}**'s database row in YAML form
+                ```yaml
+                #{YAML.stringify nssData}```
+                """
+              color: 0x34d9ff
+              footer: FOOTER
+          }
+        when "guild"
+          unless id
+            await sendError msg.channel, "Guild ID is undefined"
             return
-          try
-            member = await guild.members.fetch userId
-          catch e
-            await sendError msg.channel, "Unknown member `#{userId}` :(\n\nError: ```\n#{e}```"
+          guild = await guild.client.guilds.fetch id
+          unless guild
+            await sendError msg.channel, "Unknown guild `#{id}` :("
+          dbGuild = await getdbGuild guild
+          unless dbGuild
+            await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in the database :("
             return
-          dbUser = await getdbUser member.user
-          unless dbUser
-            await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
-            return
-        when "email"
-          email = args.with[1]
-          try
-            dbUser = (await User.findAll {
-              where: { email }
-              rejectOnEmpty: yes
-            })[0]
-          catch e
-            await sendError msg.channel, "User not found for email `#{email}`."
-            return
-          userId = decryptid dbUser.id
-          try
-            member = await guild.members.fetch userId
-          catch e
-            await sendError msg.channel, "Unknown member `#{userId}` :(\n\nError: ```\n#{e}```"
-            return
+          
+          # Standing for Not Sensible At All Data
+          nsaaData = { dbGuild.dataValues... }
+          await msg.channel.send {
+            embed:
+              title: "#{guild.name}'s database row"
+              description:
+                """
+                **#{guild.name}**'s database row in YAML form
+                ```yaml
+                #{YAML.stringify nsaaData}```
+                """
+              color: 0x34d9ff
+              footer: FOOTER
+          }
         else
-          await sendError msg.channel, "Expected first word to be 'id' or 'email', got '#{field}'"
+          await sendError msg.channel, "Expected row to be `user` or `guild`, got `#{field}`"
           return
 
-      nssData = { dbUser.dataValues... }
-      await msg.channel.send {
-        embed:
-          title: "#{member.user.tag}'s database row"
-          description:
-            """
-            **#{member.user.tag}**'s database row in YAML form
-            ```yaml
-            #{YAML.stringify nssData}```
-            """
-          color: 0x34d9ff
-          footer: FOOTER
-      }
+
+    
 
 syscalls = Object.entries syscallData
           .map ([name, { args, exec }]) ->
