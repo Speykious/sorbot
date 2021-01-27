@@ -200,7 +200,7 @@ syscallData =
             return
 
           fields = ["email", "type", "code"]
-          unless fields.includes key
+          unless key in fields
             await sendError msg.channel, "Unknown or unauthorized user field `#{key}` :("
             return
 
@@ -224,7 +224,7 @@ syscallData =
             "unverified", "member", "professor"
             "guest", "former"
           ]
-          unless fields.includes key
+          unless key in fields
             await sendError msg.channel, "Unknown of unauthorized guild field `#{key}` :("
             return
 

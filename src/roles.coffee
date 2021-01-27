@@ -7,7 +7,7 @@ updateMemberRoles = (member, dbUser) ->
 
   assocs = parseAssocs dbGuild.roles
   promises = assocs.map ([roleid, roletag]) ->
-    return if dbUser.roletags.includes roletag
+    return if roletag in dbUser.roletags
     then member.roles.add roleid
     else member.roles.remove roleid
   

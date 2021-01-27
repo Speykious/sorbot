@@ -149,7 +149,7 @@ touchMember = (member) ->
   dbUser = await getdbUser member.user, "silent"
   if dbUser
     # Add the current server to the member's database field
-    if dbUser.servers.includes member.guild.id
+    if member.guild.id in dbUser.servers
       dbUser.servers.push member.guild.id
       await dbUser.save()
   else

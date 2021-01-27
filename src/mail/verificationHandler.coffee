@@ -55,7 +55,7 @@ verifyUser = (dbUser, bot, user, verifier) ->
 handleVerification = (gmailer, emailCH, dbUser, user, content) ->
   # We don't handle verification for users with the guest flag
   # as they are already verified
-  if dbUser.roletags.includes "guest" then return no
+  if "guest" in dbUser.roletags then return no
   
   # Remember from SorBOT 2:
   # - If no email, we try to register the email
