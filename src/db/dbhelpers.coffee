@@ -1,6 +1,8 @@
-{ User, FederatedMetadata }                          = require "./initdb"
-{ encryptid }                                        = require "../encryption"
-{ logf, LOG, formatCrisis, formatUser, formatGuild } = require "../logging"
+{ User, FederatedMetadata } = require "./initdb"
+{ encryptid }               = require "../encryption"
+{ logf, LOG, formatCrisis
+  formatUser, formatGuild } = require "../logging"
+{ setAdd, removeElement }   = require "../helpers"
 
 getdbUser = (user, mode) ->
   try
@@ -28,9 +30,17 @@ stringifyAssocs = (assocs) ->
   assocs.map (assoc) -> assoc.join ":"
   .join "\n"
 
+addRoletag = (dbUser, roletag) ->
+  setAdd dbUser.roletags, roletag
+
+removeRoletag = (dbUser, roletag) ->
+  removeElement dbUser.roletag, roletag
+
 module.exports = {
   getdbUser
   getdbGuild
   parseAssocs
   stringifyAssocs
+  addRoletag
+  removeRoletag
 }
