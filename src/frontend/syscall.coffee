@@ -172,6 +172,16 @@ syscallData =
       unless id
         await sendError msg.channel, "id is undefined"
         return
+      try
+        user = await msg.client.users.fetch id
+      catch e
+        await sendError msg.channel, "Unknown user `#{id}` :("
+        return
+      dbUser = await getdbUser user
+      unless dbUser
+        await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+        return
+      
       
 
   change:
@@ -193,7 +203,11 @@ syscallData =
     exec: ({ field, id, key, value }) -> (msg) ->
       switch field
         when "user"
-          user = await msg.client.users.fetch id
+          try
+            user = await msg.client.users.fetch id
+          catch e
+            await sendError msg.channel, "Unknown user `#{id} :("
+            return
           dbUser = await getdbUser user, "silent"
           unless dbUser
             await sendError msg.channel, "User #{formatUser user} doesn't exist in the database :("
@@ -294,9 +308,11 @@ syscallData =
           unless id
             await sendError msg.channel, "Guild ID is undefined"
             return
-          guild = await msg.client.guilds.fetch id
-          unless guild
+          try
+            guild = await msg.client.guilds.fetch id
+          catch e
             await sendError msg.channel, "Unknown guild `#{id}` :("
+            return
           dbGuild = await getdbGuild guild
           unless dbGuild
             await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in the database :("
