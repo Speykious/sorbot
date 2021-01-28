@@ -34,7 +34,7 @@ addRoletag = (dbUser, roletag) ->
   setAdd dbUser.roletags, roletag
 
 removeRoletag = (dbUser, roletag) ->
-  removeElement dbUser.roletag, roletag
+  removeElement dbUser.roletags, roletag
 
 module.exports = {
   getdbUser

@@ -153,7 +153,7 @@ touchMember = (member) ->
       dbUser.servers.push member.guild.id
       await dbUser.save()
   else
-    page = getPage "welcomedm"
+    page = RTFM.getPage "welcomedm"
     pagemsg = await sendDmPage page, member.user
     unless pagemsg then return null # no need to send an error msg
     dbUser = await User.create {
