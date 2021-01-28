@@ -139,7 +139,10 @@ syscallData =
       shape:
         position: "end"
         type: "wordlist"
-    exec: ({ id, shape }) -> (msg) ->
+      email:
+        position: "start"
+        type: "word"
+    exec: ({ id, shape, email }) -> (msg) ->
       unless id
         await sendError msg.channel, "id is undefined"
         return
@@ -158,6 +161,10 @@ syscallData =
       await msg.channel.send "`Giving user shape '#{shape.join "+"}'...`"
       addRoletag dbUser, sh for sh in shape
       await dbUser.update { roletags: dbUser.roletags }
+      if email
+        await msg.channel.send "`Saving email '#{email}'...`"
+        dbUser.email = email
+        await dbUser.save()
 
       await msg.channel.send "`Verifying user #{user.tag}...`"
       await verifyUser dbUser, msg.client, user, msg.author.tag
