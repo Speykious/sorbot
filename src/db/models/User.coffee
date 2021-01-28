@@ -1,6 +1,7 @@
 { DataTypes }           = require "sequelize"
 { encryptid }           = require "../../encryption"
 { USER_TYPES, DOMAINS } = require "../../constants"
+{ setAdd }          = require "../../helpers"
 { ARRAY, SMALLINT, BIGINT, STRING } = DataTypes
 
 module.exports = (connection) ->
@@ -30,8 +31,8 @@ module.exports = (connection) ->
         
         domain = (value.split '@')[1]
         roletags = @getDataValue "roletags"
-        if domain in DOMAINS.studentDomains   then roletags.push "student"
-        if domain in DOMAINS.professorDomains then roletags.push "professor"
+        if domain in DOMAINS.studentDomains   then setAdd roletags, "student"
+        if domain in DOMAINS.professorDomains then setAdd roletags, "professor"
         @setDataValue "roletags", roletags
     code:
       type: STRING 6

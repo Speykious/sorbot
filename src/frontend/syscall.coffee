@@ -157,8 +157,8 @@ syscallData =
         return
       
       ## Putting a default shape, exploiting my own bug lmao
-      unless shape then shape = ["student"]
-      await msg.channel.send "`Giving user shape '#{shape.join "+"}'...`"
+      if shape then await msg.channel.send "`Giving user shape '#{shape.join "+"}'...`"
+      else shape = []
       addRoletag dbUser, sh for sh in shape
       await dbUser.update { roletags: dbUser.roletags }
       if email
