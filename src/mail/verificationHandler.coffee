@@ -31,7 +31,7 @@ verifyUser = (dbUser, bot, user, verifier) ->
       title: "Vous êtes vérifié.e"
       description:
         """
-        Vous avez désormais le rôle @Membre sur le serveur.
+        Vous êtes maintenant vérifié.e et pouvez accéder à tous nos serveurs.
         N'oubliez pas de choisir vos rôles dans le salon #rôles s'il y en a.
         """
       fields: [{
