@@ -17,7 +17,7 @@ syscallData =
       with:
         position: "end"
         type: "word"
-    exec: (args) -> (_guild, msg) ->
+    exec: (args) -> (msg) ->
       wth = args.with or "everything"
       switch wth
         when "everything"
@@ -36,7 +36,7 @@ syscallData =
         position: "end"
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
-    exec: ({ element }) -> (_guild, msg) ->
+    exec: ({ element }) -> (msg) ->
       rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
       
       unless rtfm.dbGuild.rtfm
@@ -61,7 +61,7 @@ syscallData =
         position: "end"
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
-    exec: ({ element }) -> (_guild, msg) ->
+    exec: ({ element }) -> (msg) ->
       rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
       
       await msg.channel.send "`Yeeting all pages...`"
@@ -87,7 +87,7 @@ syscallData =
         position: "end"
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
-    exec: ({ element }) -> (_guild, msg) ->
+    exec: ({ element }) -> (msg) ->
       await msg.channel.send "`Updating all memory-internal pages...`"
       RTFM.updatePageCache()
       await msg.channel.send "`All memory-internal pages updated.`"
@@ -103,7 +103,7 @@ syscallData =
         position: "end"
         type: "word"
         enum: ["link"]
-    exec: ({ element, shape }) -> (_guild, msg) ->
+    exec: ({ element, shape }) -> (msg) ->
       rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
       
       await msg.channel.send "`Synchronizing all pages (shape: #{shape})...`"
@@ -138,7 +138,7 @@ syscallData =
       shape:
         position: "end"
         type: "wordlist"
-    exec: ({ id, shape }) -> (_guild, msg) ->
+    exec: ({ id, shape }) -> (msg) ->
       unless id
         await sendError msg.channel, "id is undefined"
         return
@@ -168,7 +168,7 @@ syscallData =
       id:
         position: "start"
         type: "snowflake"
-    exec: ({ id }) -> (_guild, msg) ->
+    exec: ({ id }) -> (msg) ->
       unless id
         await sendError msg.channel, "id is undefined"
         return
@@ -190,7 +190,7 @@ syscallData =
       value:
         position: "start"
         type: "string"
-    exec: ({ field, id, key, value }) -> (_guild, msg) ->
+    exec: ({ field, id, key, value }) -> (msg) ->
       switch field
         when "user"
           user = await msg.client.users.fetch id
@@ -247,7 +247,7 @@ syscallData =
       email:
         position: "start"
         type: "word"
-    exec: ({ row, id, email }) -> (_guild, msg) ->
+    exec: ({ row, id, email }) -> (msg) ->
       switch row
         when "user"
           if id
