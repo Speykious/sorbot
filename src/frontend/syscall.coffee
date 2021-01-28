@@ -36,7 +36,7 @@ syscallData =
         position: "end"
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
-    exec: ({ element }) -> (guild, msg) ->
+    exec: ({ element }) -> (_guild, msg) ->
       rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
       
       unless rtfm.dbGuild.rtfm
