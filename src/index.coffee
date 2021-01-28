@@ -149,10 +149,8 @@ touchMember = (member) ->
   dbUser = await getdbUser member.user, "silent"
   if dbUser
     # Add the current server to the member's database field
-    console.log "servers:", dbUser.servers
     unless member.guild.id in dbUser.servers
       dbUser.servers.push member.guild.id
-      console.log "servers:", dbUser.servers
       await dbUser.update { servers: dbUser.servers }
   else
     page = RTFM.getPage "welcomedm"
@@ -231,7 +229,6 @@ bot.on "message", (msg) ->
   # to see if the member exists in our discord network
   dbUser = await getdbUser msg.author
   unless dbUser then return
-  console.log "dbUser", dbUser.dataValues
 
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably

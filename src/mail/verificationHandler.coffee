@@ -14,11 +14,8 @@ verifyUser = (dbUser, bot, user, verifier) ->
     dbUser.reactor = null
   dbUser.code = null
 
-  console.log "roletags:", dbUser.roletags
   addRoletag dbUser, "member"
-  console.log "roletags:", dbUser.roletags
   removeRoletag dbUser, "unverified"
-  console.log "roletags:", dbUser.roletags
   dbUser.update { roletags: dbUser.roletags }
   dbUser.save()
 
