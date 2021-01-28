@@ -222,7 +222,7 @@ bot.on "message", (msg) ->
   # We STILL don't care about messages that don't come from dms
   # Although we will care a bit later when introducing admin commands
   if msg.channel.type isnt "dm"
-    if msg.author.id in TESTERS then syscall null, msg
+    if msg.author.id in TESTERS then syscall msg
     return
   
   # Note: we'll have to fetch every federated server

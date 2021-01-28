@@ -329,7 +329,7 @@ syscalls = Object.entries syscallData
 
 sacredArts = new SacredArts syscalls
 
-module.exports = (guild, msg) ->
+module.exports = (msg) ->
   evaluated = sacredArts.eval msg.content
   unless evaluated then return
   for { isError, error, result } in evaluated
@@ -338,4 +338,4 @@ module.exports = (guild, msg) ->
       else "```yaml\n#{YAML.stringify error}\n```"
       await sendError msg.channel, errorMsg
       return
-    await result(guild or msg.guild, msg)
+    await result msg
