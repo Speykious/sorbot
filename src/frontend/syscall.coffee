@@ -6,6 +6,7 @@ RTFM                                   = require "./RTFM"
 { User }                               = require "../db/initdb"
 { verifyUser }                         = require "../mail/verificationHandler"
 { decryptid }                          = require "../encryption"
+{ updateRoles }                        = require "../roles"
 { Syscall, SacredArts }                = require "shisutemu-kooru"
 
 
@@ -158,9 +159,9 @@ syscallData =
       addRoletag dbUser, sh for sh in shape
       await dbUser.update { roletags: dbUser.roletags }
 
-      await msg.channel.send "`Verifying user #{member.user.tag}...`"
+      await msg.channel.send "`Verifying user #{user.tag}...`"
       await verifyUser dbUser, msg.client, user, msg.author.tag
-      await msg.channel.send "`User #{member.user.tag} verified.`"
+      await msg.channel.send "`User #{user.tag} verified.`"
   
   "unverify-user":
     description: "Unverifies a user, and resets all its fields in the database."
@@ -181,8 +182,16 @@ syscallData =
       unless dbUser
         await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
         return
-      
-      
+      await msg.channel.send "`Unverifying user #{user.tag}...`"
+      dbUser.roletags = ["unverified"]
+      dbUser.reactor = null
+      dbUser.email = null
+      dbUser.code = null
+      dbUser.update { roletags: dbUser.roletags }
+      await dbUser.save()
+      await msg.channel.send "`Updating #{user.tag}'s roles everywhere...`"
+      await updateRoles msg.client, dbUser
+      await msg.channel.send "`User #{user.tag} unverified.`"
 
   change:
     description: "Changes a field in the user database. Note: the field argument is just for command decoration :)"
