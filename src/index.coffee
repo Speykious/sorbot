@@ -42,7 +42,7 @@ loading.step "Initializing database..."
 loading.step "Instantiating Discord client..."
 bot = new Client {
   disableMentions: "everyone"
-  partials: ["MESSAGE", "CHANNEL", "REACTION", "GUILD_MEMBERS"]
+  partials: ["MESSAGE", "CHANNEL", "REACTION", "GUILD_MEMBER"]
   restTimeOffset: 100
 }
 
@@ -221,18 +221,17 @@ bot.on "message", (msg) ->
   # I don't care about myself lol
   if msg.author.bot then return
   
+  # We STILL don't care about messages that don't come from dms
+  # Although we will care a bit later when introducing admin commands
+  if msg.channel.type isnt "dm"
+    if msg.author.id in TESTERS then syscall null, msg
+    return
+  
   # Note: we'll have to fetch every federated server
   # to see if the member exists in our discord network
   dbUser = await getdbUser msg.author
   unless dbUser then return
 
-  # We STILL don't care about messages that don't come from dms
-  # Although we will care a bit later when introducing admin commands
-  if msg.channel.type isnt "dm"
-    unless msg.author.id in TESTERS or "admin" in dbUser.roletags then return
-    syscall null, msg
-    return
-  
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably
     # like user commands to request your
