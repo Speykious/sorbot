@@ -20,7 +20,7 @@ verifyEmail = (dbUser, user, email, crisisHandler) ->
   try # All the Sequelize validation process goes here
     dbUser.email = email
     dbUser.code = generateCode 6
-    await dbUser.save()
+    await dbUser.save { fields: ["email", "code"] }
     logf LOG.EMAIL, "Email (with code `#{dbUser.code}`) saved for user", formatUser user
 
   catch valerr

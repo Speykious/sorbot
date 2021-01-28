@@ -19,7 +19,7 @@ verifyUser = (dbUser, bot, user, verifier) ->
   console.log "roletags:", dbUser.roletags
   removeRoletag dbUser, "unverified"
   console.log "roletags:", dbUser.roletags
-  dbUser.save()
+  dbUser.save { fields: ["reactor", "code", "roletags"] }
 
   # Update roles in every guild the user is in
   await updateRoles bot, dbUser

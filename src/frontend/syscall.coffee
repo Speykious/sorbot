@@ -57,7 +57,7 @@ syscallData =
           position: 0
         }
         rtfm.dbGuild.rtfm = crtfm.id
-        await rtfm.dbGuild.save()
+        await rtfm.dbGuild.save { fields: ["rtfm"] }
       
       await msg.channel.send "`Generating pages...`"
       await rtfm.generatePageMsgs()
@@ -161,7 +161,7 @@ syscallData =
       unless shape then shape = ["student"]
       await msg.channel.send "`Giving user shape '#{shape.join "+"}'...`"
       addRoletag dbUser, sh for sh in shape
-      await dbUser.save()
+      await dbUser.save { fields: ["roletags"] }
 
       await msg.channel.send "`Verifying user #{member.user.tag}...`"
       await verifyUser dbUser, member, msg.author.tag
@@ -199,7 +199,7 @@ syscallData =
 
           await msg.channel.send "Changing field `#{key}` of user #{formatUser member.user} to `#{value}`..."
           dbUser[key] = value
-          await dbUser.save()
+          await dbUser.save { fields: [key] }
 
         when "guild"
           if id
@@ -223,7 +223,7 @@ syscallData =
 
           await msg.channel.send "Changing field `#{key}` of guild #{formatGuild guild} to `#{value}`..."
           dbGuild[key] = value
-          await dbGuild.save()
+          await dbGuild.save { fields: [key] }
           
       await msg.channel.send "`Field changed.`"
           

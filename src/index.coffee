@@ -153,7 +153,7 @@ touchMember = (member) ->
     unless member.guild.id in dbUser.servers
       dbUser.servers.push member.guild.id
       console.log "servers:", dbUser.servers
-      await dbUser.save()
+      await dbUser.save { fields: ["servers"] }
   else
     page = RTFM.getPage "welcomedm"
     pagemsg = await sendDmPage page, member.user
@@ -203,7 +203,7 @@ bot.on "guildMemberRemove", (member) ->
   # Yeeting dbUser out when it isn't present in any other server
   removeElement dbUser.servers, member.guild.id
   if dbUser.servers.length > 0
-    await dbUser.save()
+    await dbUser.save { fields: ["servers"] }
     logf LOG.DATABASE, "User #{formatUser member.user} removed from guild #{formatGuild member.guild}"
   else
     await dbUser.destroy()
@@ -231,6 +231,7 @@ bot.on "message", (msg) ->
   # to see if the member exists in our discord network
   dbUser = await getdbUser msg.author
   unless dbUser then return
+  console.log "dbUser", dbUser.dataValues
 
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably
@@ -272,7 +273,7 @@ bot.on "messageReactionAdd", (reaction, user) ->
     when "⏪"
       dbUser.code = null
       dbUser.email = null
-      await dbUser.save()
+      await dbUser.save { fields: ["code", "email"] }
       await user.send {
         embed:
           title: "Adresse mail effacée"
