@@ -128,7 +128,7 @@ bot.on "ready", ->
       color: 0x34d9ff
       footer: FOOTER
   }
-  
+
   ###
   loading.step "Fetching main guild..."
   GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
@@ -149,7 +149,7 @@ touchMember = (member) ->
   dbUser = await getdbUser member.user, "silent"
   if dbUser
     # Add the current server to the member's database field
-    if member.guild.id in dbUser.servers
+    unless member.guild.id in dbUser.servers
       dbUser.servers.push member.guild.id
       await dbUser.save()
   else
@@ -219,21 +219,18 @@ bot.on "message", (msg) ->
   # I don't care about myself lol
   if msg.author.bot then return
   
-  # We STILL don't care about messages that don't come from dms
-  # Although we will care a bit later when introducing admin commands
-  if msg.channel.type isnt "dm"
-    unless msg.author.id in TESTERS or
-      member.roles.cache.has SERVERS.main.roles.admin
-    then return
-    
-    syscall null, msg
-    return
-  
   # Note: we'll have to fetch every federated server
   # to see if the member exists in our discord network
   dbUser = await getdbUser msg.author
   unless dbUser then return
 
+  # We STILL don't care about messages that don't come from dms
+  # Although we will care a bit later when introducing admin commands
+  if msg.channel.type isnt "dm"
+    unless msg.author.id in TESTERS or "admin" in dbUser.roletags then return
+    syscall null, msg
+    return
+  
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably
     # like user commands to request your

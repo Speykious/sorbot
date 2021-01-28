@@ -16,9 +16,9 @@ updateMemberRoles = (member, dbUser) ->
 updateRoles = (bot, dbUser) ->
   id = decryptid dbUser.id
   promises = dbUser.servers.map (server) ->
-    guild = bot.guilds.fetch server
-    member = guild.members.fetch id
-    return updateMemberRoles member, dbUser
+    guild = await bot.guilds.fetch server
+    member = await guild.members.fetch id
+    return await updateMemberRoles member, dbUser
   
   return Promise.all promises
 

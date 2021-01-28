@@ -92,7 +92,9 @@ class EmailCrisisHandler
     
     user = await @bot.users.fetch decryptid dbUser.id
     logf LOG.MESSAGES, "Sending error report to user #{formatUser user} (__'#{embed.title}'__)"
-    await user.send { embed }
+    
+    user.send { embed }
+    .catch (-> logf LOG.MESSAGES, "Couldn't send error report to user #{formatUser user} :(")
   
   handleMV: (th) ->
     userEmail = th[0].from
