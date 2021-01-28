@@ -110,7 +110,7 @@ class RTFM
       .join "\n"
     
     if @dbGuild.rtfms.length is 0 then @dbGuild.rtfms = null
-    @dbGuild.save { fields: ["rtfms"] }
+    @dbGuild.save()
   
   
   

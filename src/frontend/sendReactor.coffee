@@ -17,6 +17,6 @@ sendReactor = (user, dbUser) ->
   await Promise.all ["⏪", "🔁"].map (e) -> reactor.react e
   
   dbUser.reactor = reactor.id
-  dbUser.save { fields: "reactor" }
+  dbUser.save()
 
 module.exports = sendReactor
