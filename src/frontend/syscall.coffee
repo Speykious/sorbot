@@ -17,7 +17,7 @@ syscallData =
       with:
         position: "end"
         type: "word"
-    exec: (args) -> (guild, msg) ->
+    exec: (args) -> (_guild, msg) ->
       wth = args.with or "everything"
       switch wth
         when "everything"
@@ -32,7 +32,7 @@ syscallData =
   ping:
     description: "Ping."
     args: {}
-    exec: (_) -> (guild, msg) ->
+    exec: (_) -> (_guild, msg) ->
       embed = { description: "Ping." }
       m = await msg.channel.send { embed }
       embed.description = "Pong."
@@ -46,11 +46,11 @@ syscallData =
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (guild, msg) ->
-      rtfm = await RTFM.fetch guild.client, guild.id
+      rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
       
       unless rtfm.dbGuild.rtfm
         await msg.channel.send "Creating an RTFM category..."
-        crtfm = await guild.channels.create "RTFM", {
+        crtfm = await msg.guild.channels.create "RTFM", {
           type: "category"
           topic: "READ THE FUCKING MANUAL"
           reason: "Generating RTFM pages"
@@ -70,8 +70,8 @@ syscallData =
         position: "end"
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
-    exec: ({ element }) -> (guild, msg) ->
-      rtfm = await RTFM.fetch guild.client, guild.id
+    exec: ({ element }) -> (_guild, msg) ->
+      rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
       
       await msg.channel.send "`Yeeting all pages...`"
       # Before yeeting the channels, we need to remove the RTFM instance's pagemsgs
@@ -96,7 +96,7 @@ syscallData =
         position: "end"
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
-    exec: ({ element }) -> (guild, msg) ->
+    exec: ({ element }) -> (_guild, msg) ->
       await msg.channel.send "`Updating all memory-internal pages...`"
       RTFM.updatePageCache()
       await msg.channel.send "`All memory-internal pages updated.`"
@@ -112,8 +112,8 @@ syscallData =
         position: "end"
         type: "word"
         enum: ["link"]
-    exec: ({ element, shape }) -> (guild, msg) ->
-      rtfm = await RTFM.fetch guild.client, guild.id
+    exec: ({ element, shape }) -> (_guild, msg) ->
+      rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
       
       await msg.channel.send "`Synchronizing all pages (shape: #{shape})...`"
       for pagemsg in rtfm.pagemsgs
@@ -127,7 +127,7 @@ syscallData =
                   pageref.guild.id}/#{
                     pageref.channel.id}/#{
                       pageref.id}"
-              .replace "{server}", guild.name
+              .replace "{server}", msg.guild.name
               .replace "{description}", rtfm.dbGuild.description
           
           replaceStuff orig, "description"
@@ -147,12 +147,16 @@ syscallData =
       shape:
         position: "end"
         type: "wordlist"
-    exec: ({ id, shape }) -> (guild, msg) ->
+    exec: ({ id, shape }) -> (_guild, msg) ->
       unless id
         await sendError msg.channel, "id is undefined"
         return
-      member = await guild.members.fetch id
-      dbUser = await getdbUser member.user
+      try
+        user = await msg.client.users.fetch id
+      catch e
+        await sendError msg.channel, "Unknown user `#{id}` :("
+        return
+      dbUser = await getdbUser user
       unless dbUser
         await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
         return
@@ -164,8 +168,20 @@ syscallData =
       await dbUser.update { roletags: dbUser.roletags }
 
       await msg.channel.send "`Verifying user #{member.user.tag}...`"
-      await verifyUser dbUser, member, msg.author.tag
+      await verifyUser dbUser, msg.client, user, msg.author.tag
       await msg.channel.send "`User #{member.user.tag} verified.`"
+  
+  "unverify-user":
+    description: "Unverifies a user, and resets all its fields in the database."
+    args:
+      id:
+        position: "start"
+        type: "snowflake"
+    exec: ({ id }) -> (_guild, msg) ->
+      unless id
+        await sendError msg.channel, "id is undefined"
+        return
+      
 
   change:
     description: "Changes a field in the user database. Note: the field argument is just for command decoration :)"
@@ -183,13 +199,13 @@ syscallData =
       value:
         position: "start"
         type: "string"
-    exec: ({ field, id, key, value }) -> (guild, msg) ->
+    exec: ({ field, id, key, value }) -> (_guild, msg) ->
       switch field
         when "user"
-          member = await guild.members.fetch id
-          dbUser = await getdbUser member.user, "silent"
+          user = await msg.client.users.fetch id
+          dbUser = await getdbUser user, "silent"
           unless dbUser
-            await sendError msg.channel, "User #{formatUser member.user} doesn't exist in the database :("
+            await sendError msg.channel, "User #{formatUser user} doesn't exist in the database :("
             return
 
           fields = ["email", "type", "code"]
@@ -197,7 +213,7 @@ syscallData =
             await sendError msg.channel, "Unknown or unauthorized user field `#{key}` :("
             return
 
-          await msg.channel.send "Changing field `#{key}` of user #{formatUser member.user} to `#{value}`..."
+          await msg.channel.send "Changing field `#{key}` of user #{formatUser user} to `#{value}`..."
           dbUser[key] = value
           await dbUser.update { [key]: dbUser[key] }
 
@@ -240,18 +256,18 @@ syscallData =
       email:
         position: "start"
         type: "word"
-    exec: ({ row, id, email }) -> (guild, msg) ->
+    exec: ({ row, id, email }) -> (_guild, msg) ->
       switch row
         when "user"
           if id
             try
-              member = await guild.members.fetch id
+              user = await msg.client.users.fetch id
             catch e
-              await sendError msg.channel, "Unknown member `#{id}` :(\n\nError: ```\n#{e}```"
+              await sendError msg.channel, "Unknown user `#{id}` :(\n\nError: ```\n#{e}```"
               return
-            dbUser = await getdbUser member.user
+            dbUser = await getdbUser user
             unless dbUser
-              await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
+              await sendError msg.channel, "User <@!#{user.id}> doesn't exist in the database :("
               return
           else if email
             try
@@ -264,7 +280,7 @@ syscallData =
               return
             id = decryptid dbUser.id
             try
-              member = await guild.members.fetch id
+              user = await msg.client.users.fetch id
             catch e
               await sendError msg.channel, "Unknown member `#{id}` :(\n\nError: ```\n#{e}```"
               return
@@ -273,10 +289,10 @@ syscallData =
           nssData = { dbUser.dataValues... }
           await msg.channel.send {
             embed:
-              title: "#{member.user.tag}'s database row"
+              title: "#{user.tag}'s database row"
               description:
                 """
-                **#{member.user.tag}**'s database row in YAML form
+                **#{user.tag}**'s database row in YAML form
                 ```yaml
                 #{YAML.stringify nssData}```
                 """
@@ -287,7 +303,7 @@ syscallData =
           unless id
             await sendError msg.channel, "Guild ID is undefined"
             return
-          guild = await guild.client.guilds.fetch id
+          guild = await msg.client.guilds.fetch id
           unless guild
             await sendError msg.channel, "Unknown guild `#{id}` :("
           dbGuild = await getdbGuild guild
