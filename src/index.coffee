@@ -42,7 +42,7 @@ loading.step "Initializing database..."
 loading.step "Instantiating Discord client..."
 bot = new Client {
   disableMentions: "everyone"
-  partials: ["MESSAGE", "CHANNEL", "REACTION"]
+  partials: ["MESSAGE", "CHANNEL", "REACTION", "GUILD_MEMBERS"]
   restTimeOffset: 100
 }
 
@@ -149,8 +149,10 @@ touchMember = (member) ->
   dbUser = await getdbUser member.user, "silent"
   if dbUser
     # Add the current server to the member's database field
+    console.log "servers:", dbUser.servers
     unless member.guild.id in dbUser.servers
       dbUser.servers.push member.guild.id
+      console.log "servers:", dbUser.servers
       await dbUser.save()
   else
     page = RTFM.getPage "welcomedm"
