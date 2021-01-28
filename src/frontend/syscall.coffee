@@ -28,15 +28,6 @@ syscallData =
         else
           { description, args } = syscallData[wth]
           await msg.channel.send "`#{wth}` ─ #{description}\n```yaml\n# Arguments\n#{YAML.stringify args}\n```"
-  
-  ping:
-    description: "Ping."
-    args: {}
-    exec: (_) -> (_guild, msg) ->
-      embed = { description: "Ping." }
-      m = await msg.channel.send { embed }
-      embed.description = "Pong."
-      await m.edit { embed }
 
   generate:
     description: "Generates RTFM pages."
