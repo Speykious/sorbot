@@ -1,9 +1,9 @@
-{ updateMemberRoles } = require "./roles"
-{ sendDmPage }        = require "./frontend/pageHandler"
-RTFM                  = require "./frontend/RTFM"
-{ User }              = require "./db/initdb"
-{ getdbUser }         = require "./db/dbhelpers"
-{ logf, LOG }         = require "./logging"
+{ updateMemberRoles }     = require "./roles"
+{ sendDmPage }            = require "./frontend/pageHandler"
+RTFM                      = require "./frontend/RTFM"
+{ User }                  = require "./db/initdb"
+{ getdbUser }             = require "./db/dbhelpers"
+{ logf, LOG, formatUser } = require "./logging"
 
 # Fetches a member and increments its servers, or creates a new one from the database
 touchMember = (member) ->
