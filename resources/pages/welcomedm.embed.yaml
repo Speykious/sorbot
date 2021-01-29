@@ -1,9 +1,9 @@
 embed:
   title: Bienvenue !
   description: |
-    Bienvenue sur le serveur __**Sorbonne Jussieu**__ ! Je suis le bot du serveur qui s'occupe notamment de la vérification des nouveaux arrivants.
+    Bienvenue sur le réseau de serveurs Discord pour __**Sorbonne Jussieu**__ ! Je suis le bot qui s'occupe notamment de la vérification des nouveaux arrivants.
     
-    Vous trouverez toutes les informations sur le processus de vérification dans le salon [#sommaire](https://discordapp.com/channels/672479260899803147/755258338983411792/757221737711796297).
+    Vous trouverez toutes les informations sur le processus de vérification dans le salon #sommaire.
   color: 34d9ff
   
 reactions:

@@ -1,6 +1,6 @@
 {
-  "name": "sorbot-3",
-  "version": "3.0.0-rc4",
+  "name": "sorbot",
+  "version": "3.0.0",
   "description": "SorBOT 3, La toute nouvelle version de SorBOT, le bot Discord du serveur Sorbonne Jussieu !",
   "main": "client/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "coffee src/index.coffee",
     "temp": "coffee src/temp.coffee",
     "build": "coffee -bcmo client src",
-    "run-js": "node .",
+    "run-js": "node --trace-warnings .",
     "c-all": "yarn build && yarn run-js",
     "all": "clear && yarn c-all",
     "dev": "clear && yarn start",
@@ -28,7 +28,6 @@
   "private": true,
   "dependencies": {
     "ansi-colors-ts": "^0.0.1",
-    "discord-commands-ts": "^0.0.2",
     "discord.js": "^12.2.0",
     "dotenv-flow": "^3.1.0",
     "googleapis": "39",
@@ -36,7 +35,7 @@
     "pg": "^8.3.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.13",
-    "shisutemu-kooru": "^0.1.2",
+    "shisutemu-kooru": "^0.1.4",
     "yaml": "^1.10.0"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 { DataTypes }           = require "sequelize"
 { encryptid }           = require "../../encryption"
 { USER_TYPES, DOMAINS } = require "../../constants"
+{ setAdd }          = require "../../helpers"
 { ARRAY, SMALLINT, BIGINT, STRING } = DataTypes
 
 module.exports = (connection) ->
@@ -9,8 +10,8 @@ module.exports = (connection) ->
       type: STRING 44
       primaryKey: yes
       set: (value) -> @setDataValue "id", encryptid value
-    type:
-      type: SMALLINT
+    roletags:
+      type: ARRAY STRING 16
     reactor:
       type: BIGINT
     email:
@@ -29,13 +30,13 @@ module.exports = (connection) ->
         unless value then return
         
         domain = (value.split '@')[1]
-        type = 0
-        if domain in DOMAINS.studentDomains   then type |= USER_TYPES.STUDENT
-        if domain in DOMAINS.professorDomains then type |= USER_TYPES.PROFESSOR
-        @setDataValue "type", type
+        roletags = @getDataValue "roletags"
+        if domain in DOMAINS.studentDomains   then setAdd roletags, "student"
+        if domain in DOMAINS.professorDomains then setAdd roletags, "professor"
+        @setDataValue "roletags", roletags
     code:
       type: STRING 6
     servers:
-      type: SMALLINT
+      type: ARRAY BIGINT
   }
 

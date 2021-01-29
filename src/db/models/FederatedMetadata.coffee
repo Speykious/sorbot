@@ -1,17 +1,27 @@
-{ DataTypes }     = require "sequelize"
-{ BIGINT } = DataTypes
+{ DataTypes } = require "sequelize"
+{ BIGINT, STRING } = DataTypes
+THICCINT = BIGINT
+THICCSTRING = STRING 512
 
 module.exports = (connection) ->
   connection.define "FederatedMetadata", {
-    id:
-      type: BIGINT
+    id:           # ID of the server
+      type: THICCINT
       primaryKey: yes
-    unverified:
-      type: BIGINT
-    member:
-      type: BIGINT
-    professor:
-      type: BIGINT
-    former:
-      type: BIGINT
+    rtfm:         # ID of the RTFM category
+      type: THICCINT
+    rtfms:        # IDs of channels and messages of the RTFMs in a custom format
+      type: THICCSTRING
+    description:  # Description of the server for the 'accueil' page
+      type: THICCSTRING
+    roleassocs:   # Lines of roleid:roletag associations
+      type: THICCSTRING
+      get: ->
+        @getDataValue "roleassocs"
+        .split "\n"
+        .map (line) -> line.split ":"
+      set: (value) ->
+        @setDataValue "roleassocs", 
+          value.map (assoc) -> assoc.join ":"
+          .join "\n"
   }

@@ -53,6 +53,6 @@ class LoadingBar
 
 
 
-loading = new LoadingBar 17, "║║", 25, 0x34d9ff
+loading = new LoadingBar 16, "║║", 25, 0x34d9ff
 
 module.exports = loading

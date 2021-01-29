@@ -8,17 +8,21 @@ require "dotenv-flow"
 loading.step "Loading nodejs dependencies..."
 { join }                      = require "path"
 YAML                          = require "yaml"
+{ UniqueConstraintError }     = require "sequelize"
 
 loading.step "Loading discord.js..."
 { Client }                    = require "discord.js"
 
 loading.step "Loading generic utils..."
-{ relative, delay, readf }    = require "./helpers"
-{ logf, LOG, formatCrisis,
-  formatUser, botCache }      = require "./logging"
+{ relative, delay, readf
+  removeElement }             = require "./helpers"
+{ logf, formatCrisis, formatGuild
+  LOG, formatUser, botCache } = require "./logging"
 { CROSSMARK, SERVERS, BYEBYES,
   GUILDS, TESTERS, FOOTER }   = require "./constants"
 { encryptid, decryptid }      = require "./encryption"
+{ updateMemberRoles }         = require "./roles"
+touchMember                   = require "./touchMember"
 
 loading.step "Loading gmailer and email crisis handler..."
 GMailer                       = require "./mail/gmailer"
@@ -27,18 +31,18 @@ EmailCrisisHandler            = require "./mail/crisisHandler"
 
 loading.step "Loading frontend functions..."
 syscall                       = require "./frontend/syscall"
-{ mdir, getPage, sendDmPage } = require "./frontend/page-handler"
+RTFM                          = require "./frontend/RTFM"
 
 loading.step "Loading dbhelpers..."
-{ getdbUser }                 = require "./db/dbhelpers"
+{ getdbUser, getdbGuild }     = require "./db/dbhelpers"
 loading.step "Initializing database..."
-{ User }                      = require "./db/initdb"
+{ User, FederatedMetadata }   = require "./db/initdb"
 
 
 loading.step "Instantiating Discord client..."
 bot = new Client {
   disableMentions: "everyone"
-  partials: ["MESSAGE", "CHANNEL", "REACTION"]
+  partials: ["MESSAGE", "CHANNEL", "REACTION", "GUILD_MEMBER"]
   restTimeOffset: 100
 }
 
@@ -55,6 +59,7 @@ gmailer = new GMailer ["readonly", "modify", "compose", "send"], "credentials.ya
 # - embedUEC       {Embed}   - The embed error report for Unread Existential Crisis
 # - embedUSC       {Embed}   - The embed error report for Unread Sorbonne Crisis
 emailCH = new EmailCrisisHandler {
+  bot
   gmailer
 
   # About those embeds, I'm probably gonna isolate
@@ -113,77 +118,78 @@ bot.on "ready", ->
     activity:
       type: "PLAYING"
       name: if process.env.LOCAL then "Coucou humain 👀" else "with your data 👀"
-      url: "https://gitlab.com/Speykious/sorbot-3"
+      url: "https://gitlab.com/Speykious/sorbot"
   }
   
   logf LOG.INIT, {
     embed:
       title: "Ready to sip. 茶 ☕"
-      description: "Let's play with some ***DATA*** <a:eyeshake:691797273147080714>"
+      description: "Let's play with even more ***DATA*** <a:eyeshake:691797273147080714>"
       color: 0x34d9ff
       footer: FOOTER
   }
-  
+
+  ###
   loading.step "Fetching main guild..."
   GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
   GUILDS.LOGS = await bot.guilds.fetch SERVERS.logs.id
+  ###
   
   loading.step "Authorizing the gmailer..."
   await gmailer.authorize "token.yaml"
   
   loading.step "Bot started successfully."
-  setTimeout ( ->
-    emailCH.guild = GUILDS.MAIN
-    emailCH.gmailer = gmailer
-    emailCH.activate()
-  ), 100
+  setTimeout (-> emailCH.activate()), 100
 
-# Adds a new member to the main server
-addNewMember = (member) ->
-  if member.guild.id isnt GUILDS.MAIN.id then return
-  
-  logf LOG.MODERATION, "Adding user #{formatUser member.user}"
-  await member.roles.add SERVERS.main.roles.non_verifie
-  
-  page = getPage "welcomedm"
-  pagemsg = await sendDmPage page, member.user
-  unless pagemsg then return # no need to send an error msg
-  
-  # Add new entry in the database
-  dbUser = await User.create {
-    id: member.user.id
-    type: 0
-  }
-  
-  logf LOG.DATABASE, "User #{formatUser member.user} added"
-  return dbUser
-  
+bot.on "guildCreate", (guild) ->
+  try
+    dbGuild = await FederatedMetadata.create { id: guild.id }
+    logf LOG.DATABASE, "New guild #{formatGuild guild} has been added to the database"
+  catch e
+    unless e instanceof UniqueConstraintError
+      logf LOG.WTF, "**WTF ?!** Unexpected error when creating guild! Please check the console log."
+      console.log "\x1b[1mUNEXPECTED ERROR WHEN CREATING GUILD\x1b[0m"
+      console.log e
+      return
+    logf LOG.DATABASE, "Guild #{formatGuild guild} already existed in the database"
+  new RTFM guild
+
+bot.on "guildDelete", (guild) ->
+  dbGuild = await getdbGuild guild
+  unless dbGuild then return
+  await dbGuild.destroy()
+  logf LOG.DATABASE, "Guild #{formatGuild guild} removed"
 
 bot.on "guildMemberAdd", (member) ->
   # I don't care about bots lol
   if member.user.bot
     logf LOG.MODERATION, "Bot #{formatUser member.user} just arrived"
     return
-  # For now we only care about the main server.
-  # Shared auth coming soon(er)™
-  if member.guild.id isnt GUILDS.MAIN.id then return
   
-  await addNewMember member
+  # Praise shared auth !
+  logf LOG.MODERATION, "User #{formatUser member.user} joined guild #{formatGuild member.guild}"
+  await touchMember member
 
 bot.on "guildMemberRemove", (member) ->
   # I don't care about bots lol
   if member.user.bot
-    logf LOG.MODERATION, "Bot #{formatUser member.user} just left"
+    logf LOG.MODERATION, "Bot #{formatUser member.user} left guild #{formatGuild member.guild}"
     return
-  logf LOG.MODERATION, "Removing user #{formatUser member.user}"
+  logf LOG.MODERATION, "User #{formatUser member.user} left guild #{formatGuild member.guild}"
   dbUser = await getdbUser member.user
   unless dbUser then return
-  # Yeeting dbUser out when someone leaves
-  await dbUser.destroy()
-  logf LOG.DATABASE, "User #{formatUser member.user} removed"
-  
+
+  # Yeeting dbUser out when it isn't present in any other server
+  removeElement dbUser.servers, member.guild.id
+  if dbUser.servers.length > 0
+    await dbUser.update { servers: dbUser.servers }
+    logf LOG.DATABASE, "User #{formatUser member.user} removed from guild #{formatGuild member.guild}"
+  else
+    await dbUser.destroy()
+    logf LOG.DATABASE, "User #{formatUser member.user} removed"
+
   unless process.env.LOCAL
-    bye = BYEBYES[Math.floor(Math.random() * BYEBYES.length - 1e-6)]
+    bye = BYEBYES[Math.floor (Math.random() * BYEBYES.length - 1e-6)]
     bye = bye.replace "{name}", member.displayName
     
     auRevoir = await bot.channels.fetch '672502429836640267'
@@ -194,23 +200,16 @@ bot.on "message", (msg) ->
   # I don't care about myself lol
   if msg.author.bot then return
   
-  # Note: this member comes exclusively from the main guild
-  member = await GUILDS.MAIN.members.fetch msg.author
-  unless member
-    return logf LOG.MODERATION, "Error: User #{formatUser msg.author} is not on the main server"
-  
   # We STILL don't care about messages that don't come from dms
   # Although we will care a bit later when introducing admin commands
   if msg.channel.type isnt "dm"
-    unless msg.author.id in TESTERS or
-      member.roles.cache.has SERVERS.main.roles.admin
-    then return
-    
-    syscall GUILDS.MAIN, msg
+    if msg.author.id in TESTERS then syscall msg
     return
   
+  # Note: we'll have to fetch every federated server
+  # to see if the member exists in our discord network
   dbUser = await getdbUser msg.author
-  unless dbUser then dbUser = await addNewMember member
+  unless dbUser then return
 
   unless await handleVerification gmailer, emailCH, dbUser, msg.author, msg.content
     # More stuff is gonna go here probably
@@ -268,10 +267,10 @@ bot.on "messageReactionAdd", (reaction, user) ->
 
 
 
-bot.on "guildMemberUpdate", (oldMember, newMember) ->
+bot.on "guildMemberUpdate", (_, member) ->
   levelRoles = ["licence_1", "licence_2", "licence_3", "master_1", "master_2", "doctorat", "professeur"]
-  if levelRoles.some (lr) -> newMember.roles.cache.has SERVERS.main.roles[lr]
-    newMember.roles.remove SERVERS.main.roles.indecis
+  if levelRoles.some (lr) -> member.roles.cache.has SERVERS.main.roles[lr]
+    member.roles.remove SERVERS.main.roles.indecis
 
 
 

@@ -48,7 +48,7 @@ class EmailCrisisHandler
     @maxThreadsFast = options.maxThreadsFast or options.maxThreads or 5
     @requestFast = off
     
-    @guild   = options.guild
+    @bot   = options.bot
     @gmailer = options.gmailer
 
     @embedUEC = options.embedUEC
@@ -77,13 +77,11 @@ class EmailCrisisHandler
     { embed } = g_embed th
     
     try
-      # Since emails are necessarily unique, that '[0]' hardcode is safe
-      dbUser = (await User.findAll {
+      dbUser = await User.findOne {
         where:
           email: th[0].to
         rejectOnEmpty: yes
-      })[0]
-      
+      }
     catch err
       unless err instanceof EmptyResultError
         logf LOG.WTF, "What the fuck just happened? <_<\n#{colmat err}"
@@ -92,9 +90,11 @@ class EmailCrisisHandler
       logf LOG.DATABASE, (formatCrisis "Query", "User for email `#{th[0].to}` has not been found")
       return
     
-    member = await @guild.members.fetch decryptid dbUser.id
-    logf LOG.MESSAGES, "Sending error report to user #{formatUser member.user} (__'#{embed.title}'__)"
-    await member.user.send { embed }
+    user = await @bot.users.fetch decryptid dbUser.id
+    logf LOG.MESSAGES, "Sending error report to user #{formatUser user} (__'#{embed.title}'__)"
+    
+    user.send { embed }
+    .catch (-> logf LOG.MESSAGES, "Couldn't send error report to user #{formatUser user} :(")
   
   handleMV: (th) ->
     userEmail = th[0].from
@@ -114,14 +114,14 @@ class EmailCrisisHandler
       logf LOG.DATABASE, (formatCrisis "M-Query", "User for email `#{userEmail}` has not been found")
       return
     
-    member = await @guild.members.fetch decryptid dbUser.id
-    unless th[0].subject.includes member.user.tag
-      logf LOG.EMAIL, (formatCrisis "Email Subject", "User #{formatUser member.user} didn't include their discord tag in the subject of their email")
-      # Log something in Discord here to notify the admins
+    user = await @bot.users.fetch decryptid dbUser.id
+    unless user.tag in th[0].subject
+      logf LOG.EMAIL, (formatCrisis "Email Subject", "User #{formatUser user} didn't include their discord tag in the subject of their email")
       return
-    logf LOG.MESSAGES, "'Manually' verifying user #{formatUser member.user}"
+    
+    logf LOG.MESSAGES, "'Manually' verifying user #{formatUser user}"
     # Noice little trick: do as if the user had entered the confirmation code :)
-    handleVerification @gmailer, @, dbUser, member.user, dbUser.code
+    handleVerification @gmailer, @, dbUser, user, dbUser.code
   
   proc: (maxThreads) ->
     # Existential Crisis

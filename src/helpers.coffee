@@ -13,7 +13,13 @@ forEach = (array, f) ->
 readf  = (path)       -> readFileSync  (relative path), "utf8"
 writef = (path, data) -> writeFileSync (relative path), data, "utf8"
 
+removeElement = (arr, element) ->
+  i = arr.indexOf element
+  if i isnt -1 then arr.splice i, 1
+  return arr
 
+setAdd = (set, element) ->
+  unless element in set then set.push element
 
 module.exports = {
   relative
@@ -21,4 +27,6 @@ module.exports = {
   forEach
   readf
   writef
+  removeElement
+  setAdd
 }
