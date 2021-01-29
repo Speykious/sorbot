@@ -1,5 +1,5 @@
-{ getdbGuild, parseAssocs } = require "./db/dbhelpers"
-{ decryptid }               = require "./encryption"
+{ getdbGuild } = require "./db/dbhelpers"
+{ decryptid }  = require "./encryption"
 
 updateMemberRoles = (member, dbUser) ->
   dbGuild = await getdbGuild member.guild
