@@ -15,7 +15,7 @@ loading.step "Loading discord.js..."
 loading.step "Loading generic utils..."
 { relative, delay, readf
   removeElement }             = require "./helpers"
-{ logf, formatCrisis, formatGuild,
+{ logf, formatCrisis, formatGuild
   LOG, formatUser, botCache } = require "./logging"
 { CROSSMARK, SERVERS, BYEBYES,
   GUILDS, TESTERS, FOOTER }   = require "./constants"
@@ -33,8 +33,7 @@ syscall                       = require "./frontend/syscall"
 RTFM                          = require "./frontend/RTFM"
 
 loading.step "Loading dbhelpers..."
-{ getdbUser, getdbGuild, parseAssocs,
-  stringifyAssocs }           = require "./db/dbhelpers"
+{ getdbUser, getdbGuild }     = require "./db/dbhelpers"
 loading.step "Initializing database..."
 { User, FederatedMetadata }   = require "./db/initdb"
 
@@ -286,10 +285,10 @@ bot.on "messageReactionAdd", (reaction, user) ->
 
 
 
-bot.on "guildMemberUpdate", (oldMember, newMember) ->
+bot.on "guildMemberUpdate", (_, member) ->
   levelRoles = ["licence_1", "licence_2", "licence_3", "master_1", "master_2", "doctorat", "professeur"]
-  if levelRoles.some (lr) -> newMember.roles.cache.has SERVERS.main.roles[lr]
-    newMember.roles.remove SERVERS.main.roles.indecis
+  if levelRoles.some (lr) -> member.roles.cache.has SERVERS.main.roles[lr]
+    member.roles.remove SERVERS.main.roles.indecis
 
 
 
