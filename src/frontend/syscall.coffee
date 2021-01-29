@@ -421,7 +421,7 @@ syscallData =
         await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in the database :("
         return
       
-      msg.channel.send "`Fetching all members of guild '#{guild.name}' (#{guild.id})...`"
+      await msg.channel.send "`Fetching all members of guild '#{guild.name}' (#{guild.id})...`"
       try
         members = [(await guild.members.fetch()).values()...].filter (m) -> not m.user.bot
       catch e
@@ -431,21 +431,25 @@ syscallData =
       embed = {
         title: "SYSTEM-CALL"
         description: "Adding all users of guild #{formatGuild guild} to the database..."
-        fields:
+        fields: [
           {
             name: "Members"
             value: 0
           }
+        ]
+        color: 0x34d9ff
       }
       embedmsg = await msg.channel.send { embed }
       
       console.log bold "Members to add:"
       for member in members
         console.log member.id, member.user.tag
-        #await touchMember member
+        await touchMember member
         embed.fields[0].value++
+        await embedmsg.edit { embed }
 
       console.log bold "End of print"
+      await msg.channel.send "`All users of guild '#{guild.name}' (#{guild.id}) have been added to the database.`"
       
 
     
