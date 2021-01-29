@@ -1,4 +1,5 @@
 YAML                                   = require "yaml"
+{ bold }                               = require "ansi-colors-ts"
 RTFM                                   = require "./RTFM"
 { USER_TYPES, FOOTER }                 = require "../constants"
 { sendError, formatUser, formatGuild } = require "../logging"
@@ -7,9 +8,8 @@ RTFM                                   = require "./RTFM"
 { verifyUser }                         = require "../mail/verificationHandler"
 { decryptid }                          = require "../encryption"
 { updateRoles }                        = require "../roles"
+touchMember                            = require "../touchMember"
 { Syscall, SacredArts }                = require "shisutemu-kooru"
-
-
 
 syscallData =
   help:
@@ -374,9 +374,7 @@ syscallData =
               footer: FOOTER
           }
         when "guild"
-          unless id
-            await sendError msg.channel, "Guild ID is undefined"
-            return
+          unless id then id = msg.guild.id
           try
             guild = await msg.client.guilds.fetch id
           catch e
@@ -404,7 +402,51 @@ syscallData =
         else
           await sendError msg.channel, "Expected row to be `user` or `guild`, got `#{field}`"
           return
+  
+  "add-users":
+    description: "Adds all users of a guild to the database."
+    args:
+      id:
+        position: "start"
+        type: "snowflake"
+    exec: ({ id }) -> (msg) ->
+      unless id then id = msg.guild.id
+      try
+        guild = await msg.client.guilds.fetch id
+      catch e
+        await sendError msg.channel, "Unknown guild `#{id}` :("
+        return
+      dbGuild = await getdbGuild guild, "silent"
+      unless dbGuild
+        await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in the database :("
+        return
+      
+      msg.channel.send "`Fetching all members of guild '#{guild.name}' (#{guild.id})...`"
+      try
+        members = [(await guild.members.fetch()).values()...].filter (m) -> not m.user.bot
+      catch e
+        await sendError msg.channel "**UNEXPECTED ERROR** when fetching all the members of the guild! Please check the console log."
+        return
+      
+      embed = {
+        title: "SYSTEM-CALL"
+        description: "Adding all users of guild #{formatGuild guild} to the database..."
+        fields:
+          {
+            name: "Members"
+            value: 0
+          }
+      }
+      embedmsg = await msg.channel.send { embed }
+      
+      console.log bold "Members to add:"
+      for member in members
+        console.log member.id, member.user.tag
+        #await touchMember member
+        embed.fields[0].value++
 
+      console.log bold "End of print"
+      
 
     
 
