@@ -16,8 +16,8 @@ verifyUser = (dbUser, bot, user, verifier) ->
 
   addRoletag dbUser, "member"
   removeRoletag dbUser, "unverified"
-  dbUser.update { roletags: dbUser.roletags }
-  dbUser.save()
+  await dbUser.update { roletags: dbUser.roletags }
+  await dbUser.save()
 
   # Update roles in every guild the user is in
   await updateRoles bot, dbUser

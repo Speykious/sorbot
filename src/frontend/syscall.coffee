@@ -194,7 +194,7 @@ syscallData =
       dbUser.reactor = null
       dbUser.email = null
       dbUser.code = null
-      dbUser.update { roletags: dbUser.roletags }
+      await dbUser.update { roletags: dbUser.roletags }
       await dbUser.save()
       await msg.channel.send "`Updating #{user.tag}'s roles everywhere...`"
       await updateRoles msg.client, dbUser
