@@ -8,6 +8,7 @@ require "dotenv-flow"
 loading.step "Loading nodejs dependencies..."
 { join }                      = require "path"
 YAML                          = require "yaml"
+{ UniqueConstraintError }     = require "sequelize"
 
 loading.step "Loading discord.js..."
 { Client }                    = require "discord.js"
@@ -21,6 +22,7 @@ loading.step "Loading generic utils..."
   GUILDS, TESTERS, FOOTER }   = require "./constants"
 { encryptid, decryptid }      = require "./encryption"
 { updateMemberRoles }         = require "./roles"
+touchMember                   = require "./touchMember"
 
 loading.step "Loading gmailer and email crisis handler..."
 GMailer                       = require "./mail/gmailer"
@@ -29,7 +31,6 @@ EmailCrisisHandler            = require "./mail/crisisHandler"
 
 loading.step "Loading frontend functions..."
 syscall                       = require "./frontend/syscall"
-{ mdir, getPage, sendDmPage } = require "./frontend/pageHandler"
 RTFM                          = require "./frontend/RTFM"
 
 loading.step "Loading dbhelpers..."
@@ -140,38 +141,18 @@ bot.on "ready", ->
   loading.step "Bot started successfully."
   setTimeout (-> emailCH.activate()), 100
 
-# Fetches a member and increments its servers, or creates a new one from the database
-touchMember = (member) ->
-  logf LOG.MODERATION, "User #{formatUser member.user} joined guild #{formatGuild member.guild}"
-  # We have to abstract the roles to add, also based on whether the member is verified or not
-  
-  dbUser = await getdbUser member.user, "silent"
-  if dbUser
-    # Add the current server to the member's database field
-    unless member.guild.id in dbUser.servers
-      dbUser.servers.push member.guild.id
-      await dbUser.update { servers: dbUser.servers }
-  else
-    page = RTFM.getPage "welcomedm"
-    pagemsg = await sendDmPage page, member.user
-    unless pagemsg then return null # no need to send an error msg
-    dbUser = await User.create {
-      id: member.user.id
-      roletags: ["unverified"]
-      servers: [member.guild.id]
-    }
-
-    logf LOG.DATABASE, "New user #{formatUser member.user} has been added to the database"
-
-  # Add available roles from the guild
-  updateMemberRoles member, dbUser
-  
-  return dbUser
-
 bot.on "guildCreate", (guild) ->
-  dbGuild = await FederatedMetadata.create { id: guild.id }
+  try
+    dbGuild = await FederatedMetadata.create { id: guild.id }
+    logf LOG.DATABASE, "New guild #{formatGuild guild} has been added to the database"
+  catch e
+    unless e instanceof UniqueConstraintError
+      logf LOG.WTF, "**WTF ?!** Unexpected error when creating guild! Please check the console log."
+      console.log "\x1b[1mUNEXPECTED ERROR WHEN CREATING GUILD\x1b[0m"
+      console.log e
+      return
+    logf LOG.DATABASE, "Guild #{formatGuild guild} already existed in the database"
   new RTFM guild
-  logf LOG.DATABASE, "New guild #{formatGuild guild} has been added to the database"
 
 bot.on "guildDelete", (guild) ->
   dbGuild = await getdbGuild guild
@@ -185,7 +166,8 @@ bot.on "guildMemberAdd", (member) ->
     logf LOG.MODERATION, "Bot #{formatUser member.user} just arrived"
     return
   
-  # Shared auth coming soon(er)™
+  # Praise shared auth !
+  logf LOG.MODERATION, "User #{formatUser member.user} joined guild #{formatGuild member.guild}"
   await touchMember member
 
 bot.on "guildMemberRemove", (member) ->
