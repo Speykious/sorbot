@@ -13,6 +13,7 @@ TESTERS = [
   "128848040889942016" # chilledfrogs
   "419624396710477834" # Toast
   "690223603001983037" # Ereshkigall
+  "690869031531446313" # rboud-sensei ツ
 ]
 
 DOMAINS = YAML.parse readf "resources/domains.yaml"
