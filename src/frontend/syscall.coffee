@@ -356,7 +356,7 @@ syscallData =
             try
               user = await msg.client.users.fetch id
             catch e
-              await sendError msg.channel, "Unknown member `#{id}` :(\n\nError: ```\n#{e}```"
+              await sendError msg.channel, "Unknown user `#{id}` :(\n\nError: ```\n#{e}```"
               return
           
           # Standing for Not So Sensible Data
@@ -450,8 +450,24 @@ syscallData =
 
       console.log bold "End of print"
       await msg.channel.send "`All users of guild '#{guild.name}' (#{guild.id}) have been added to the database.`"
-      
+  
+  "add-user":
+    description: "Adds a user to the database."
+    args:
+      id:
+        position: "start"
+        type: "snowflake"
+  exec: ({ id }) -> (msg) ->
+    await sendError msg.channel, "SYSTEM-CALL NOT IMPLEMENTED"
 
+  "remove-user":
+    description: "Removes a user from the database."
+    args:
+      id:
+        position: "start"
+        type: "snowflake"
+  exec: ({ id }) -> (msg) ->
+    await sendError msg.channel, "SYSTEM-CALL NOT IMPLEMENTED"
     
 
 syscalls = Object.entries syscallData
