@@ -16,4 +16,12 @@ module.exports = (connection) ->
       type: THICCSTRING
     roleassocs:   # Lines of roleid:roletag associations
       type: THICCSTRING
+      get: ->
+        @getDataValue "roleassocs"
+        .split "\n"
+        .map (line) -> line.split ":"
+      set: (value) ->
+        @setDataValue "roleassocs", 
+          value.map (assoc) -> assoc.join ":"
+          .join "\n"
   }
