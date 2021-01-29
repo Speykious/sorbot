@@ -1,5 +1,4 @@
 YAML                                   = require "yaml"
-{ bold }                               = require "ansi-colors-ts"
 RTFM                                   = require "./RTFM"
 { USER_TYPES, FOOTER }                 = require "../constants"
 { sendError, formatUser, formatGuild } = require "../logging"
@@ -441,14 +440,11 @@ syscallData =
       }
       embedmsg = await msg.channel.send { embed }
       
-      console.log bold "Members to add:"
       for member in members
-        console.log member.id, member.user.tag
         await touchMember member
         embed.fields[0].value++
         await embedmsg.edit { embed }
 
-      console.log bold "End of print"
       await msg.channel.send "`All users of guild '#{guild.name}' (#{guild.id}) have been added to the database.`"
   
   "add-user":
