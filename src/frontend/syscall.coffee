@@ -151,7 +151,7 @@ syscallData =
       catch e
         await sendError msg.channel, "Unknown user `#{id}` :("
         return
-      dbUser = await getdbUser user
+      dbUser = await getdbUser user, "silent"
       unless dbUser
         await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
         return
@@ -185,7 +185,7 @@ syscallData =
       catch e
         await sendError msg.channel, "Unknown user `#{id}` :("
         return
-      dbUser = await getdbUser user
+      dbUser = await getdbUser user, "silent"
       unless dbUser
         await sendError msg.channel, "User <@!#{member.user.id}> doesn't exist in the database :("
         return
@@ -199,7 +199,60 @@ syscallData =
       await msg.channel.send "`Updating #{user.tag}'s roles everywhere...`"
       await updateRoles msg.client, dbUser
       await msg.channel.send "`User #{user.tag} unverified.`"
-
+  
+  "add-roleassoc":
+    description: "Adds a role association in the current guild."
+    args:
+      roleid:
+        position: "start"
+        type: "snowflake"
+      roletag:
+        position: "start"
+        type: "word"
+    exec: ({ roleid, roletag }) -> (msg) ->
+      unless roleid
+        await sendError msg.channel, "roleid is undefined"
+        return
+      unless roletag
+        await sendError msg.channel, "roletag is undefined"
+        return
+      dbGuild = await getdbGuild msg.guild, "silent"
+      unless dbGuild
+        await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in our database :("
+        return
+      await msg.channel.send "`Adding association '#{roleid}:#{roletag}'...`"
+      roleassocs = dbGuild.roleassocs
+      roleassocs.push [roleid, roletag]
+      await dbGuild.update { roleassocs }
+      await msg.channel.send "`Association added.`"
+  
+  "remove-roleassoc":
+    description: "Removes a role association from the current guild."
+    args:
+      roleid:
+        position: "start"
+        type: "snowflake"
+      roletag:
+        position: "start"
+        type: "word"
+    exec: ({ roleid, roletag }) -> (msg) ->
+      unless roleid or roletag
+        await sendError msg.channel, "Expected either roleid or roletag to be defined"
+        return
+      dbGuild = await getdbGuild msg.guild, "silent"
+      unless dbGuild
+        await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in our database :("
+        return
+      roleassocs = dbGuild.roleassocs
+      if roleid
+        await msg.channel.send "`Removing association with roleid '#{roleid}'...`"
+        roleassocs = roleassocs.filter ([rid, _]) -> rid isnt roleid
+      else if roletag
+        await msg.channel.send "`Removing association with roletag '#{roletag}'...`"
+        roleassocs = roleassocs.filter ([_, rtag]) -> rtag isnt roletag
+      await dbGuild.update { roleassocs }
+      await msg.channel.send "`Association removed.`"
+  
   change:
     description: "Changes a field in the user database. Note: the field argument is just for command decoration :)"
     args:
@@ -265,7 +318,7 @@ syscallData =
       await msg.channel.send "`Field changed.`"
           
   get:
-    description: "Fetches user data from the user database."
+    description: "Fetches user/guild data from the database."
     args:
       row:
         position: "end"
@@ -286,7 +339,7 @@ syscallData =
             catch e
               await sendError msg.channel, "Unknown user `#{id}` :(\n\nError: ```\n#{e}```"
               return
-            dbUser = await getdbUser user
+            dbUser = await getdbUser user, "silent"
             unless dbUser
               await sendError msg.channel, "User <@!#{user.id}> doesn't exist in the database :("
               return
@@ -329,7 +382,7 @@ syscallData =
           catch e
             await sendError msg.channel, "Unknown guild `#{id}` :("
             return
-          dbGuild = await getdbGuild guild
+          dbGuild = await getdbGuild guild, "silent"
           unless dbGuild
             await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in the database :("
             return
