@@ -8,7 +8,7 @@
     "start": "coffee src/index.coffee",
     "temp": "coffee src/temp.coffee",
     "build": "coffee -bcmo client src",
-    "run-js": "node .",
+    "run-js": "node --trace-warnings .",
     "c-all": "yarn build && yarn run-js",
     "all": "clear && yarn c-all",
     "dev": "clear && yarn start",
