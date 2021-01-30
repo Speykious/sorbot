@@ -453,8 +453,8 @@ syscallData =
       id:
         position: "start"
         type: "snowflake"
-  exec: ({ id }) -> (msg) ->
-    await sendError msg.channel, "SYSTEM-CALL NOT IMPLEMENTED"
+    exec: ({ id }) -> (msg) ->
+      await sendError msg.channel, "SYSTEM-CALL NOT IMPLEMENTED"
 
   "remove-user":
     description: "Removes a user from the database."
@@ -462,8 +462,8 @@ syscallData =
       id:
         position: "start"
         type: "snowflake"
-  exec: ({ id }) -> (msg) ->
-    await sendError msg.channel, "SYSTEM-CALL NOT IMPLEMENTED"
+    exec: ({ id }) -> (msg) ->
+      await sendError msg.channel, "SYSTEM-CALL NOT IMPLEMENTED"
     
 
 syscalls = Object.entries syscallData
