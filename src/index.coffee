@@ -189,6 +189,7 @@ bot.on "guildMemberRemove", (member) ->
     logf LOG.DATABASE, "User #{formatUser member.user} removed"
 
   unless process.env.LOCAL
+    unless member.guild.id is "672479260899803147" then return
     bye = BYEBYES[Math.floor (Math.random() * BYEBYES.length - 1e-6)]
     bye = bye.replace "{name}", member.displayName
     

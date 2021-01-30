@@ -217,7 +217,7 @@ syscallData =
         return
       dbGuild = await getdbGuild msg.guild, "silent"
       unless dbGuild
-        await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in our database :("
+        await sendError msg.channel, "Guild #{formatGuild msg.guild} doesn't exist in our database :("
         return
       await msg.channel.send "`Adding association '#{roleid}:#{roletag}'...`"
       roleassocs = dbGuild.roleassocs
@@ -291,11 +291,11 @@ syscallData =
           await dbUser.update { [key]: dbUser[key] }
 
         when "guild"
-          if id
-            guild = RTFM.RTFMs[id].guild
-            unless guild
-              await sendError msg.channel, "Guild with ID `#{id}` not found"
-              return
+          unless id then id = msg.guild.id
+          guild = RTFM.RTFMs[id].guild
+          unless guild
+            await sendError msg.channel, "Guild with ID `#{id}` not found"
+            return
           dbGuild = await getdbGuild guild, "silent"
           unless dbGuild
             await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in our database :("
