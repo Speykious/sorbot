@@ -1,48 +1,101 @@
 require "dotenv-flow"
 .config()
 
-{ Client } = require "discord.js"
+{ Sequelize, DataTypes } = require "sequelize"
+{ decryptid, encryptid } = require "./encryption"
+{ DOMAINS } = require "./constants"
+{ ARRAY, SMALLINT, BIGINT, STRING } = DataTypes
+{ blue, green } = require "ansi-colors-ts"
 
-{ logf, LOG, botCache } = require "./logging"
-{ SERVERS, GUILDS } = require "./constants"
+pe = process.env
+uri = if pe.LOCAL
+then "postgres://#{pe.DB_USER}:#{pe.DB_PASS}@localhost:5432/sorbot-dev"
+else "postgres://sorbot:#{pe.DB_PASS}@localhost:5432/sorbot"
+connection = new Sequelize uri
 
-regexinator = /^Email (`.+` )\(code .+\) saved for user .+$/
-
-bot = new Client {
-  disableMentions: "everyone"
+OldUser = connection.define "User", {
+  id:
+    type: STRING 44
+    primaryKey: yes
+  type:
+    type: SMALLINT
+  reactor:
+    type: BIGINT
+  email:
+    type: STRING
+    unique: yes
+    validate:
+      isEmail:
+        msg: "Ceci n'est pas une adresse mail."
+  code:
+    type: STRING 6
+  servers:
+    type: SMALLINT
 }
 
-bot.on "ready", ->
-  console.log "TIME TO ERASE TRACES OF EMAILS"
-  botCache.bot = bot
-  await bot.user.setPresence {
-    activity:
-      type: "PLAYING"
-      name: "Oops, I dropped it again ~"
-      url: "https://gitlab.com/Speykious/sorbot"
-  }
-  
-  GUILDS.LOGS = await bot.guilds.fetch SERVERS.logs.id
-  
-  console.log "Fetching #email..."
-  chemail = GUILDS.LOGS.channels.resolve "755792774359679037"
-  console.log "Fetching messages..."
-  messages = []
-  lastMessageId = "781069634757328936"
-  loop
-    messages = await Promise.all (
-      (await chemail.messages.fetch { limit: 100, before: lastMessageId })
-      .filter ({ content }) -> regexinator.test content
-      .map (message) ->
-        [_, replaceTarget, _, _, _] = message.content.match regexinator
-        newContent = message.content.replace replaceTarget, ""
-        await message.edit newContent
-        console.log newContent
-        return message)
-    unless messages.length then break
-    lastMessageId = messages[messages.length - 1].id
+NewUser = connection.define "NewUser", {
+  id:
+    type: STRING 44
+    primaryKey: yes
+  roletags:
+    type: ARRAY STRING 16
+  reactor:
+    type: BIGINT
+  email:
+    type: STRING
+    unique: yes
+    validate:
+      isEmail:
+        msg: "Ceci n'est pas une adresse mail."
+      validateEmail: (value) ->
+        domain = (value.split '@')[1]
+        unless domain in DOMAINS.studentDomains or
+               domain in DOMAINS.professorDomains
+          throw new Error "Ceci n'est pas une adresse mail de Sorbonne Jussieu."
+  code:
+    type: STRING 6
+  servers:
+    type: ARRAY BIGINT
+}
 
-  bot.destroy()
-  
+connection.sync()
+  .then ->
+    console.log "Dank database connection established"
+    await query()
+  .catch (err) ->
+    console.log "\x1b[31m Haha yesn't:\x1b[0m #{err}"
+    process.exit 1
 
-bot.login process.env.SORBOT_TOKEN_REAL
+USER_TYPES =
+  STUDENT:   1 << 0
+  PROFESSOR: 1 << 1
+  GUEST:     1 << 2
+  FORMER:    1 << 3
+
+query = ->
+  oldUsers = await OldUser.findAll()
+  i = 0
+  for { id, type, reactor, email, code, servers, createdAt, updatedAt } in oldUsers
+    decrypted = null
+    try
+      decrypted = decryptid id # Ensuring the id is decryptable
+      
+    catch e
+      console.log "\x1b[31mERROR:\x1b[0m #{e} with OldUser", {
+        id, type, reactor, email, code, servers, createdAt, updatedAt, decrypted
+      }
+    
+    i++
+    roletags = []
+    if type then roletags.push "member"
+    if type & USER_TYPES.STUDENT then roletags.push "student"
+    if type & USER_TYPES.PROFESSOR then roletags.push "professor"
+    if type & USER_TYPES.GUEST then roletags.push "guest"
+    if type & USER_TYPES.FORMER then roletags.push "former"
+    unless roletags.length then roletags.push "unverified"
+    console.log i, "#{(green id)}(#{id.length})", roletags, reactor, email, code, ["672479260899803147"], createdAt, updatedAt
+    await NewUser.create {
+      id, roletags, reactor, email, code
+      servers: ["672479260899803147"]
+      createdAt, updatedAt
+    }
