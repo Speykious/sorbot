@@ -437,7 +437,9 @@ syscallData =
       for member in members
         await touchMember member
         embed.fields[0].value++
-        await embedmsg.edit { embed }
+        if embed.fields[0].value % 10
+          await embedmsg.edit { embed }
+      await embedmsg.edit { embed }
 
       await msg.channel.send "`All users of guild '#{guild.name}' (#{guild.id}) have been added to the database.`"
   
