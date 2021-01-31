@@ -43,7 +43,7 @@ class RTFM
     @pagemsgids = []
     @pagemsgs = []
     @dbGuild = null
-
+    
     RTFM.RTFMs[@guild.id] = @
 
 
@@ -54,6 +54,7 @@ class RTFM
     unless rtfm
       rtfm = new RTFM (await bot.guilds.fetch id)
       await rtfm.cachedbGuild()
+      unless rtfm.dbGuild then throw new Error "Guild doesn't exist in the database"
       rtfm.loadPageMsgs()
     return rtfm
 
@@ -117,7 +118,7 @@ class RTFM
   # Generates the embed pages in their corresponding threads
   generatePageMsgs: ->
     guild = @guild
-    categoryId = @dbGuild.rtfm
+    dbGuild = @dbGuild
     channelCache = @channelCache
     pages = Object.values RTFM.pageCache
     pagemsgids = @pagemsgids
@@ -134,10 +135,19 @@ class RTFM
           pagemsgs[i] = await channelCache[page.thread.name].messages.fetch pagemsgids[i].msgid
       
       unless channelCache[page.thread.name]
+        unless dbGuild.rtfm and guild.channels.cache.has dbGuild.rtfm
+          crtfm = await guild.channels.create "RTFM", {
+            type: "category"
+            topic: "READ THE FUCKING MANUAL"
+            reason: "Generating RTFM pages"
+            position: 0
+          }
+          dbGuild.rtfm = crtfm.id
+          await dbGuild.save()
         channelCache[page.thread.name] =
           await guild.channels.create page.thread.name, {
             topic: page.thread.topic
-            parent: categoryId
+            parent: dbGuild.rtfm
           }
       
       # And here we witness the weirdest condition logic

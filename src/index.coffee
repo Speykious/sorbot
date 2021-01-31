@@ -152,7 +152,9 @@ bot.on "guildCreate", (guild) ->
       console.log e
       return
     logf LOG.DATABASE, "Guild #{formatGuild guild} already existed in the database"
-  new RTFM guild
+  
+  RTFM.fetch bot, guild.id
+
 
 bot.on "guildDelete", (guild) ->
   dbGuild = await getdbGuild guild

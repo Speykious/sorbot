@@ -37,18 +37,11 @@ syscallData =
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (msg) ->
-      rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
-      
-      unless rtfm.dbGuild.rtfm
-        await msg.channel.send "Creating an RTFM category..."
-        crtfm = await msg.guild.channels.create "RTFM", {
-          type: "category"
-          topic: "READ THE FUCKING MANUAL"
-          reason: "Generating RTFM pages"
-          position: 0
-        }
-        rtfm.dbGuild.rtfm = crtfm.id
-        await rtfm.dbGuild.save()
+      try
+        rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
+      catch e
+        await sendError msg.channel, "Guild doesn't exist in the database :("
+        return
       
       await msg.channel.send "`Generating pages...`"
       await rtfm.generatePageMsgs()
@@ -62,7 +55,11 @@ syscallData =
         type: "word"
         enum: ["pages", "all-pages", "page", "all-page"]
     exec: ({ element }) -> (msg) ->
-      rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
+      try
+        rtfm = await RTFM.fetch msg.guild.client, msg.guild.id
+      catch e
+        await sendError msg.channel, "Guild doesn't exist in the database :("
+        return
       
       await msg.channel.send "`Yeeting all pages...`"
       # Before yeeting the channels, we need to remove the RTFM instance's pagemsgs
@@ -76,7 +73,6 @@ syscallData =
             return false
         await ch.delete()
         delete rtfm.channelCache[k]
-      
       rtfm.savePageMsgs()
       await msg.channel.send "`All pages from this guild have been yeeted.`"
   
@@ -269,6 +265,7 @@ syscallData =
         position: "start"
         type: "string"
     exec: ({ field, id, key, value }) -> (msg) ->
+      unless value then value = null
       switch field
         when "user"
           try
@@ -292,20 +289,17 @@ syscallData =
 
         when "guild"
           unless id then id = msg.guild.id
-          guild = RTFM.RTFMs[id].guild
-          unless guild
-            await sendError msg.channel, "Guild with ID `#{id}` not found"
+          try
+            guild = await msg.client.guilds.fetch id
+          catch e
+            await sendError msg.channel, "Unknown guild `#{id}` :("
             return
           dbGuild = await getdbGuild guild, "silent"
           unless dbGuild
-            await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in our database :("
+            await sendError msg.channel, "Guild #{formatGuild guild} doesn't exist in the database :("
             return
           
-          fields = [
-            "rtfm", "description"
-            "unverified", "member", "professor"
-            "guest", "former"
-          ]
+          fields = ["rtfm", "description"]
           unless key in fields
             await sendError msg.channel, "Unknown of unauthorized guild field `#{key}` :("
             return
