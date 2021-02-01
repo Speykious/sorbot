@@ -123,7 +123,8 @@ class RTFM
     pages = Object.values RTFM.pageCache
     pagemsgids = @pagemsgids
     pagemsgs = @pagemsgs
-
+    
+    guild.fetch()
     channeler = (pages, i = 0) ->
       if i >= pages.length then return
 
