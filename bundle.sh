@@ -17,9 +17,9 @@ echo -e "  ${bred}Minifying$c   the javascript code"
 ncc build client/index.js -mo sorbot-min/bin/
 
 echo -e "  ${bred}Copying$c     the needed resources to ${u}sorbot-min/$c"
-rsync -rah --progress resources sorbot-min/
-rsync -ah --progress credentials.yaml token.yaml sorbot-min/
-rsync -ah --progress bundle.env sorbot-min/.env
+rsync -Pauh --progress resources sorbot-min/
+rsync -Pauh --progress credentials.yaml token.yaml sorbot-min/
+rsync -Pauh --progress bundle.env sorbot-min/.env
 
 echo -e "  ${bred}Removing$c    the ${u}bin/lib/$c folder"
 rm -rf sorbot-min/bin/lib/

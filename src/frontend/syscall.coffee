@@ -44,8 +44,11 @@ syscallData =
         return
       
       await msg.channel.send "`Generating pages...`"
-      await rtfm.generatePageMsgs()
-      await msg.channel.send "`All pages generated.`"
+      try
+        await rtfm.generatePageMsgs()
+        await msg.channel.send "`All pages generated.`"
+      catch e
+        await sendError msg.channel, "GENERATE_PAGE_MSGS_CRISIS: #{e}"
 
   yeet:
     description: "Yeets RTFM pages."

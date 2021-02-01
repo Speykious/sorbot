@@ -128,40 +128,42 @@ class RTFM
     channeler = (pages, i = 0) ->
       if i >= pages.length then return
 
-      page = pages[i]
-      if pagemsgids[i]
+      try
+        page = pages[i]
+        if pagemsgids[i]
+          unless channelCache[page.thread.name]
+            channelCache[page.thread.name] = guild.channels.resolve pagemsgids[i].chid
+          unless pagemsgs[i]
+            pagemsgs[i] = await channelCache[page.thread.name].messages.fetch pagemsgids[i].msgid
+        
         unless channelCache[page.thread.name]
-          channelCache[page.thread.name] = guild.channels.resolve pagemsgids[i].chid
+          unless dbGuild.rtfm and guild.channels.cache.has dbGuild.rtfm
+            crtfm = await guild.channels.create "RTFM", {
+              type: "category"
+              topic: "READ THE FUCKING MANUAL"
+              reason: "Generating RTFM pages"
+              position: 0
+            }
+            dbGuild.rtfm = crtfm.id
+            await dbGuild.save()
+          channelCache[page.thread.name] =
+            await guild.channels.create page.thread.name, {
+              topic: page.thread.topic
+              parent: dbGuild.rtfm
+            }
+        
+        # And here we witness the weirdest condition logic
+        # ever seen in the entire history of programming
+        # in its natural habitat
         unless pagemsgs[i]
-          pagemsgs[i] = await channelCache[page.thread.name].messages.fetch pagemsgids[i].msgid
-      
-      unless channelCache[page.thread.name]
-        unless dbGuild.rtfm and guild.channels.cache.has dbGuild.rtfm
-          crtfm = await guild.channels.create "RTFM", {
-            type: "category"
-            topic: "READ THE FUCKING MANUAL"
-            reason: "Generating RTFM pages"
-            position: 0
-          }
-          dbGuild.rtfm = crtfm.id
-          await dbGuild.save()
-        channelCache[page.thread.name] =
-          await guild.channels.create page.thread.name, {
-            topic: page.thread.topic
-            parent: dbGuild.rtfm
-          }
-      
-      # And here we witness the weirdest condition logic
-      # ever seen in the entire history of programming
-      # in its natural habitat
-      unless pagemsgs[i]
-        pagemsgs[i] = await channelCache[page.thread.name].send { embed: page.embed }
-      else if pagemsgs[i].client.user.id is pagemsgs[i].author.id
-        await pagemsgs[i].edit { embed: page.embed }
-      else
-        await pagemsgs[i].delete()
-        pagemsgs[i] = await channelCache[page.thread.name].send { embed: page.embed }
-
+          pagemsgs[i] = await channelCache[page.thread.name].send { embed: page.embed }
+        else if pagemsgs[i].client.user.id is pagemsgs[i].author.id
+          await pagemsgs[i].edit { embed: page.embed }
+        else
+          await pagemsgs[i].delete()
+          pagemsgs[i] = await channelCache[page.thread.name].send { embed: page.embed }
+      catch e
+        throw new Error "Error with pagemsgid `#{JSON.stringify pagemsgids[i]}`, n°#{i} on channel ##{page.thread.name}: #{e}"
       channeler pages, i + 1
 
     await channeler pages
