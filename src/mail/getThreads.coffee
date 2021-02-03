@@ -25,7 +25,7 @@ getThreads = (query, maxFetch = 10) ->
     gmail.users.threads.modify {
       userId: "me"
       id: thread.id
-      addLabelIds:    if manver then ["manual-verification-handled"]   else []
+      addLabelIds:    if manver then ["manual-verification/handled"]   else []
       removeLabelIds: if manver then ["manual-verification", "UNREAD"] else ["UNREAD"]
     }
 
