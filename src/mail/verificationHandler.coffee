@@ -1,8 +1,8 @@
-{ GUILDS, SERVERS, FOOTER, USER_TYPES } = require "../constants"
-{ logf, LOG, formatUser }               = require "../logging"
-{ addRoletag, removeRoletag }           = require "../db/dbhelpers"
-{ updateRoles }                         = require "../roles"
-sendReactor                             = require "../frontend/sendReactor"
+{ GUILDS, SERVERS, FOOTER, USER_TYPES, DOMAINS } = require "../constants"
+{ logf, LOG, formatUser }                        = require "../logging"
+{ addRoletag, removeRoletag }                    = require "../db/dbhelpers"
+{ updateRoles }                                  = require "../roles"
+sendReactor                                      = require "../frontend/sendReactor"
 
 # dbUser {User}        - The user to verify in the database
 # member {GuildMember} - The member to verify
@@ -16,6 +16,10 @@ verifyUser = (dbUser, bot, user, verifier) ->
 
   addRoletag dbUser, "member"
   removeRoletag dbUser, "unverified"
+  if dbUser.email
+    domain = (dbUser.email.split '@')[1]
+    if domain in DOMAINS.studentDomains   then addRoletag dbUser, "student"
+    if domain in DOMAINS.professorDomains then addRoletag dbUser, "professor"
   await dbUser.update { roletags: dbUser.roletags }
   await dbUser.save()
 

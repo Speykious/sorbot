@@ -25,15 +25,6 @@ module.exports = (connection) ->
           unless domain in DOMAINS.studentDomains or
                  domain in DOMAINS.professorDomains
             throw new Error "Ceci n'est pas une adresse mail de Sorbonne Jussieu."
-      set: (value) ->
-        @setDataValue "email", value
-        unless value then return
-        
-        domain = (value.split '@')[1]
-        roletags = @getDataValue "roletags"
-        if domain in DOMAINS.studentDomains   then setAdd roletags, "student"
-        if domain in DOMAINS.professorDomains then setAdd roletags, "professor"
-        @setDataValue "roletags", roletags
     code:
       type: STRING 6
     servers:
