@@ -124,17 +124,11 @@ bot.on "ready", ->
   logf LOG.INIT, {
     embed:
       title: "Ready to sip. 茶 ☕"
-      description: "Let's play with even more ***DATA*** <a:eyeshake:691797273147080714>"
+      description: "Let's play with even more dynamically-typed ***DATA*** <a:eyeshake:691797273147080714>"
       color: 0x34d9ff
       footer: FOOTER
   }
 
-  ###
-  loading.step "Fetching main guild..."
-  GUILDS.MAIN = await bot.guilds.fetch SERVERS.main.id
-  GUILDS.LOGS = await bot.guilds.fetch SERVERS.logs.id
-  ###
-  
   loading.step "Authorizing the gmailer..."
   await gmailer.authorize "token.yaml"
   
