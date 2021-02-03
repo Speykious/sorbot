@@ -5,7 +5,7 @@
 { ARRAY, SMALLINT, BIGINT, STRING } = DataTypes
 
 module.exports = (connection) ->
-  connection.define "User", {
+  connection.define (if process.env.LOCAL then "DevUser" else "User"), {
     id:
       type: STRING 44
       primaryKey: yes
