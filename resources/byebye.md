@@ -93,3 +93,4 @@ chilledfrogs a désintégré les oreilles de {name} avec son clavier.
 {name} n'a pas trouvé le tag #wholesome.
 {name} didn't give the sauce.
 {name} n'avait pas assez de puissance intellectuelle. <:puissance_intellectuelle:760926566573801534>
+{name} a décidé de migrer de `master` vers `main`.
